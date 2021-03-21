@@ -30,6 +30,143 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
+    "type": "RADIO",
+    "name": "event_type",
+    "displayName": "Event Name",
+    "radioItems": [
+      {
+        "value": "standard",
+        "displayValue": "Standard",
+        "subParams": [
+          {
+            "type": "SELECT",
+            "name": "event_name_standard",
+            "selectItems": [
+              {
+                "value": "page_view",
+                "displayValue": "Page View"
+              },
+              {
+                "value": "add_payment_info",
+                "displayValue": "Add Payment Info"
+              },
+              {
+                "value": "add_to_cart",
+                "displayValue": "Add To Cart"
+              },
+              {
+                "value": "add_to_wishlist",
+                "displayValue": "Add To Wishlist"
+              },
+              {
+                "value": "begin_checkout",
+                "displayValue": "Begin Checkout"
+              },
+              {
+                "value": "contact",
+                "displayValue": "Contact"
+              },
+              {
+                "value": "customize_product",
+                "displayValue": "Customize Product"
+              },
+              {
+                "value": "donate",
+                "displayValue": "Donate"
+              },
+              {
+                "value": "exception",
+                "displayValue": "Exception"
+              },
+              {
+                "value": "find_location",
+                "displayValue": "Find Location"
+              },
+              {
+                "value": "generate_lead",
+                "displayValue": "Generate Lead"
+              },
+              {
+                "value": "join_group",
+                "displayValue": "Join Group"
+              },
+              {
+                "value": "login",
+                "displayValue": "Login"
+              },
+              {
+                "value": "purchase",
+                "displayValue": "Purchase"
+              },
+              {
+                "value": "refund",
+                "displayValue": "Refund"
+              },
+              {
+                "value": "schedule",
+                "displayValue": "Schedule"
+              },
+              {
+                "value": "search",
+                "displayValue": "Search"
+              },
+              {
+                "value": "select_content",
+                "displayValue": "Select Content"
+              },
+              {
+                "value": "share",
+                "displayValue": "Share"
+              },
+              {
+                "value": "sign_up",
+                "displayValue": "Sign Up"
+              },
+              {
+                "value": "start_trial",
+                "displayValue": "Start Trial"
+              },
+              {
+                "value": "submit_application",
+                "displayValue": "Submit Application"
+              },
+              {
+                "value": "subscribe",
+                "displayValue": "Subscribe"
+              },
+              {
+                "value": "view_item",
+                "displayValue": "View Item"
+              },
+              {
+                "value": "view_item_list",
+                "displayValue": "View Item List"
+              },
+              {
+                "value": "view_search_results",
+                "displayValue": "View Search Results"
+              }
+            ],
+            "simpleValueType": true,
+            "defaultValue": "page_view"
+          }
+        ]
+      },
+      {
+        "value": "custom",
+        "displayValue": "Custom",
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "event_name_custom",
+            "simpleValueType": true
+          }
+        ]
+      }
+    ],
+    "simpleValueType": true
+  },
+  {
     "type": "TEXT",
     "name": "gtm_server_domain",
     "displayName": "GTM Server Side domain",
@@ -41,18 +178,6 @@ ___TEMPLATE_PARAMETERS___
       }
     ],
     "alwaysInSummary": true
-  },
-  {
-    "type": "TEXT",
-    "name": "event_name",
-    "displayName": "Event name",
-    "simpleValueType": true,
-    "alwaysInSummary": true,
-    "valueValidators": [
-      {
-        "type": "NON_EMPTY"
-      }
-    ]
   },
   {
     "type": "TEXT",
@@ -94,6 +219,114 @@ ___TEMPLATE_PARAMETERS___
             "valueValidators": [
               {
                 "type": "NON_EMPTY"
+              }
+            ]
+          },
+          {
+            "defaultValue": "",
+            "displayName": "Value",
+            "name": "value",
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "none",
+            "displayName": "Transformation",
+            "name": "transformation",
+            "type": "SELECT",
+            "selectItems": [
+              {
+                "value": "none",
+                "displayValue": "None"
+              },
+              {
+                "value": "trim",
+                "displayValue": "Trim"
+              },
+              {
+                "value": "to_lower_case",
+                "displayValue": "To lower case"
+              }
+            ],
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "user",
+    "displayName": "User Data",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "SIMPLE_TABLE",
+        "name": "user_data",
+        "displayName": "",
+        "simpleTableColumns": [
+          {
+            "defaultValue": "email_address",
+            "displayName": "Name",
+            "name": "name",
+            "type": "SELECT",
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ],
+            "isUnique": true,
+            "selectItems": [
+              {
+                "value": "email_address",
+                "displayValue": "Email Address"
+              },
+              {
+                "value": "phone_number",
+                "displayValue": "Phone Number"
+              },
+              {
+                "value": "first_name",
+                "displayValue": "First Name"
+              },
+              {
+                "value": "last_name",
+                "displayValue": "Last Name"
+              },
+              {
+                "value": "gender",
+                "displayValue": "Gender"
+              },
+              {
+                "value": "db",
+                "displayValue": "Date of Birth"
+              },
+              {
+                "value": "street",
+                "displayValue": "Street"
+              },
+              {
+                "value": "city",
+                "displayValue": "City"
+              },
+              {
+                "value": "region",
+                "displayValue": "Region"
+              },
+              {
+                "value": "postal_code",
+                "displayValue": "Postal Code"
+              },
+              {
+                "value": "country",
+                "displayValue": "Country"
+              },
+              {
+                "value": "user_id",
+                "displayValue": "User ID"
               }
             ]
           },
@@ -257,21 +490,23 @@ function buildEndpoint() {
 }
 
 function addRequiredDataForPostRequest(data, eventData) {
-    eventData.event_name = data.event_name;
+    eventData.event_name = getEventName(data);
     eventData.protocol_version = makeNumber(data.protocol_version);
     eventData.data_tag = true;
-    eventData.data_tag_custom_data = data.custom_data;
+    eventData.data_tag_custom_data = getCustomData(data);
     eventData.dtclid = getDtclid();
 
     return eventData;
 }
 
 function addRequiredDataForGetRequest(data, url) {
-    url = url + '?event_name=' + encodeUriComponent(data.event_name) + '&dtclid=' + encodeUriComponent(getDtclid()) + '&v=' + makeNumber(data.protocol_version);
+    url = url + '?event_name=' + encodeUriComponent(getEventName(data)) + '&dtclid=' + encodeUriComponent(getDtclid()) + '&v=' + makeNumber(data.protocol_version);
 
-    if (data.custom_data && data.custom_data.length) {
-        for (let customDataKey in data.custom_data) {
-            url = url + '&' + data.custom_data[customDataKey].name + '=' + encodeUriComponent(data.custom_data[customDataKey].value);
+    let customData = getCustomData(data);
+
+    if (customData.length) {
+        for (let customDataKey in customData) {
+            url = url + '&' + customData[customDataKey].name + '=' + encodeUriComponent(customData[customDataKey].value);
         }
     }
 
@@ -345,6 +580,37 @@ function addCommonData(data, eventData) {
 
     return eventData;
 }
+
+function getEventName(data) {
+    let eventName = 'page_view';
+
+    if (data.event_type === 'standard') {
+        return data.event_name_standard ? data.event_name_standard : eventName;
+    }
+
+    if (data.event_type === 'custom') {
+        return data.event_name_custom ? data.event_name_custom : eventName;
+    }
+
+    return eventName;
+}
+
+function getCustomData(data) {
+    let customData = [];
+
+    if (data.custom_data && data.custom_data.length) {
+        customData = data.custom_data;
+    }
+
+    if (data.user_data && data.user_data.length) {
+        for (let userDataKey in data.user_data) {
+            customData.push(data.user_data[userDataKey]);
+        }
+    }
+
+    return customData;
+}
+
 
 
 ___WEB_PERMISSIONS___
@@ -734,6 +1000,6 @@ scenarios: []
 
 ___NOTES___
 
-Created on 20/03/2021, 16:30:32
+Created on 21/03/2021, 11:26:46
 
 

@@ -60,21 +60,23 @@ function buildEndpoint() {
 }
 
 function addRequiredDataForPostRequest(data, eventData) {
-    eventData.event_name = data.event_name;
+    eventData.event_name = getEventName(data);
     eventData.protocol_version = makeNumber(data.protocol_version);
     eventData.data_tag = true;
-    eventData.data_tag_custom_data = data.custom_data;
+    eventData.data_tag_custom_data = getCustomData(data);
     eventData.dtclid = getDtclid();
 
     return eventData;
 }
 
 function addRequiredDataForGetRequest(data, url) {
-    url = url + '?event_name=' + encodeUriComponent(data.event_name) + '&dtclid=' + encodeUriComponent(getDtclid()) + '&v=' + makeNumber(data.protocol_version);
+    url = url + '?event_name=' + encodeUriComponent(getEventName(data)) + '&dtclid=' + encodeUriComponent(getDtclid()) + '&v=' + makeNumber(data.protocol_version);
 
-    if (data.custom_data && data.custom_data.length) {
-        for (let customDataKey in data.custom_data) {
-            url = url + '&' + data.custom_data[customDataKey].name + '=' + encodeUriComponent(data.custom_data[customDataKey].value);
+    let customData = getCustomData(data);
+
+    if (customData.length) {
+        for (let customDataKey in customData) {
+            url = url + '&' + customData[customDataKey].name + '=' + encodeUriComponent(customData[customDataKey].value);
         }
     }
 
@@ -147,4 +149,34 @@ function addCommonData(data, eventData) {
     eventData.page_encoding = readCharacterSet();
 
     return eventData;
+}
+
+function getEventName(data) {
+    let eventName = 'page_view';
+
+    if (data.event_type === 'standard') {
+        return data.event_name_standard ? data.event_name_standard : eventName;
+    }
+
+    if (data.event_type === 'custom') {
+        return data.event_name_custom ? data.event_name_custom : eventName;
+    }
+
+    return eventName;
+}
+
+function getCustomData(data) {
+    let customData = [];
+
+    if (data.custom_data && data.custom_data.length) {
+        customData = data.custom_data;
+    }
+
+    if (data.user_data && data.user_data.length) {
+        for (let userDataKey in data.user_data) {
+            customData.push(data.user_data[userDataKey]);
+        }
+    }
+
+    return customData;
 }
