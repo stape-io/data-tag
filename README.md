@@ -8,6 +8,12 @@ It can automatically add to request Common data and current Data Layer.
 Common data contains: `page_location, page_path, page_hostname, page_referrer, page_title, page_encoding, screen_resolution, viewport_size.`
 
 
+## How to use Data tag
+
+- [Data tag description](https://gtm-server.com/sending-data-from-google-tag-manager-web-container-to-the-server-container/)
+
+
+
 ![Data Tag](https://gtm-server.com/wp-content/uploads/2021/03/data-tag.png)
 
 ## Open Source
