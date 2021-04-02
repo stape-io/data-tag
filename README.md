@@ -10,7 +10,7 @@ Common data contains: `page_location, page_path, page_hostname, page_referrer, p
 
 ## How to use Data tag
 
-- [Data tag description](https://gtm-server.com/sending-data-from-google-tag-manager-web-container-to-the-server-container/)
+- [Sending Data From Google Tag Manager Web Container to Server Container](https://gtm-server.com/sending-data-from-google-tag-manager-web-container-to-the-server-container/)
 
 
 
