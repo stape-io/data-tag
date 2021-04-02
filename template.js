@@ -56,7 +56,7 @@ function getDtclid() {
 }
 
 function buildEndpoint() {
-    return 'https://' + data.gtm_server_domain + data.request_path;
+    return data.gtm_server_domain + data.request_path;
 }
 
 function addRequiredDataForPostRequest(data, eventData) {
