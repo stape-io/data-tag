@@ -63,7 +63,7 @@ function addRequiredDataForPostRequest(data, eventData) {
     eventData.event_name = getEventName(data);
     eventData.protocol_version = makeNumber(data.protocol_version);
     eventData.data_tag = true;
-    eventData.data_tag_custom_data = getCustomData(data);
+    eventData.data_tag_custom_data = getCustomData(data, true);
     eventData.dtclid = getDtclid();
 
     return eventData;
@@ -72,7 +72,7 @@ function addRequiredDataForPostRequest(data, eventData) {
 function addRequiredDataForGetRequest(data, url) {
     url = url + '?event_name=' + encodeUriComponent(getEventName(data)) + '&dtclid=' + encodeUriComponent(getDtclid()) + '&v=' + makeNumber(data.protocol_version);
 
-    let customData = getCustomData(data);
+    let customData = getCustomData(data, false);
 
     if (customData.length) {
         for (let customDataKey in customData) {
@@ -165,7 +165,7 @@ function getEventName(data) {
     return eventName;
 }
 
-function getCustomData(data) {
+function getCustomData(data, dtagLoaded) {
     let customData = [];
 
     if (data.custom_data && data.custom_data.length) {
@@ -176,6 +176,25 @@ function getCustomData(data) {
         for (let userDataKey in data.user_data) {
             customData.push(data.user_data[userDataKey]);
         }
+    }
+
+    for (let dataKey in customData) {
+        let dataValue = customData[dataKey].value;
+        let dataTransformation = customData[dataKey].transformation;
+
+        if (dataTransformation === 'trim') {
+            dataValue = dataValue.trim();
+        }
+
+        if (dataTransformation === 'to_lower_case') {
+            dataValue = dataValue.trim().toLocaleLowerCase();
+        }
+
+        if (dtagLoaded && dataTransformation === 'md5') {
+            dataValue = callInWindow('dataTagMD5', dataValue.trim().toLocaleLowerCase());
+        }
+
+        customData[dataKey].value = dataValue;
     }
 
     return customData;
