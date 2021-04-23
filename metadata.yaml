@@ -1,5 +1,7 @@
 homepage: "https://gtm-server.com/"
 versions:
+  - sha: 167e76600a45a3f977ca20204c45b65e7454fecc
+    changeNotes: Add md5 data transformation option.
   - sha: 2cc7595f464a12892747c95cd7e55c9f29eb03ae
     changeNotes: Change domain parameter to URL and add more validation rules.
   - sha: 87c00be55d94e2e4c1253faf47d9854223f96784
