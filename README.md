@@ -1,6 +1,6 @@
 # Data Tag for Google Tag Manager WEB Container
 
-Data Tag developed for sending requests from GTM Web Container to GTM Server Side [Data client](https://github.com/gtm-server/data-client).
+Data Tag developed for sending requests from GTM Web Container to GTM Server Side Container [Data client](https://github.com/stape-io/data-client).
 
 With the help of Data Tag, you can send any information from the Web Containers to the Server Containers.
 
@@ -10,12 +10,12 @@ Common data contains: `page_location, page_path, page_hostname, page_referrer, p
 
 ## How to use Data tag
 
-- [Sending Data From Google Tag Manager Web Container to Server Container](https://gtm-server.com/sending-data-from-google-tag-manager-web-container-to-the-server-container/)
+- [Sending Data From Google Tag Manager Web Container to Server Container](https://stape.io/sending-data-from-google-tag-manager-web-container-to-the-server-container/)
 
 
 
-![Data Tag](https://gtm-server.com/wp-content/uploads/2021/03/data-tag.png)
+![Data Tag](https://stape.io/wp-content/uploads/2021/03/data-tag.png)
 
 ## Open Source
 
-Data Client for Google Tag Manager Server Side is developed and maintained by [GTM Server Team](https://gtm-server.com/) under the Apache 2.0 license.
+Data Tag for Google Tag Manager Web container is developing and maintained by [Stape Team](https://stape.io/) under the Apache 2.0 license.

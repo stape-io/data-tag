@@ -1,4 +1,4 @@
-homepage: "https://gtm-server.com/"
+homepage: "https://stape.io/"
 versions:
   - sha: 167e76600a45a3f977ca20204c45b65e7454fecc
     changeNotes: Add md5 data transformation option.

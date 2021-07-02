@@ -14,7 +14,7 @@ const sendPixel = require('sendPixel');
 const encodeUriComponent = require('encodeUriComponent');
 
 if (data.request_type === 'post') {
-    const dataTagScriptUrl = 'https://cdn.gtm-server.com/dtag.js';
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag.js';
 
     if (queryPermission('inject_script', dataTagScriptUrl)) {
         injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
@@ -76,7 +76,11 @@ function addRequiredDataForGetRequest(data, url) {
 
     if (customData.length) {
         for (let customDataKey in customData) {
-            url = url + '&' + customData[customDataKey].name + '=' + encodeUriComponent(customData[customDataKey].value);
+            url = url + '&' + customData[customDataKey].name + '=';
+
+            if (customData[customDataKey].value) {
+                url = url + encodeUriComponent(customData[customDataKey].value);
+            }
         }
     }
 
@@ -133,7 +137,11 @@ function addCommonDataForGetRequest(data, url) {
         eventData = addCommonData(data, eventData);
 
         for (let eventDataKey in eventData) {
-            url = url + '&' + eventDataKey + '=' + encodeUriComponent(eventData[eventDataKey]);
+            url = url + '&' + eventDataKey + '=';
+
+            if (eventData[eventDataKey]) {
+                url = url + encodeUriComponent(eventData[eventDataKey]);
+            }
         }
     }
 
@@ -182,19 +190,21 @@ function getCustomData(data, dtagLoaded) {
         let dataValue = customData[dataKey].value;
         let dataTransformation = customData[dataKey].transformation;
 
-        if (dataTransformation === 'trim') {
-            dataValue = dataValue.trim();
-        }
+        if (dataValue) {
+            if (dataTransformation === 'trim') {
+                dataValue = dataValue.trim();
+            }
 
-        if (dataTransformation === 'to_lower_case') {
-            dataValue = dataValue.trim().toLocaleLowerCase();
-        }
+            if (dataTransformation === 'to_lower_case') {
+                dataValue = dataValue.trim().toLocaleLowerCase();
+            }
 
-        if (dtagLoaded && dataTransformation === 'md5') {
-            dataValue = callInWindow('dataTagMD5', dataValue.trim().toLocaleLowerCase());
-        }
+            if (dtagLoaded && dataTransformation === 'md5') {
+                dataValue = callInWindow('dataTagMD5', dataValue.trim().toLocaleLowerCase());
+            }
 
-        customData[dataKey].value = dataValue;
+            customData[dataKey].value = dataValue;
+        }
     }
 
     return customData;
