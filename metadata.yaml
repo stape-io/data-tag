@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 95d42bda5fce25db520c9fd8131dd0616a267eb3
+    changeNotes: Move to Stape. Update parameter parsing.
   - sha: 167e76600a45a3f977ca20204c45b65e7454fecc
     changeNotes: Add md5 data transformation option.
   - sha: 2cc7595f464a12892747c95cd7e55c9f29eb03ae
