@@ -12,9 +12,14 @@ const readCharacterSet = require('readCharacterSet');
 const localStorage = require('localStorage');
 const sendPixel = require('sendPixel');
 const encodeUriComponent = require('encodeUriComponent');
+const toBase64 = require('toBase64');
+const makeString = require('makeString');
+const getCookieValues = require('getCookieValues');
+
+let dataToStore = {};
 
 if (data.request_type === 'post') {
-    const dataTagScriptUrl = 'https://cdn.stape.io/dtag.js';
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v1.js';
 
     if (queryPermission('inject_script', dataTagScriptUrl)) {
         injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
@@ -33,7 +38,14 @@ function sendPostRequest() {
     eventData = addRequiredDataForPostRequest(data, eventData);
 
     callInWindow('dataTagSendData', eventData, buildEndpoint(), data.gtm_server_preview_header);
-    data.gtmOnSuccess();
+
+    if (dataToStore.length) {
+        let url = buildEndpoint() + '/store?d='+encodeUriComponent(toBase64(dataToStore));
+
+        sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
+    } else {
+        data.gtmOnSuccess();
+    }
 }
 
 function sendGetRequest() {
@@ -45,32 +57,24 @@ function sendGetRequest() {
     sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
 }
 
-function getDtclid() {
-    if (localStorage) {
-        const dtclid = localStorage.getItem('dtclid');
-
-        return dtclid ? dtclid : '';
-    }
-
-    return '';
-}
-
 function buildEndpoint() {
     return data.gtm_server_domain + data.request_path;
 }
 
 function addRequiredDataForPostRequest(data, eventData) {
     eventData.event_name = getEventName(data);
-    eventData.protocol_version = makeNumber(data.protocol_version);
-    eventData.data_tag = true;
+    eventData.v = makeNumber(data.protocol_version);
+    eventData.important_cookie_values = {
+        '_fbp': getCookieValues('_fbp'),
+        '_fbc': getCookieValues('_fbc'),
+    };
     eventData.data_tag_custom_data = getCustomData(data, true);
-    eventData.dtclid = getDtclid();
 
     return eventData;
 }
 
 function addRequiredDataForGetRequest(data, url) {
-    url = url + '?event_name=' + encodeUriComponent(getEventName(data)) + '&dtclid=' + encodeUriComponent(getDtclid()) + '&v=' + makeNumber(data.protocol_version);
+    url = url + '?event_name=' + encodeUriComponent(getEventName(data)) + '&v=' + makeNumber(data.protocol_version);
 
     let customData = getCustomData(data, false);
 
@@ -187,25 +191,75 @@ function getCustomData(data, dtagLoaded) {
     }
 
     for (let dataKey in customData) {
+        let dataName = customData[dataKey].name;
         let dataValue = customData[dataKey].value;
         let dataTransformation = customData[dataKey].transformation;
+        let dataStore = customData[dataKey].store;
 
         if (dataValue) {
             if (dataTransformation === 'trim') {
+                dataValue = makeString(dataValue);
                 dataValue = dataValue.trim();
             }
 
             if (dataTransformation === 'to_lower_case') {
-                dataValue = dataValue.trim().toLocaleLowerCase();
+                dataValue = makeString(dataValue);
+                dataValue = dataValue.trim().toLowerCase();
+            }
+
+            if (dataTransformation === 'base64') {
+                dataValue = makeString(dataValue);
+                dataValue = toBase64(dataValue);
             }
 
             if (dtagLoaded && dataTransformation === 'md5') {
-                dataValue = callInWindow('dataTagMD5', dataValue.trim().toLocaleLowerCase());
+                dataValue = makeString(dataValue);
+                dataValue = callInWindow('dataTagMD5', dataValue.trim().toLowerCase());
+            }
+
+            if (dtagLoaded && dataTransformation === 'sha256base64') {
+                dataValue = makeString(dataValue);
+                dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'B64');
+            }
+
+            if (dtagLoaded && dataTransformation === 'sha256hex') {
+                dataValue = makeString(dataValue);
+                dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'HEX');
+            }
+
+            if (localStorage && (dataStore === 'localStorage' || dataStore === 'all')) {
+                dataToStore[dataName] = dataValue;
             }
 
             customData[dataKey].value = dataValue;
         }
     }
 
+    if (getObjectLength(dataToStore) !== 0) {
+        let dataToStoreOld = localStorage.getItem('stape');
+        if (dataToStoreOld) {
+            dataToStoreOld = JSON.parse(dataToStoreOld);
+
+            for (let attrName in dataToStoreOld) {
+                if (!dataToStore[attrName]) {
+                    dataToStore[attrName] = dataToStoreOld[attrName];
+                }
+            }
+        }
+
+        dataToStore = JSON.stringify(dataToStore);
+        localStorage.setItem('stape', dataToStore);
+    }
+
     return customData;
+}
+
+function getObjectLength(object) {
+    let length = 0;
+    for(let key in object) {
+        if(object.hasOwnProperty(key)) {
+            ++length;
+        }
+    }
+    return length;
 }
