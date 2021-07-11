@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 630a4aaa1d5556d7370a04a826deeb48618c8f4d
+    changeNotes: Add data store functionality.
   - sha: 95d42bda5fce25db520c9fd8131dd0616a267eb3
     changeNotes: Move to Stape. Update parameter parsing.
   - sha: 167e76600a45a3f977ca20204c45b65e7454fecc
