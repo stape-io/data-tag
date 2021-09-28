@@ -15,10 +15,18 @@ const encodeUriComponent = require('encodeUriComponent');
 const toBase64 = require('toBase64');
 const makeString = require('makeString');
 const getCookieValues = require('getCookieValues');
+const makeTableMap = require('makeTableMap');
+
+let pageLocation = getUrl();
+
+if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
+    return data.gtmOnSuccess();
+}
 
 let dataToStore = {};
+let requestType = determinateRequestType();
 
-if (data.request_type === 'post') {
+if (requestType === 'post') {
     const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v1.js';
 
     if (queryPermission('inject_script', dataTagScriptUrl)) {
@@ -67,6 +75,7 @@ function addRequiredDataForPostRequest(data, eventData) {
     eventData.important_cookie_values = {
         '_fbp': getCookieValues('_fbp'),
         '_fbc': getCookieValues('_fbc'),
+        '_dcid': getCookieValues('_dcid'),
     };
     eventData.data_tag_custom_data = getCustomData(data, true);
 
@@ -79,11 +88,17 @@ function addRequiredDataForGetRequest(data, url) {
     let customData = getCustomData(data, false);
 
     if (customData.length) {
-        for (let customDataKey in customData) {
-            url = url + '&' + customData[customDataKey].name + '=';
+        if (data.request_type === 'auto') {
+            let customDataPrep = makeTableMap(customData, 'name', 'value');
+            customDataPrep = encodeUriComponent(JSON.stringify(customDataPrep));
+            url = url + '&dtcd=' + customDataPrep;
+        } else {
+            for (let customDataKey in customData) {
+                url = url + '&' + customData[customDataKey].name + '=';
 
-            if (customData[customDataKey].value) {
-                url = url + encodeUriComponent(customData[customDataKey].value);
+                if (customData[customDataKey].value) {
+                    url = url + encodeUriComponent(customData[customDataKey].value);
+                }
             }
         }
     }
@@ -262,4 +277,31 @@ function getObjectLength(object) {
         }
     }
     return length;
+}
+
+function determinateRequestType() {
+    if (data.request_type !== 'auto') {
+        return data.request_type;
+    }
+
+    if (data.add_data_layer) {
+        return 'post';
+    }
+
+    let customDataLength = 0;
+    let userDataLength = 0;
+
+    if (data.custom_data && data.custom_data.length) {
+        customDataLength = makeNumber(JSON.stringify(data.custom_data).length);
+    }
+
+    if (data.user_data && data.user_data.length) {
+        userDataLength = makeNumber(JSON.stringify(data.user_data).length);
+    }
+
+    if ((customDataLength+userDataLength) > 1500) {
+        return 'post';
+    }
+
+    return 'get';
 }
