@@ -191,13 +191,6 @@ ___TEMPLATE_PARAMETERS___
     "alwaysInSummary": true
   },
   {
-    "type": "TEXT",
-    "name": "gtm_server_preview_header",
-    "displayName": "GTM Server Preview HTTP header",
-    "simpleValueType": true,
-    "help": "Provide a \u003cb\u003eX-Gtm-Server-Preview HTTP header\u003c/b\u003e if you want to test incoming \u003cb\u003ePOST\u003c/b\u003e requests in the GTM Sever side debugger. You can find it by clicking the three dots in the top right corner of Google Tag Manager Server container preview mode and choose the \"Send requests manually\"."
-  },
-  {
     "type": "CHECKBOX",
     "name": "add_data_layer",
     "checkboxText": "Send all from DataLayer",
@@ -563,7 +556,7 @@ let dataToStore = {};
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
-    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v1.js';
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v2.js';
 
     if (queryPermission('inject_script', dataTagScriptUrl)) {
         injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
@@ -581,7 +574,7 @@ function sendPostRequest() {
     eventData = addCommonDataForPostRequest(data, eventData);
     eventData = addRequiredDataForPostRequest(data, eventData);
 
-    callInWindow('dataTagSendData', eventData, buildEndpoint(), data.gtm_server_preview_header);
+    callInWindow('dataTagSendData', eventData, buildEndpoint());
 
     if (dataToStore.length) {
         let url = buildEndpoint() + '/store?d='+encodeUriComponent(toBase64(dataToStore));
@@ -1202,7 +1195,7 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://cdn.stape.io/dtag/v1.js"
+                "string": "https://cdn.stape.io/dtag/v2.js"
               }
             ]
           }

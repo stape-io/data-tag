@@ -1,12 +1,10 @@
-function dataTagSendData(data, endpoint, gtmServerPreviewHeader) {
+function dataTagSendData(data, endpoint) {
     var xhr = new XMLHttpRequest();
     var stringifiedData = JSON.stringify(data);
 
     xhr.open('POST', endpoint);
     xhr.setRequestHeader('Content-type', 'application/json');
-    if (gtmServerPreviewHeader) {
-        xhr.setRequestHeader('x-gtm-server-preview', gtmServerPreviewHeader);
-    }
+    xhr.withCredentials = true;
     xhr.send(stringifiedData);
 
     xhr.onload = function () {

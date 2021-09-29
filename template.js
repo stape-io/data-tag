@@ -27,7 +27,7 @@ let dataToStore = {};
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
-    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v1.js';
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v2.js';
 
     if (queryPermission('inject_script', dataTagScriptUrl)) {
         injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
@@ -45,7 +45,7 @@ function sendPostRequest() {
     eventData = addCommonDataForPostRequest(data, eventData);
     eventData = addRequiredDataForPostRequest(data, eventData);
 
-    callInWindow('dataTagSendData', eventData, buildEndpoint(), data.gtm_server_preview_header);
+    callInWindow('dataTagSendData', eventData, buildEndpoint());
 
     if (dataToStore.length) {
         let url = buildEndpoint() + '/store?d='+encodeUriComponent(toBase64(dataToStore));
