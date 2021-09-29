@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 05a73617b9563ed32703ceacdd85db8f3ae2b2ad
+    changeNotes: Add Auto Preview Header.
   - sha: 7cee3544d17e43cb62b44e675f64e5db9b027dd5
     changeNotes: Add auto request type.
   - sha: 630a4aaa1d5556d7370a04a826deeb48618c8f4d
