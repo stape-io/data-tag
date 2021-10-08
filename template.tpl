@@ -641,7 +641,9 @@ function addDataLayerDataForPostRequest(data, eventData) {
         const dataLayer = copyFromWindow('dataLayer');
 
         if (dataLayer && gtmId) {
-            let obj = dataLayer.map(o => {
+            let obj = dataLayer.filter((o) => {
+                return typeof o.event !== "undefined";
+            }).map(o => {
                 if (o['gtm.uniqueEventId']) return o;
 
                 o = JSON.parse(JSON.stringify(o));
@@ -661,7 +663,6 @@ function addDataLayerDataForPostRequest(data, eventData) {
                 }
             }
         }
-
     }
 
     return eventData;
