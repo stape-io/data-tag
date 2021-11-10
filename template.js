@@ -6,7 +6,6 @@ const getReferrerUrl = require('getReferrerUrl');
 const readTitle = require('readTitle');
 const injectScript = require('injectScript');
 const callInWindow = require('callInWindow');
-const queryPermission = require('queryPermission');
 const makeNumber = require('makeNumber');
 const readCharacterSet = require('readCharacterSet');
 const localStorage = require('localStorage');
@@ -14,26 +13,22 @@ const sendPixel = require('sendPixel');
 const encodeUriComponent = require('encodeUriComponent');
 const toBase64 = require('toBase64');
 const makeString = require('makeString');
+const setCookie = require('setCookie');
 const getCookieValues = require('getCookieValues');
-const makeTableMap = require('makeTableMap');
 
 let pageLocation = getUrl();
 
 if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
-    return data.gtmOnSuccess();
+    data.gtmOnSuccess();
+
+    return;
 }
 
-let dataToStore = {};
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
-    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v2.js';
-
-    if (queryPermission('inject_script', dataTagScriptUrl)) {
-        injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
-    } else {
-        data.gtmOnFailure();
-    }
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v3.js';
+    injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
 } else {
     sendGetRequest();
 }
@@ -44,25 +39,14 @@ function sendPostRequest() {
     eventData = addDataLayerDataForPostRequest(data, eventData);
     eventData = addCommonDataForPostRequest(data, eventData);
     eventData = addRequiredDataForPostRequest(data, eventData);
+    eventData = addGaRequiredData(data, eventData);
 
     callInWindow('dataTagSendData', eventData, buildEndpoint());
-
-    if (dataToStore.length) {
-        let url = buildEndpoint() + '/store?d='+encodeUriComponent(toBase64(dataToStore));
-
-        sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
-    } else {
-        data.gtmOnSuccess();
-    }
+    data.gtmOnSuccess();
 }
 
 function sendGetRequest() {
-    let url = buildEndpoint();
-
-    url = addRequiredDataForGetRequest(data, url);
-    url = addCommonDataForGetRequest(data, url);
-
-    sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
+    sendPixel(addDataForGetRequest(data, buildEndpoint()), data.gtmOnSuccess, data.gtmOnFailure);
 }
 
 function buildEndpoint() {
@@ -72,35 +56,52 @@ function buildEndpoint() {
 function addRequiredDataForPostRequest(data, eventData) {
     eventData.event_name = getEventName(data);
     eventData.v = makeNumber(data.protocol_version);
-    eventData.important_cookie_values = {
-        '_fbp': getCookieValues('_fbp'),
-        '_fbc': getCookieValues('_fbc'),
-        '_dcid': getCookieValues('_dcid'),
-    };
-    eventData.data_tag_custom_data = getCustomData(data, true);
+
+    let customData = getCustomData(data, true);
+
+    for (let key in customData) {
+        eventData[customData[key].name] = customData[key].value;
+    }
 
     return eventData;
 }
 
-function addRequiredDataForGetRequest(data, url) {
-    url = url + '?event_name=' + encodeUriComponent(getEventName(data)) + '&v=' + makeNumber(data.protocol_version);
+function addGaRequiredData(data, eventData) {
+    if (data.addGaParameters && data.gaId) {
+        eventData['x-ga-measurement_id'] = data.gaId;
+        eventData['x-ga-page_id'] = copyFromDataLayer('gtm.start');
+        eventData['x-ga-mp2-richsstsse'] = '';
+        eventData['x-ga-mp2-seg'] = 1;
+        eventData['x-ga-request_count'] = 1;
+        eventData['x-ga-protocol_version'] = 2;
+        eventData.v = 2;
+    }
+
+    return eventData;
+}
+
+function addDataForGetRequest(data, url) {
+    let eventData = {};
+    url += '?v=' + data.protocol_version + '&event_name=' + encodeUriComponent(getEventName(data));
+
+    if (data.add_common) {
+        eventData = addCommonData(data, eventData);
+    }
 
     let customData = getCustomData(data, false);
 
     if (customData.length) {
-        if (data.request_type === 'auto') {
-            let customDataPrep = makeTableMap(customData, 'name', 'value');
-            customDataPrep = encodeUriComponent(JSON.stringify(customDataPrep));
-            url = url + '&dtcd=' + customDataPrep;
-        } else {
-            for (let customDataKey in customData) {
-                url = url + '&' + customData[customDataKey].name + '=';
-
-                if (customData[customDataKey].value) {
-                    url = url + encodeUriComponent(customData[customDataKey].value);
-                }
-            }
+        for (let customDataKey in customData) {
+            eventData[customData[customDataKey].name] = customData[customDataKey].value;
         }
+    }
+
+    if (data.request_type === 'auto') {
+        return url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)));
+    }
+
+    for (let eventDataKey in eventData) {
+        url += '&' + eventDataKey + '=' + (eventData[eventDataKey] ? encodeUriComponent(eventData[eventDataKey]) : '');
     }
 
     return url;
@@ -151,23 +152,6 @@ function addCommonDataForPostRequest(data, eventData) {
     return eventData;
 }
 
-function addCommonDataForGetRequest(data, url) {
-    if (data.add_common) {
-        let eventData = {};
-        eventData = addCommonData(data, eventData);
-
-        for (let eventDataKey in eventData) {
-            url = url + '&' + eventDataKey + '=';
-
-            if (eventData[eventDataKey]) {
-                url = url + encodeUriComponent(eventData[eventDataKey]);
-            }
-        }
-    }
-
-    return url;
-}
-
 function addCommonData(data, eventData) {
     eventData.page_location = getUrl();
     eventData.page_path = getUrl('path');
@@ -180,7 +164,7 @@ function addCommonData(data, eventData) {
 }
 
 function getEventName(data) {
-    let eventName = 'page_view';
+    const eventName = 'page_view';
 
     if (data.event_type === 'standard') {
         return data.event_name_standard ? data.event_name_standard : eventName;
@@ -194,6 +178,7 @@ function getEventName(data) {
 }
 
 function getCustomData(data, dtagLoaded) {
+    let dataToStore = [];
     let customData = [];
 
     if (data.custom_data && data.custom_data.length) {
@@ -207,10 +192,8 @@ function getCustomData(data, dtagLoaded) {
     }
 
     for (let dataKey in customData) {
-        let dataName = customData[dataKey].name;
         let dataValue = customData[dataKey].value;
         let dataTransformation = customData[dataKey].transformation;
-        let dataStore = customData[dataKey].store;
 
         if (dataValue) {
             if (dataTransformation === 'trim') {
@@ -243,37 +226,80 @@ function getCustomData(data, dtagLoaded) {
                 dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'HEX');
             }
 
-            if (localStorage && (dataStore === 'localStorage' || dataStore === 'all')) {
-                dataToStore[dataName] = dataValue;
+            if (customData[dataKey].store && customData[dataKey].store !== 'none') {
+                dataToStore.push({
+                    'store': customData[dataKey].store,
+                    'name': customData[dataKey].name,
+                    'value': dataValue,
+                });
             }
 
             customData[dataKey].value = dataValue;
         }
     }
 
-    if (getObjectLength(dataToStore) !== 0) {
-        let dataToStoreOld = localStorage.getItem('stape');
-        if (dataToStoreOld) {
-            dataToStoreOld = JSON.parse(dataToStoreOld);
-
-            for (let attrName in dataToStoreOld) {
-                if (!dataToStore[attrName]) {
-                    dataToStore[attrName] = dataToStoreOld[attrName];
-                }
-            }
-        }
-
-        dataToStore = JSON.stringify(dataToStore);
-        localStorage.setItem('stape', dataToStore);
+    if (dataToStore.length !== 0) {
+        storeData(dataToStore);
     }
 
     return customData;
 }
 
+function storeData(dataToStore) {
+    let dataToStoreCookieResult = {};
+    let dataToStoreLocalStorageResult = {};
+    let dataToStoreCookie = getCookieValues('stape')[0];
+
+    if (dataToStoreCookie) {
+        dataToStoreCookie = JSON.parse(dataToStoreCookie);
+
+        if (dataToStoreCookie) {
+            for (let attrName in dataToStoreCookie) {
+                if (dataToStoreCookie[attrName]) dataToStoreCookieResult[attrName] = dataToStoreCookie[attrName];
+            }
+        }
+    }
+
+    if (localStorage) {
+        let dataToStoreLocalStorage = localStorage.getItem('stape');
+
+        if (dataToStoreLocalStorage) {
+            dataToStoreLocalStorage = JSON.parse(dataToStoreLocalStorage);
+
+            if (dataToStoreLocalStorage) {
+                for (let attrName in dataToStoreLocalStorage) {
+                    if (dataToStoreLocalStorage[attrName]) dataToStoreLocalStorageResult[attrName] = dataToStoreLocalStorage[attrName];
+                }
+            }
+        }
+    }
+
+    for (let attrName in dataToStore) {
+        if (dataToStore[attrName].value) {
+            if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'localStorage') {
+                dataToStoreLocalStorageResult[dataToStore[attrName].name] = dataToStore[attrName].value;
+            }
+
+            if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'cookies') {
+                dataToStoreCookieResult[dataToStore[attrName].name] = dataToStore[attrName].value;
+            }
+        }
+    }
+
+    if (localStorage && getObjectLength(dataToStoreLocalStorageResult) !== 0) {
+        localStorage.setItem('stape', JSON.stringify(dataToStoreLocalStorageResult));
+    }
+
+    if (getObjectLength(dataToStoreCookieResult) !== 0) {
+        setCookie('stape', JSON.stringify(dataToStoreCookieResult), {secure: true, domain: 'auto', path: '/'});
+    }
+}
+
 function getObjectLength(object) {
     let length = 0;
-    for(let key in object) {
-        if(object.hasOwnProperty(key)) {
+
+    for (let key in object) {
+        if (object.hasOwnProperty(key)) {
             ++length;
         }
     }
@@ -292,17 +318,8 @@ function determinateRequestType() {
     let customDataLength = 0;
     let userDataLength = 0;
 
-    if (data.custom_data && data.custom_data.length) {
-        customDataLength = makeNumber(JSON.stringify(data.custom_data).length);
-    }
+    if (data.custom_data && data.custom_data.length) customDataLength = makeNumber(JSON.stringify(data.custom_data).length);
+    if (data.user_data && data.user_data.length) userDataLength = makeNumber(JSON.stringify(data.user_data).length);
 
-    if (data.user_data && data.user_data.length) {
-        userDataLength = makeNumber(JSON.stringify(data.user_data).length);
-    }
-
-    if ((customDataLength+userDataLength) > 1500) {
-        return 'post';
-    }
-
-    return 'get';
+    return (customDataLength + userDataLength) > 1500 ? 'post' : 'get';
 }

@@ -3,7 +3,7 @@ function dataTagSendData(data, endpoint) {
     var stringifiedData = JSON.stringify(data);
 
     xhr.open('POST', endpoint);
-    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.setRequestHeader('Content-type', 'text/plain');
     xhr.withCredentials = true;
     xhr.send(stringifiedData);
 
