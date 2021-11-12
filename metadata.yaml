@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 198b1bcadbadb760092f0470ed6034b54ae7a87a
+    changeNotes: Update send data method.
   - sha: 13b71a1440e44e726dd5b394dfb582a762d3eb6f
     changeNotes: Fixed DataLayer parsing issue.
   - sha: 05a73617b9563ed32703ceacdd85db8f3ae2b2ad
