@@ -1,5 +1,4 @@
 const copyFromDataLayer = require('copyFromDataLayer');
-const copyFromWindow = require('copyFromWindow');
 const JSON = require('JSON');
 const getUrl = require('getUrl');
 const getReferrerUrl = require('getReferrerUrl');
@@ -15,6 +14,7 @@ const toBase64 = require('toBase64');
 const makeString = require('makeString');
 const setCookie = require('setCookie');
 const getCookieValues = require('getCookieValues');
+const getContainerVersion = require('getContainerVersion');
 
 let pageLocation = getUrl();
 
@@ -27,7 +27,7 @@ if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) 
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
-    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v3.js';
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v4.js';
     injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
 } else {
     sendGetRequest();
@@ -36,7 +36,6 @@ if (requestType === 'post') {
 function sendPostRequest() {
     let eventData = {};
 
-    eventData = addDataLayerDataForPostRequest(data, eventData);
     eventData = addCommonDataForPostRequest(data, eventData);
     eventData = addRequiredDataForPostRequest(data, eventData);
     eventData = addGaRequiredData(data, eventData);
@@ -107,46 +106,21 @@ function addDataForGetRequest(data, url) {
     return url;
 }
 
-function addDataLayerDataForPostRequest(data, eventData) {
-    if (data.add_data_layer) {
-        const gtmId = copyFromDataLayer('gtm.uniqueEventId');
-        const dataLayer = copyFromWindow('dataLayer');
+function addCommonDataForPostRequest(data, eventData) {
+    if (data.add_common || data.add_data_layer) {
+        const dataTagData = callInWindow('dataTagGetData', getContainerVersion()['containerId']);
 
-        if (dataLayer && gtmId) {
-            let obj = dataLayer.filter((o) => {
-                return typeof o.event !== "undefined";
-            }).map(o => {
-                if (o['gtm.uniqueEventId']) return o;
-
-                o = JSON.parse(JSON.stringify(o));
-
-                for (let prop in o) {
-                    return o[prop];
-                }
-            }).filter(o => {
-                if (o['gtm.uniqueEventId'] === gtmId) return true;
-            });
-
-            if (obj.length) {
-                obj = obj[0];
-
-                for (let objKey in obj) {
-                    eventData[objKey] = obj[objKey];
-                }
+        if (data.add_data_layer && dataTagData.dataModel) {
+            for (let dataKey in dataTagData.dataModel) {
+                eventData[dataKey] = dataTagData.dataModel[dataKey];
             }
         }
-    }
 
-    return eventData;
-}
-
-function addCommonDataForPostRequest(data, eventData) {
-    if (data.add_common) {
-        const dataTagData = callInWindow('dataTagGetData');
-
-        eventData = addCommonData(data, eventData);
-        eventData.screen_resolution = dataTagData.screen.width + 'x' + dataTagData.screen.height;
-        eventData.viewport_size = dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
+        if (data.add_common) {
+            eventData = addCommonData(data, eventData);
+            eventData.screen_resolution = dataTagData.screen.width + 'x' + dataTagData.screen.height;
+            eventData.viewport_size = dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
+        }
     }
 
     return eventData;

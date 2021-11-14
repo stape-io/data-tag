@@ -14,7 +14,7 @@ function dataTagSendData(data, endpoint) {
     };
 }
 
-function dataTagGetData() {
+function dataTagGetData(containerId) {
     window.dataTagData = {
         document: {
             characterSet: window.document.characterSet,
@@ -25,6 +25,9 @@ function dataTagGetData() {
             width: window.screen.width,
             height: window.screen.height,
         },
+        dataModel: window.google_tag_manager[containerId].dataLayer.get({
+            split: function() { return []; }
+        }),
     };
 
     return window.dataTagData;
