@@ -12,10 +12,6 @@ Common data contains: `page_location, page_path, page_hostname, page_referrer, p
 
 - [Sending Data From Google Tag Manager Web Container to Server Container](https://stape.io/sending-data-from-google-tag-manager-web-container-to-the-server-container/)
 
-
-
-![Data Tag](https://stape.io/wp-content/uploads/2021/03/data-tag.png)
-
 ## Open Source
 
 Data Tag for Google Tag Manager Web container is developing and maintained by [Stape Team](https://stape.io/) under the Apache 2.0 license.
