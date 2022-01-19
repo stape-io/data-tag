@@ -605,7 +605,7 @@ function sendPostRequest() {
     eventData = addRequiredDataForPostRequest(data, eventData);
     eventData = addGaRequiredData(data, eventData);
 
-    callInWindow('dataTagSendData', eventData, buildEndpoint());
+    callInWindow('dataTagSendData', eventData, buildEndpoint()+'?v=' + eventData.v + '&event_name=' + encodeUriComponent(eventData.event_name));
     data.gtmOnSuccess();
 }
 
