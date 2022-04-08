@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: fb1e40e9ed67710d740fd9777353da1023e88183
+    changeNotes: Update UA compatibility.
   - sha: d6bbe18327efedbd29a8411ae8471e57e31db4f8
     changeNotes: Add required data to URL for POST type request.
   - sha: 55831742327c807310adbbf529eb7d83c0719625
