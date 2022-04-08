@@ -128,7 +128,6 @@ function addCommonDataForPostRequest(data, eventData) {
 
 function addCommonData(data, eventData) {
     eventData.page_location = getUrl();
-    eventData.page_path = getUrl('path');
     eventData.page_hostname = getUrl('host');
     eventData.page_referrer = getReferrerUrl();
     eventData.page_title = readTitle();
