@@ -1,4 +1,14 @@
-function dataTagSendData(data, endpoint) {
+function parseResponse(str) {
+    try {
+        return JSON.parse(str);
+    } catch (e) {
+        return {
+            'body': str,
+        };
+    }
+}
+
+function dataTagSendData(data, endpoint, dataLayerEventName, dataLayerVariableName) {
     var xhr = new XMLHttpRequest();
     var stringifiedData = JSON.stringify(data);
 
@@ -10,6 +20,15 @@ function dataTagSendData(data, endpoint) {
     xhr.onload = function () {
         if (xhr.status.toString()[0] !== '2') {
             console.error(xhr.status + '> ' + xhr.statusText);
+        }
+
+        if (dataLayerEventName && dataLayerVariableName) {
+            window[dataLayerVariableName] = window[dataLayerVariableName] || [];
+            var eventDataLayerData = parseResponse(xhr.responseText);
+            eventDataLayerData.event = dataLayerEventName;
+            eventDataLayerData.status = xhr.status;
+
+            window[dataLayerVariableName].push(eventDataLayerData);
         }
     };
 }

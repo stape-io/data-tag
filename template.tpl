@@ -555,6 +555,52 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "help": "Enter the Measurement ID of your GA4 property."
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "dataLayerEventPush",
+        "checkboxText": "Push event to DataLayer after tag receives a response",
+        "simpleValueType": true,
+        "help": "Helpful in obtaining data from the server.",
+        "defaultValue": false
+      },
+      {
+        "type": "TEXT",
+        "name": "dataLayerVariableName",
+        "displayName": "DataLayer Variable Name",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "dataLayerEventPush",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ],
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "defaultValue": "dataLayer"
+      },
+      {
+        "type": "TEXT",
+        "name": "dataLayerEventName",
+        "displayName": "DataLayer Event Name",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "dataLayerEventPush",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ],
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "valueHint": "page_view_response"
       }
     ]
   }
@@ -592,7 +638,7 @@ if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) 
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
-    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v4.js';
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v5.js';
     injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
 } else {
     sendGetRequest();
@@ -605,7 +651,12 @@ function sendPostRequest() {
     eventData = addRequiredDataForPostRequest(data, eventData);
     eventData = addGaRequiredData(data, eventData);
 
-    callInWindow('dataTagSendData', eventData, buildEndpoint()+'?v=' + eventData.v + '&event_name=' + encodeUriComponent(eventData.event_name));
+    if (data.dataLayerEventPush) {
+        callInWindow('dataTagSendData', eventData, buildEndpoint()+'?v=' + eventData.v + '&event_name=' + encodeUriComponent(eventData.event_name), data.dataLayerEventName, data.dataLayerVariableName);
+    } else {
+        callInWindow('dataTagSendData', eventData, buildEndpoint()+'?v=' + eventData.v + '&event_name=' + encodeUriComponent(eventData.event_name));
+    }
+
     data.gtmOnSuccess();
 }
 
@@ -850,6 +901,10 @@ function determinateRequestType() {
     }
 
     if (data.add_data_layer) {
+        return 'post';
+    }
+
+    if (data.dataLayerEventPush) {
         return 'post';
     }
 
@@ -1232,7 +1287,7 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://cdn.stape.io/dtag/v4.js"
+                "string": "https://cdn.stape.io/dtag/v5.js"
               }
             ]
           }
