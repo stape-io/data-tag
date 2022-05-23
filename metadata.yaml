@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 4db792ff55044f83a7dc53986da138a5044d0b93
+    changeNotes: Add response dataLayer push feature.
   - sha: fb1e40e9ed67710d740fd9777353da1023e88183
     changeNotes: Update UA compatibility.
   - sha: d6bbe18327efedbd29a8411ae8471e57e31db4f8
