@@ -566,25 +566,6 @@ ___TEMPLATE_PARAMETERS___
       },
       {
         "type": "TEXT",
-        "name": "dataLayerVariableName",
-        "displayName": "DataLayer Variable Name",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "dataLayerEventPush",
-            "paramValue": true,
-            "type": "EQUALS"
-          }
-        ],
-        "valueValidators": [
-          {
-            "type": "NON_EMPTY"
-          }
-        ],
-        "defaultValue": "dataLayer"
-      },
-      {
-        "type": "TEXT",
         "name": "dataLayerEventName",
         "displayName": "DataLayer Event Name",
         "simpleValueType": true,
@@ -601,6 +582,26 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "valueHint": "page_view_response"
+      },
+      {
+        "type": "TEXT",
+        "name": "dataLayerVariableName",
+        "displayName": "DataLayer Variable Name",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "dataLayerEventPush",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ],
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "defaultValue": "dataLayer",
+        "help": "Use dataLayer by default. Modify only if you renamed dataLayer variable name."
       }
     ]
   }
