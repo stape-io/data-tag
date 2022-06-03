@@ -586,7 +586,7 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "TEXT",
         "name": "dataLayerVariableName",
-        "displayName": "DataLayer Variable Name",
+        "displayName": "DataLayer Object Name",
         "simpleValueType": true,
         "enablingConditions": [
           {
@@ -601,7 +601,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "defaultValue": "dataLayer",
-        "help": "Use dataLayer by default. Modify only if you renamed dataLayer variable name."
+        "help": "Use dataLayer by default. Modify only if you renamed dataLayer object name."
       }
     ]
   }
