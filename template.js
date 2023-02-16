@@ -30,7 +30,8 @@ if (
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
-  const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v5.js';
+  const dataTagScriptUrl =
+    data.data_tag_script_url || 'https://cdn.stape.io/dtag/v5.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
