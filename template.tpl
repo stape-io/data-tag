@@ -522,6 +522,23 @@ ___TEMPLATE_PARAMETERS___
         ]
       },
       {
+        "type": "TEXT",
+        "name": "data_tag_script_url",
+        "displayName": "Data Tag Script URL",
+        "simpleValueType": true,
+        "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/v5.js",
+        "valueValidators": [
+          {
+            "type": "REGEX",
+            "args": [
+              "^(https://).*(\\.js)$"
+            ]
+          }
+        ],
+        "alwaysInSummary": false,
+        "defaultValue": "https://cdn.stape.io/dtag/v5.js"
+      },
+      {
         "type": "CHECKBOX",
         "name": "addGaParameters",
         "checkboxText": "Add GA4 specific parameters",
@@ -642,7 +659,8 @@ if (
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
-  const dataTagScriptUrl = 'https://cdn.stape.io/dtag/v5.js';
+  const dataTagScriptUrl =
+    data.data_tag_script_url || 'https://cdn.stape.io/dtag/v5.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,

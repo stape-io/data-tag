@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: ee07980ee98d04890d75c63fb714998840b27476
+    changeNotes: Allow to load script from custom domain.
   - sha: c82826eaa467ef37868913232bcbaee8da29ba49
     changeNotes: Update dataLayer push UI.
   - sha: babdcc899d9b6651a646d660018653923ecdfae5
