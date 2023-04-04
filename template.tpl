@@ -619,6 +619,36 @@ ___TEMPLATE_PARAMETERS___
         ],
         "defaultValue": "dataLayer",
         "help": "Use dataLayer by default. Modify only if you renamed dataLayer object name."
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "richsstsse",
+        "checkboxText": "Support rich command protocol",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "request_type",
+            "paramValue": "get",
+            "type": "NOT_EQUALS"
+          }
+        ],
+        "help": "Useful if you have server-side tags, that (partially) depend on the sendPixelFromBrowser() api for 3rd party cookies (e.g. Google Ads Conversion, Google Ads Remarketing)",
+        "defaultValue": false
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "waitForCookies",
+        "checkboxText": "Wait for cookies before event is pushed",
+        "simpleValueType": true,
+        "defaultValue": false,
+        "enablingConditions": [
+          {
+            "paramName": "richsstsse",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ],
+        "help": "Wait for all cookies to be set before event is pushed to DataLayer. Helpful if a server-side tag sets cookies that a web tag relies on."
       }
     ]
   }
@@ -678,29 +708,20 @@ function sendPostRequest() {
   eventData = addRequiredDataForPostRequest(data, eventData);
   eventData = addGaRequiredData(data, eventData);
 
-  if (data.dataLayerEventPush) {
-    callInWindow(
-      'dataTagSendData',
-      eventData,
-      buildEndpoint() +
-        '?v=' +
-        eventData.v +
-        '&event_name=' +
-        encodeUriComponent(eventData.event_name),
-      data.dataLayerEventName,
-      data.dataLayerVariableName
-    );
-  } else {
-    callInWindow(
-      'dataTagSendData',
-      eventData,
-      buildEndpoint() +
-        '?v=' +
-        eventData.v +
-        '&event_name=' +
-        encodeUriComponent(eventData.event_name)
-    );
-  }
+  callInWindow(
+    'dataTagSendData',
+    eventData,
+    data.gtm_server_domain,
+    data.request_path +
+    '?v=' +
+    eventData.v +
+    '&event_name=' +
+    encodeUriComponent(eventData.event_name) +
+    (data.richsstsse ? '&richsstsse' : ''),
+    data.dataLayerEventName,
+    data.dataLayerVariableName,
+    data.waitForCookies
+  );
 
   data.gtmOnSuccess();
 }
@@ -998,6 +1019,10 @@ function determinateRequestType() {
   }
 
   if (data.dataLayerEventPush) {
+    return 'post';
+  }
+
+  if (data.richsstsse) {
     return 'post';
   }
 

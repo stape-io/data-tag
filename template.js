@@ -49,29 +49,20 @@ function sendPostRequest() {
   eventData = addRequiredDataForPostRequest(data, eventData);
   eventData = addGaRequiredData(data, eventData);
 
-  if (data.dataLayerEventPush) {
-    callInWindow(
-      'dataTagSendData',
-      eventData,
-      buildEndpoint() +
-        '?v=' +
-        eventData.v +
-        '&event_name=' +
-        encodeUriComponent(eventData.event_name),
-      data.dataLayerEventName,
-      data.dataLayerVariableName
-    );
-  } else {
-    callInWindow(
-      'dataTagSendData',
-      eventData,
-      buildEndpoint() +
-        '?v=' +
-        eventData.v +
-        '&event_name=' +
-        encodeUriComponent(eventData.event_name)
-    );
-  }
+  callInWindow(
+    'dataTagSendData',
+    eventData,
+    data.gtm_server_domain,
+    data.request_path +
+    '?v=' +
+    eventData.v +
+    '&event_name=' +
+    encodeUriComponent(eventData.event_name) +
+    (data.richsstsse ? '&richsstsse' : ''),
+    data.dataLayerEventName,
+    data.dataLayerVariableName,
+    data.waitForCookies
+  );
 
   data.gtmOnSuccess();
 }
@@ -369,6 +360,10 @@ function determinateRequestType() {
   }
 
   if (data.dataLayerEventPush) {
+    return 'post';
+  }
+
+  if (data.richsstsse) {
     return 'post';
   }
 
