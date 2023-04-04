@@ -35,7 +35,11 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
                 img.onload = img.onerror = function() {
                     img.onload = img.onerror = null;
                     setCookieRunningCount--;
-                    if (waitForCookies && (setCookieRunningCount === 0)) {
+                    if ( (xhr.readyState === 4) // server container must be finished to be sure no more cookies will be received
+                      && dataLayerEventName && dataLayerVariableName // data tag configured to push event
+                      && waitForCookies // data tag configured to wait for cookies
+                      && (setCookieRunningCount === 0) // all cookies already set
+                    ) {
                         pushToDataLayer();
                     }
                 };
@@ -138,12 +142,15 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
             console.error(xhr.status + '> ' + xhr.statusText);
         }
 
-        if (dataLayerEventName && dataLayerVariableName) {
-            if (!xhr.responseText.startsWith("event: message\ndata: ")) {
+        if (dataLayerEventName && dataLayerVariableName) { // data tag configured to push event
+            if (!xhr.responseText.startsWith("event: message\ndata: ")) { // old protocol
                 eventDataLayerData = dataTagParseResponse(xhr.responseText);
                 eventDataLayerData.status = xhr.status;
                 pushToDataLayer();
-            } else if (!waitForCookies || (setCookieRunningCount === 0)) {
+            } else if (
+                 !waitForCookies // data tag configured to push event instantly
+              || (setCookieRunningCount === 0) // no cookies received or all cookies already set
+            ) {
                 pushToDataLayer();
             }
         }
