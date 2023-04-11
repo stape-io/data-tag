@@ -112,11 +112,11 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
                         i;
                     if (Array.isArray(sendPixelArr))
                         for (i = 0; i < sendPixelArr.length; i++) sendPixel(sendPixelArr[i]);
-//                    if (T(66)) {
-                        var sendBeaconArr = event.send_beacon || [];
-                        if (Array.isArray(sendBeaconArr))
-                            for (i = 0; i < sendBeaconArr.length; i++) sendBeacon(sendBeaconArr[i])
-//                    }
+
+                    var sendBeaconArr = event.send_beacon || [];
+                    if (Array.isArray(sendBeaconArr))
+                        for (i = 0; i < sendBeaconArr.length; i++) sendBeacon(sendBeaconArr[i])
+
                     if (typeof event.response === 'object') {
                         var status = event.response.status_code || 0,
                             body = event.response.body || {},
