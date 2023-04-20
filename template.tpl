@@ -526,7 +526,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "data_tag_script_url",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
-        "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/v5.js",
+        "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/v6.js",
         "valueValidators": [
           {
             "type": "REGEX",
@@ -536,7 +536,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "alwaysInSummary": false,
-        "defaultValue": "https://cdn.stape.io/dtag/v5.js"
+        "defaultValue": "https://cdn.stape.io/dtag/v6.js"
       },
       {
         "type": "CHECKBOX",
@@ -690,7 +690,7 @@ let requestType = determinateRequestType();
 
 if (requestType === 'post') {
   const dataTagScriptUrl =
-    data.data_tag_script_url || 'https://cdn.stape.io/dtag/v5.js';
+    data.data_tag_script_url || 'https://cdn.stape.io/dtag/v6.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
@@ -1407,7 +1407,7 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://cdn.stape.io/dtag/v5.js"
+                "string": "https://cdn.stape.io/dtag/v6.js"
               }
             ]
           }

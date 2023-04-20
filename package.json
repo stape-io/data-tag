@@ -1,0 +1,23 @@
+{
+  "name": "data-tag",
+  "version": "1.0.0",
+  "description": "Data Tag developed for sending requests from GTM Web Container to GTM Server Side Container [Data client](https://github.com/stape-io/data-client).",
+  "main": "data-tag.js",
+  "scripts": {
+    "build": "uglifyjs data-tag.js -o dtag.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stape-io/data-tag.git"
+  },
+  "author": "Stape",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/stape-io/data-tag/issues"
+  },
+  "homepage": "https://github.com/stape-io/data-tag#readme",
+  "devDependencies": {
+    "prettier": "^2.8.7",
+    "uglify-js": "^3.17.4"
+  }
+}
