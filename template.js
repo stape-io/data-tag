@@ -31,7 +31,7 @@ let requestType = determinateRequestType();
 
 if (requestType === 'post') {
   const dataTagScriptUrl =
-    data.data_tag_script_url || 'https://cdn.stape.io/dtag/v5.js';
+    data.data_tag_script_url || 'https://cdn.stape.io/dtag/v6.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
@@ -54,11 +54,11 @@ function sendPostRequest() {
     eventData,
     data.gtm_server_domain,
     data.request_path +
-    '?v=' +
-    eventData.v +
-    '&event_name=' +
-    encodeUriComponent(eventData.event_name) +
-    (data.richsstsse ? '&richsstsse' : ''),
+      '?v=' +
+      eventData.v +
+      '&event_name=' +
+      encodeUriComponent(eventData.event_name) +
+      (data.richsstsse ? '&richsstsse' : ''),
     data.dataLayerEventName,
     data.dataLayerVariableName,
     data.waitForCookies

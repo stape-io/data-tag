@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: d22fb3d52da7fa004ae13b3af4591fa7a18a9eb3
+    changeNotes: Added support for rich command protocols and sendPixelFromBrowser.
   - sha: ee07980ee98d04890d75c63fb714998840b27476
     changeNotes: Allow to load script from custom domain.
   - sha: c82826eaa467ef37868913232bcbaee8da29ba49
