@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: facb29633cc924250d1e66360d108f7ea8b98ec6
+    changeNotes: Fix script path permissions.
   - sha: d22fb3d52da7fa004ae13b3af4591fa7a18a9eb3
     changeNotes: Added support for rich command protocols and sendPixelFromBrowser.
   - sha: ee07980ee98d04890d75c63fb714998840b27476
