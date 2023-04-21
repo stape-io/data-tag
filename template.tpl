@@ -523,7 +523,7 @@ ___TEMPLATE_PARAMETERS___
       },
       {
         "type": "TEXT",
-        "name": "data_tag_script_url",
+        "name": "data_tag_script",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
         "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/v6.js",
@@ -690,7 +690,7 @@ let requestType = determinateRequestType();
 
 if (requestType === 'post') {
   const dataTagScriptUrl =
-    data.data_tag_script_url || 'https://cdn.stape.io/dtag/v6.js';
+    data.data_tag_script || 'https://cdn.stape.io/dtag/v6.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
