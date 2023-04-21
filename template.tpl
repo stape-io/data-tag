@@ -1407,7 +1407,7 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://cdn.stape.io/dtag/v6.js"
+                "string": "https://cdn.stape.io/dtag/*"
               }
             ]
           }
