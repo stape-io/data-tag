@@ -685,7 +685,7 @@ if (
 
   return;
 }
-
+const userAndCustomData = getUserAndCustomDataArray();
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
@@ -713,11 +713,11 @@ function sendPostRequest() {
     eventData,
     data.gtm_server_domain,
     data.request_path +
-    '?v=' +
-    eventData.v +
-    '&event_name=' +
-    encodeUriComponent(eventData.event_name) +
-    (data.richsstsse ? '&richsstsse' : ''),
+      '?v=' +
+      eventData.v +
+      '&event_name=' +
+      encodeUriComponent(eventData.event_name) +
+      (data.richsstsse ? '&richsstsse' : ''),
     data.dataLayerEventName,
     data.dataLayerVariableName,
     data.waitForCookies
@@ -856,17 +856,7 @@ function getEventName(data) {
 
 function getCustomData(data, dtagLoaded) {
   let dataToStore = [];
-  let customData = [];
-
-  if (data.custom_data && data.custom_data.length) {
-    customData = data.custom_data;
-  }
-
-  if (data.user_data && data.user_data.length) {
-    for (let userDataKey in data.user_data) {
-      customData.push(data.user_data[userDataKey]);
-    }
-  }
+  let customData = userAndCustomData;
 
   for (let dataKey in customData) {
     let dataValue = customData[dataKey].value;
@@ -1026,15 +1016,34 @@ function determinateRequestType() {
     return 'post';
   }
 
-  let customDataLength = 0;
-  let userDataLength = 0;
+  const isHashingEnabled = userAndCustomData.some(
+    (item) =>
+      item.transformation === 'md5' ||
+      item.transformation === 'sha256base64' ||
+      item.transformation === 'sha256hex'
+  );
 
-  if (data.custom_data && data.custom_data.length)
-    customDataLength = makeNumber(JSON.stringify(data.custom_data).length);
-  if (data.user_data && data.user_data.length)
-    userDataLength = makeNumber(JSON.stringify(data.user_data).length);
+  if (isHashingEnabled) return 'post';
 
-  return customDataLength + userDataLength > 1500 ? 'post' : 'get';
+  const userAndCustomDataLength = makeNumber(
+    JSON.stringify(userAndCustomData).length
+  );
+  return userAndCustomDataLength > 1500 ? 'post' : 'get';
+}
+
+function getUserAndCustomDataArray() {
+  let userAndCustomDataArray = [];
+
+  if (data.custom_data && data.custom_data.length) {
+    userAndCustomDataArray = data.custom_data;
+  }
+
+  if (data.user_data && data.user_data.length) {
+    for (let userDataKey in data.user_data) {
+      userAndCustomDataArray.push(data.user_data[userDataKey]);
+    }
+  }
+  return userAndCustomDataArray;
 }
 
 
