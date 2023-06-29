@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 5fad7b78d9cf0888994b53388e38a1a450b74e35
+    changeNotes: Fix data hashing.
   - sha: 244758b434d60d2831ca7962e0983cb89f9bfbaa
     changeNotes: Fix issue with tag update.
   - sha: facb29633cc924250d1e66360d108f7ea8b98ec6
