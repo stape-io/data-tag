@@ -31,7 +31,7 @@ let requestType = determinateRequestType();
 
 if (requestType === 'post') {
   const dataTagScriptUrl =
-    data.data_tag_script || 'https://cdn.stape.io/dtag/v6.js';
+    data.load_data_tag_script_url || 'https://cdn.stape.io/dtag/v7.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
@@ -61,7 +61,8 @@ function sendPostRequest() {
       (data.richsstsse ? '&richsstsse' : ''),
     data.dataLayerEventName,
     data.dataLayerVariableName,
-    data.waitForCookies
+    data.waitForCookies,
+    data.useFetchInsteadOfXHR
   );
 
   data.gtmOnSuccess();

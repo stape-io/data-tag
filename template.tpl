@@ -523,7 +523,7 @@ ___TEMPLATE_PARAMETERS___
       },
       {
         "type": "TEXT",
-        "name": "data_tag_script",
+        "name": "load_data_tag_script_url",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
         "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/v6.js",
@@ -536,7 +536,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "alwaysInSummary": false,
-        "defaultValue": "https://cdn.stape.io/dtag/v6.js"
+        "defaultValue": "https://cdn.stape.io/dtag/v7.js"
       },
       {
         "type": "CHECKBOX",
@@ -649,6 +649,14 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "help": "Wait for all cookies to be set before event is pushed to DataLayer. Helpful if a server-side tag sets cookies that a web tag relies on."
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "useFetchInsteadOfXHR",
+        "checkboxText": "Use fetch instead of XMLHttpRequest",
+        "simpleValueType": true,
+        "enablingConditions": [],
+        "help": "Using fetch with keepalive option which allow the request to outlive the page. \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Web/API/fetch#keepalive\"\u003eRead more\u003c/a\u003e"
       }
     ]
   }
@@ -690,7 +698,7 @@ let requestType = determinateRequestType();
 
 if (requestType === 'post') {
   const dataTagScriptUrl =
-    data.data_tag_script || 'https://cdn.stape.io/dtag/v6.js';
+    data.load_data_tag_script_url || 'https://cdn.stape.io/dtag/v7.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
@@ -720,7 +728,8 @@ function sendPostRequest() {
       (data.richsstsse ? '&richsstsse' : ''),
     data.dataLayerEventName,
     data.dataLayerVariableName,
-    data.waitForCookies
+    data.waitForCookies,
+    data.useFetchInsteadOfXHR
   );
 
   data.gtmOnSuccess();

@@ -18,7 +18,7 @@ function dataTagParseResponse(str) {
     }
 }
 
-function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName, dataLayerVariableName, waitForCookies) {
+function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName, dataLayerVariableName, waitForCookies, useFetchInsteadOfXHR) {
     dataLayerEventName = dataLayerEventName || false;
     dataLayerVariableName = dataLayerVariableName || false;
     waitForCookies = waitForCookies || false;
@@ -69,93 +69,157 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
             eventDataLayerData.event = dataLayerEventName;
             window[dataLayerVariableName].push(eventDataLayerData);
         },
-        xhr = new XMLHttpRequest(),
         stringifiedData = JSON.stringify(data),
         response = "",
         loaded = 0,
         replacements = {transport_url: gtmServerDomain},
         eventDataLayerData = {},
-        setCookieRunningCount = 0;
+        setCookieRunningCount = 0,
+        processResponseDataEvent = function(event) {
+          if (event) {
+            var sendPixelArr = event.send_pixel || [],
+              i;
+            if (Array.isArray(sendPixelArr))
+              for (i = 0; i < sendPixelArr.length; i++) sendPixel(sendPixelArr[i]);
 
-    xhr.open('POST', gtmServerDomain + requestPath);
-    xhr.setRequestHeader('Content-type', 'text/plain');
-    xhr.withCredentials = true;
+            var sendBeaconArr = event.send_beacon || [];
+            if (Array.isArray(sendBeaconArr))
+              for (i = 0; i < sendBeaconArr.length; i++) sendBeacon(sendBeaconArr[i])
 
-    xhr.onprogress = function(progress) {
-        if ((xhr.status === 200) && xhr.responseText.startsWith("event: message\ndata: ")) {
-            response += xhr.responseText.substring(loaded);
-            loaded = progress.loaded;
+            if (typeof event.response === 'object') {
+              var status = event.response.status_code || 0,
+                body = event.response.body || {},
+                parsedBody = dataTagParseResponse(body);
 
-            for (var replacedResponse = replaceVariable(response, replacements), nextSeparationPos = replacedResponse.indexOf("\n\n"); - 1 !== nextSeparationPos;) {
-                var parsedData;
-                a: {
-                    var iterableLines;
-                    var lines = replacedResponse.substring(0, nextSeparationPos).split("\n"),
-                        linesIterator = "undefined" != typeof Symbol && Symbol.iterator && lines[Symbol.iterator];
-                    if (linesIterator) iterableLines = linesIterator.call(lines);
-                    else if ("number" == typeof lines.length) iterableLines = {
-                        next: fallbackIterator(lines)
-                    };
-                    else throw Error(String(lines) + " is not an iterable or ArrayLike");
-                    var eventNameLine = iterableLines.next().value,
-                        eventDataLine = iterableLines.next().value;
-                    if (eventNameLine.startsWith("event: message") && eventDataLine.startsWith("data: ")) try {
-                        parsedData = JSON.parse(eventDataLine.substring(eventDataLine.indexOf(":") + 1));
-                        break a
-                    } catch (e) {}
-                    parsedData =
-                        void 0
+              // merge parsedBody into eventDataLayerData instead of assignment
+              // (just in case multiple responses will be supported by gtm in the future)
+              for (var key in parsedBody) {
+                if (parsedBody.hasOwnProperty(key)) {
+                  eventDataLayerData[key] = parsedBody[key];
                 }
-                var event = parsedData;
-                if (event) {
-                    var sendPixelArr = event.send_pixel || [],
-                        i;
-                    if (Array.isArray(sendPixelArr))
-                        for (i = 0; i < sendPixelArr.length; i++) sendPixel(sendPixelArr[i]);
-
-                    var sendBeaconArr = event.send_beacon || [];
-                    if (Array.isArray(sendBeaconArr))
-                        for (i = 0; i < sendBeaconArr.length; i++) sendBeacon(sendBeaconArr[i])
-
-                    if (typeof event.response === 'object') {
-                        var status = event.response.status_code || 0,
-                            body = event.response.body || {},
-                            parsedBody = dataTagParseResponse(body);
-
-                        // merge parsedBody into eventDataLayerData instead of assignment
-                        // (just in case multiple responses will be supported by gtm in the future)
-                        for (var key in parsedBody) {
-                            if (parsedBody.hasOwnProperty(key)) {
-                                eventDataLayerData[key] = parsedBody[key];
-                            }
-                        }
-                        eventDataLayerData.status = status;
-                    }
-                }
-                replacedResponse = replacedResponse.substring(nextSeparationPos + 2);
-                nextSeparationPos = replacedResponse.indexOf("\n\n")
+              }
+              eventDataLayerData.status = status;
             }
+          }
+        };
+
+    if(useFetchInsteadOfXHR) {
+      fetch(gtmServerDomain + requestPath, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+        credentials: 'include',
+        keepalive: true,
+        body: stringifiedData,
+      })
+        .then(function (response) {
+          var responseText = '';
+          var reader = response.body.getReader();
+
+          return reader.read().then(function readChunk(result) {
+            if (result.done) {
+              // Request has been fully received.
+              return;
+            }
+
+            var chunk = result.value;
+            var textChunk = new TextDecoder('utf-8').decode(chunk);
+
+            responseText += textChunk;
+            var separatorIndex = responseText.indexOf('\n\n');
+
+            while (separatorIndex !== -1) {
+              var eventData = responseText.substring(0, separatorIndex);
+
+              try {
+                var event = JSON.parse(eventData);
+                processResponseDataEvent(event)
+              } catch (error) {
+                console.error('Error processing response data:', error);
+              }
+
+              responseText = responseText.substring(separatorIndex + 2);
+              separatorIndex = responseText.indexOf('\n\n');
+            }
+
+            return reader.read().then(readChunk);
+          });
+        })
+        .then(function () {
+          if (dataLayerEventName && dataLayerVariableName) {
+            if (!responseText.startsWith("event: message\ndata: ")) {
+              eventDataLayerData = dataTagParseResponse(responseText);
+              eventDataLayerData.status = xhr.status;
+              pushToDataLayer();
+            } else if (
+              !waitForCookies ||
+              setCookieRunningCount === 0
+            ) {
+              pushToDataLayer();
+            }
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    } else {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', gtmServerDomain + requestPath);
+      xhr.setRequestHeader('Content-type', 'text/plain');
+      xhr.withCredentials = true;
+
+      xhr.onprogress = function(progress) {
+        if ((xhr.status === 200) && xhr.responseText.startsWith("event: message\ndata: ")) {
+          response += xhr.responseText.substring(loaded);
+          loaded = progress.loaded;
+
+          for (var replacedResponse = replaceVariable(response, replacements), nextSeparationPos = replacedResponse.indexOf("\n\n"); - 1 !== nextSeparationPos;) {
+            var parsedData;
+            a: {
+              var iterableLines;
+              var lines = replacedResponse.substring(0, nextSeparationPos).split("\n"),
+                linesIterator = "undefined" != typeof Symbol && Symbol.iterator && lines[Symbol.iterator];
+              if (linesIterator) iterableLines = linesIterator.call(lines);
+              else if ("number" == typeof lines.length) iterableLines = {
+                next: fallbackIterator(lines)
+              };
+              else throw Error(String(lines) + " is not an iterable or ArrayLike");
+              var eventNameLine = iterableLines.next().value,
+                eventDataLine = iterableLines.next().value;
+              if (eventNameLine.startsWith("event: message") && eventDataLine.startsWith("data: ")) try {
+                parsedData = JSON.parse(eventDataLine.substring(eventDataLine.indexOf(":") + 1));
+                break a
+              } catch (e) {}
+              parsedData =
+                void 0
+            }
+            processResponseDataEvent(parsedData);
+            replacedResponse = replacedResponse.substring(nextSeparationPos + 2);
+            nextSeparationPos = replacedResponse.indexOf("\n\n")
+          }
         }
-    };
-    xhr.onload = function () {
+      };
+      xhr.onload = function () {
         if (xhr.status.toString()[0] !== '2') {
-            console.error(xhr.status + '> ' + xhr.statusText);
+          console.error(xhr.status + '> ' + xhr.statusText);
         }
 
         if (dataLayerEventName && dataLayerVariableName) { // data tag configured to push event
-            if (!xhr.responseText.startsWith("event: message\ndata: ")) { // old protocol
-                eventDataLayerData = dataTagParseResponse(xhr.responseText);
-                eventDataLayerData.status = xhr.status;
-                pushToDataLayer();
-            } else if (
-                 !waitForCookies // data tag configured to push event instantly
-              || (setCookieRunningCount === 0) // no cookies received or all cookies already set
-            ) {
-                pushToDataLayer();
-            }
+          if (!xhr.responseText.startsWith("event: message\ndata: ")) { // old protocol
+            eventDataLayerData = dataTagParseResponse(xhr.responseText);
+            eventDataLayerData.status = xhr.status;
+            pushToDataLayer();
+          } else if (
+            !waitForCookies // data tag configured to push event instantly
+            || (setCookieRunningCount === 0) // no cookies received or all cookies already set
+          ) {
+            pushToDataLayer();
+          }
         }
-    };
-    xhr.send(stringifiedData);
+      };
+      xhr.send(stringifiedData);
+    }
 }
 
 function dataTagGetData(containerId) {
