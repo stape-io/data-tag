@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 638f930fb91edf699aa5f97164bec34778c52314
+    changeNotes: Added ability to use fetch instead if XHR.
   - sha: 5fad7b78d9cf0888994b53388e38a1a450b74e35
     changeNotes: Fix data hashing.
   - sha: 244758b434d60d2831ca7962e0983cb89f9bfbaa
