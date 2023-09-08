@@ -22,7 +22,7 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
     dataLayerEventName = dataLayerEventName || false;
     dataLayerVariableName = dataLayerVariableName || false;
     waitForCookies = waitForCookies || false;
-    
+
     var replaceVariable = function(a, b) {
             return a.replace(/\$\{([^\}]+)\}/g, function(c, d) {
                 return b[d] || c
@@ -114,51 +114,32 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
         body: stringifiedData,
       })
         .then(function (response) {
-          var responseText = '';
-          var reader = response.body.getReader();
-
-          return reader.read().then(function readChunk(result) {
-            if (result.done) {
-              // Request has been fully received.
-              return;
+          response.text().then(function (responseText) {
+            if(responseText && responseText.startsWith("event: message\ndata: ")) {
+              responseText
+                .split("\n\n")
+                .forEach(function(eventString) {
+                  try {
+                    const event =  JSON.parse(eventString.replace('event: message\ndata: ', ''));
+                    processResponseDataEvent(event);
+                  } catch (error) {
+                    console.error('Error processing response data:', error);
+                  }
+                });
             }
-
-            var chunk = result.value;
-            var textChunk = new TextDecoder('utf-8').decode(chunk);
-
-            responseText += textChunk;
-            var separatorIndex = responseText.indexOf('\n\n');
-
-            while (separatorIndex !== -1) {
-              var eventData = responseText.substring(0, separatorIndex);
-
-              try {
-                var event = JSON.parse(eventData);
-                processResponseDataEvent(event)
-              } catch (error) {
-                console.error('Error processing response data:', error);
+            if (dataLayerEventName && dataLayerVariableName) { // data tag configured to push event
+              if (!responseText || !responseText.startsWith("event: message\ndata: ")) { // old protocol
+                eventDataLayerData = dataTagParseResponse(responseText);
+                eventDataLayerData.status = response.status;
+                pushToDataLayer();
+              } else if (
+                !waitForCookies // data tag configured to push event instantly
+                || (setCookieRunningCount === 0) // no cookies received or all cookies already set
+              ) {
+                pushToDataLayer();
               }
-
-              responseText = responseText.substring(separatorIndex + 2);
-              separatorIndex = responseText.indexOf('\n\n');
             }
-
-            return reader.read().then(readChunk);
           });
-        })
-        .then(function () {
-          if (dataLayerEventName && dataLayerVariableName) {
-            if (!responseText.startsWith("event: message\ndata: ")) {
-              eventDataLayerData = dataTagParseResponse(responseText);
-              eventDataLayerData.status = xhr.status;
-              pushToDataLayer();
-            } else if (
-              !waitForCookies ||
-              setCookieRunningCount === 0
-            ) {
-              pushToDataLayer();
-            }
-          }
         })
         .catch(function (error) {
           console.error(error);
