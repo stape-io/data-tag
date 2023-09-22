@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 2c1c32da737f882e89cf2232668b8da57a649c6e
+    changeNotes: Added ability to send consent state.
   - sha: 638f930fb91edf699aa5f97164bec34778c52314
     changeNotes: Added ability to use fetch instead if XHR.
   - sha: 5fad7b78d9cf0888994b53388e38a1a450b74e35
