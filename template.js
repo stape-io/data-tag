@@ -15,6 +15,7 @@ const makeString = require('makeString');
 const setCookie = require('setCookie');
 const getCookieValues = require('getCookieValues');
 const getContainerVersion = require('getContainerVersion');
+const isConsentGranted = require('isConsentGranted');
 
 let pageLocation = getUrl();
 
@@ -119,6 +120,10 @@ function addDataForGetRequest(data, url) {
     eventData = addCommonData(data, eventData);
   }
 
+  if (data.add_consent_state) {
+    eventData = addConsentStateData(eventData);
+  }
+
   let customData = getCustomData(data, false);
 
   if (customData.length) {
@@ -167,6 +172,9 @@ function addCommonDataForPostRequest(data, eventData) {
       eventData.viewport_size =
         dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
+    if (data.add_consent_state) {
+      eventData = addConsentStateData(eventData);
+    }
   }
 
   return eventData;
@@ -179,6 +187,17 @@ function addCommonData(data, eventData) {
   eventData.page_title = readTitle();
   eventData.page_encoding = readCharacterSet();
 
+  return eventData;
+}
+
+function addConsentStateData(eventData) {
+  eventData.consent_state = {
+    ad_storage: isConsentGranted('ad_storage'),
+    analytics_storage: isConsentGranted('analytics_storage'),
+    functionality_storage: isConsentGranted('functionality_storage'),
+    personalization_storage: isConsentGranted('personalization_storage'),
+    security_storage: isConsentGranted('security_storage'),
+  };
   return eventData;
 }
 
