@@ -118,6 +118,9 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
             if(responseText && responseText.startsWith("event: message\ndata: ")) {
               responseText
                 .split("\n\n")
+                .filter(function(eventString) {
+                  return eventString;  // Filter out empty strings
+                })
                 .forEach(function(eventString) {
                   try {
                     const event =  JSON.parse(eventString.replace('event: message\ndata: ', ''));
