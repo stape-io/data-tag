@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 2cb9b382abf507f2b94d0fe395a641ae11bef716
+    changeNotes: Added missing page_path parameter.
   - sha: 2c1c32da737f882e89cf2232668b8da57a649c6e
     changeNotes: Added ability to send consent state.
   - sha: 638f930fb91edf699aa5f97164bec34778c52314
