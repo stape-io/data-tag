@@ -31,8 +31,11 @@ const userAndCustomData = getUserAndCustomDataArray();
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
+  const dataScriptVersion = 'v7';
   const dataTagScriptUrl =
-    data.load_data_tag_script_url || 'https://cdn.stape.io/dtag/v7.js';
+      typeof data.load_data_tag_script_url !== 'undefined'
+          ? data.load_data_tag_script_url.replace('${data-script-version}', dataScriptVersion)
+          : 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
