@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 319497e7f4bf22b386ee67bc633e1ec3490d30bb
+    changeNotes: Added dynamic parameter to Data Tag Script URL.
   - sha: bc1a996da50485259a4691c607b0543e0e8c3378
     changeNotes: Remove define and exports check.
   - sha: 534cd4e84475957487b0ffba1a0afb21e2547f2a
