@@ -533,7 +533,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "load_data_tag_script_url",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
-        "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/v6.js",
+        "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/${data-script-version}.js. This can be parameterized with ${data-script-version} in order to load the correct version for this tag.",
         "valueValidators": [
           {
             "type": "REGEX",
@@ -705,8 +705,11 @@ const userAndCustomData = getUserAndCustomDataArray();
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
+  const dataScriptVersion = 'v8';
   const dataTagScriptUrl =
-    data.load_data_tag_script_url || 'https://cdn.stape.io/dtag/v8.js';
+      typeof data.load_data_tag_script_url !== 'undefined'
+          ? data.load_data_tag_script_url.replace('${data-script-version}', dataScriptVersion)
+          : 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
