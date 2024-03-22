@@ -31,7 +31,7 @@ const userAndCustomData = getUserAndCustomDataArray();
 let requestType = determinateRequestType();
 
 if (requestType === 'post') {
-  const dataScriptVersion = 'v7';
+  const dataScriptVersion = 'v8';
   const dataTagScriptUrl =
     typeof data.load_data_tag_script_url !== 'undefined'
       ? data.load_data_tag_script_url.replace(
