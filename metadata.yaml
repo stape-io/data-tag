@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: bc1a996da50485259a4691c607b0543e0e8c3378
+    changeNotes: Remove define and exports check.
   - sha: 534cd4e84475957487b0ffba1a0afb21e2547f2a
     changeNotes: Fix UA 360 compatibility.
   - sha: 2cb9b382abf507f2b94d0fe395a641ae11bef716
