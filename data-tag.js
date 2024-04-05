@@ -115,6 +115,9 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
       })
         .then(function (response) {
           response.text().then(function (responseText) {
+            if(responseText) {
+              responseText = replaceVariable(responseText, replacements)
+            }
             if(responseText && responseText.startsWith("event: message\ndata: ")) {
               responseText
                 .split("\n\n")
