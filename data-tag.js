@@ -28,6 +28,7 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
                 return b[d] || c
             })
         },
+        xhr = null,
         sendPixel = function(url) {
             var img = new Image(1, 1);
             if (url.startsWith(((gtmServerDomain.charAt(gtmServerDomain.length - 1) === '/') ? gtmServerDomain.slice(0, -1) : gtmServerDomain) + '/_set_cookie')) {
@@ -35,7 +36,7 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
                 img.onload = img.onerror = function() {
                     img.onload = img.onerror = null;
                     setCookieRunningCount--;
-                    if ( (xhr.readyState === 4) // server container must be finished to be sure no more cookies will be received
+                    if ((!xhr || xhr.readyState === 4) // server container must be finished to be sure no more cookies will be received
                       && dataLayerEventName && dataLayerVariableName // data tag configured to push event
                       && waitForCookies // data tag configured to wait for cookies
                       && (setCookieRunningCount === 0) // all cookies already set
@@ -151,7 +152,7 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
           console.error(error);
         });
     } else {
-      var xhr = new XMLHttpRequest();
+      xhr = new XMLHttpRequest();
       xhr.open('POST', gtmServerDomain + requestPath);
       xhr.setRequestHeader('Content-type', 'text/plain');
       xhr.withCredentials = true;
