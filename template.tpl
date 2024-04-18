@@ -1405,13 +1405,6 @@ ___WEB_PERMISSIONS___
       },
       "param": [
         {
-          "key": "allowedKeys",
-          "value": {
-            "type": 1,
-            "string": "specific"
-          }
-        },
-        {
           "key": "keyPatterns",
           "value": {
             "type": 2,
