@@ -32,19 +32,12 @@ let requestType = determinateRequestType();
 
 if (requestType === 'post') {
   const dataScriptVersion = 'v8';
-  const dataTagScriptUrl =
-    typeof data.load_data_tag_script_url !== 'undefined'
-      ? data.load_data_tag_script_url.replace(
-          '${data-script-version}',
-          dataScriptVersion
-        )
-      : 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
-  injectScript(
-    dataTagScriptUrl,
-    sendPostRequest,
-    data.gtmOnFailure,
-    dataTagScriptUrl
-  );
+  if (data.customLoadDataTagScriptFunction) {
+    callInWindow('loadDataTagScript', dataScriptVersion, sendPostRequest, data.gtmOnFailure);
+  } else {
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
+    injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
+  }
 } else {
   sendGetRequest();
 }

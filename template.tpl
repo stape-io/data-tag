@@ -529,21 +529,11 @@ ___TEMPLATE_PARAMETERS___
         ]
       },
       {
-        "type": "TEXT",
-        "name": "load_data_tag_script_url",
-        "displayName": "Data Tag Script URL",
+        "type": "CHECKBOX",
+        "name": "customLoadDataTagScriptFunction",
+        "checkboxText": "Load data tag script with custom function",
         "simpleValueType": true,
-        "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/${data-script-version}.js. This can be parameterized with ${data-script-version} in order to load the correct version for this tag.",
-        "valueValidators": [
-          {
-            "type": "REGEX",
-            "args": [
-              "^(https://).*(\\.js)$"
-            ]
-          }
-        ],
-        "alwaysInSummary": false,
-        "defaultValue": "https://cdn.stape.io/dtag/v8.js"
+        "help": "Option to load the dataTagScript using a custom implementation of Data Tag users instead of the gtm injectScript function. If checked the Data Tag expects a function loadDataTagScript to be defined that takes three parameters: version (the version of the script to load), successCallback (function to execute on success), errorCallback (function to execute on failure). See the Data Tag repository for an implementation that you can use."
       },
       {
         "type": "CHECKBOX",
@@ -706,16 +696,12 @@ let requestType = determinateRequestType();
 
 if (requestType === 'post') {
   const dataScriptVersion = 'v8';
-  const dataTagScriptUrl =
-      typeof data.load_data_tag_script_url !== 'undefined'
-          ? data.load_data_tag_script_url.replace('${data-script-version}', dataScriptVersion)
-          : 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
-  injectScript(
-    dataTagScriptUrl,
-    sendPostRequest,
-    data.gtmOnFailure,
-    dataTagScriptUrl
-  );
+  if (data.customLoadDataTagScriptFunction) {
+    callInWindow('loadDataTagScript', dataScriptVersion, sendPostRequest, data.gtmOnFailure);
+  } else {
+    const dataTagScriptUrl = 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
+    injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
+  }
 } else {
   sendGetRequest();
 }
@@ -1333,6 +1319,45 @@ ___WEB_PERMISSIONS___
                     "boolean": true
                   }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "loadDataTagScript"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
               }
             ]
           }
@@ -1379,6 +1404,13 @@ ___WEB_PERMISSIONS___
         "versionId": "1"
       },
       "param": [
+        {
+          "key": "allowedKeys",
+          "value": {
+            "type": 1,
+            "string": "specific"
+          }
+        },
         {
           "key": "keyPatterns",
           "value": {
