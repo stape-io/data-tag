@@ -199,6 +199,8 @@ function addCommonData(data, eventData) {
 function addConsentStateData(eventData) {
   eventData.consent_state = {
     ad_storage: isConsentGranted('ad_storage'),
+    ad_user_data: isConsentGranted('ad_user_data'),
+    ad_personalization: isConsentGranted('ad_personalization'),
     analytics_storage: isConsentGranted('analytics_storage'),
     functionality_storage: isConsentGranted('functionality_storage'),
     personalization_storage: isConsentGranted('personalization_storage'),
