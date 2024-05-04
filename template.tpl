@@ -707,9 +707,12 @@ let requestType = determinateRequestType();
 if (requestType === 'post') {
   const dataScriptVersion = 'v8';
   const dataTagScriptUrl =
-      typeof data.load_data_tag_script_url !== 'undefined'
-          ? data.load_data_tag_script_url.replace('${data-script-version}', dataScriptVersion)
-          : 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
+    typeof data.load_data_tag_script_url !== 'undefined'
+      ? data.load_data_tag_script_url.replace(
+          '${data-script-version}',
+          dataScriptVersion
+        )
+      : 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
@@ -870,6 +873,8 @@ function addCommonData(data, eventData) {
 function addConsentStateData(eventData) {
   eventData.consent_state = {
     ad_storage: isConsentGranted('ad_storage'),
+    ad_user_data: isConsentGranted('ad_user_data'),
+    ad_personalization: isConsentGranted('ad_personalization'),
     analytics_storage: isConsentGranted('analytics_storage'),
     functionality_storage: isConsentGranted('functionality_storage'),
     personalization_storage: isConsentGranted('personalization_storage'),
@@ -1379,6 +1384,13 @@ ___WEB_PERMISSIONS___
         "versionId": "1"
       },
       "param": [
+        {
+          "key": "allowedKeys",
+          "value": {
+            "type": 1,
+            "string": "specific"
+          }
+        },
         {
           "key": "keyPatterns",
           "value": {
