@@ -211,7 +211,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_consent_state",
     "checkboxText": "Add consent state",
     "simpleValueType": true,
-    "help": "Adds \u003cb\u003econsent_state\u003c/b\u003e object to request.\u003cbr/\u003e\nIncluding following properties:\u003cbr/\u003e \nad_storage\u003cbr/\u003e\nanalytics_storage\u003cbr/\u003e\nfunctionality_storage\u003cbr/\u003e\npersonalization_storage\u003cbr/\u003e\nsecurity_storage"
+    "help": "Adds \u003cb\u003econsent_state\u003c/b\u003e object to request.\u003cbr/\u003e\nIncluding following properties:\u003cbr/\u003e \nad_storage\u003cbr/\u003e\nad_user_data\u003cbr/\u003e\nad_personalization\u003cbr/\u003e\nanalytics_storage\u003cbr/\u003e\nfunctionality_storage\u003cbr/\u003e\npersonalization_storage\u003cbr/\u003e\nsecurity_storage"
   },
   {
     "type": "GROUP",
@@ -1694,6 +1694,68 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 1,
                     "string": "ad_storage"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "ad_user_data"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "ad_personalization"
                   },
                   {
                     "type": 8,
