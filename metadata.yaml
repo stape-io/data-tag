@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: f0b3afdab0acd076e71cf57bef517aa1f715c827
+    changeNotes: Update load data tag sript URL.
   - sha: 6e81ef3f3e63f5b975277b9e04a0c7fc752c8212
     changeNotes: Add ad_user_data and ad_personalization for consent mode v2.
   - sha: 319497e7f4bf22b386ee67bc633e1ec3490d30bb

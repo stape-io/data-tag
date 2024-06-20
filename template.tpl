@@ -530,10 +530,10 @@ ___TEMPLATE_PARAMETERS___
       },
       {
         "type": "TEXT",
-        "name": "load_data_tag_script_url",
+        "name": "data_tag_load_script_url",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
-        "help": "Url, where to load data tag script from, by default will be loaded from https://cdn.stape.io/dtag/${data-script-version}.js. This can be parameterized with ${data-script-version} in order to load the correct version for this tag.",
+        "help": "Url, where to load data tag script from, by default will be loaded from https://stapecdn.com/dtag/${data-script-version}.js. This can be parameterized with ${data-script-version} in order to load the correct version for this tag.",
         "valueValidators": [
           {
             "type": "REGEX",
@@ -543,7 +543,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "alwaysInSummary": false,
-        "defaultValue": "https://cdn.stape.io/dtag/v8.js"
+        "defaultValue": "https://stapecdn.com/dtag/v8.js"
       },
       {
         "type": "CHECKBOX",
@@ -707,12 +707,12 @@ let requestType = determinateRequestType();
 if (requestType === 'post') {
   const dataScriptVersion = 'v8';
   const dataTagScriptUrl =
-    typeof data.load_data_tag_script_url !== 'undefined'
-      ? data.load_data_tag_script_url.replace(
+    typeof data.data_tag_load_script_url !== 'undefined'
+      ? data.data_tag_load_script_url.replace(
           '${data-script-version}',
           dataScriptVersion
         )
-      : 'https://cdn.stape.io/dtag/' + dataScriptVersion + '.js';
+      : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
   injectScript(
     dataTagScriptUrl,
     sendPostRequest,
@@ -1466,7 +1466,7 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://cdn.stape.io/dtag/*"
+                "string": "https://stapecdn.com/dtag/*"
               }
             ]
           }
