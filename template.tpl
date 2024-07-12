@@ -214,6 +214,13 @@ ___TEMPLATE_PARAMETERS___
     "help": "Adds \u003cb\u003econsent_state\u003c/b\u003e object to request.\u003cbr/\u003e\nIncluding following properties:\u003cbr/\u003e \nad_storage\u003cbr/\u003e\nad_user_data\u003cbr/\u003e\nad_personalization\u003cbr/\u003e\nanalytics_storage\u003cbr/\u003e\nfunctionality_storage\u003cbr/\u003e\npersonalization_storage\u003cbr/\u003e\nsecurity_storage"
   },
   {
+    "type": "CHECKBOX",
+    "name": "add_common_cookie",
+    "checkboxText": "Add Common Cookie",
+    "simpleValueType": true,
+    "help": "The tag will send common cookies in eventData to avoid some e-commerce platform limitations. Now supported by the next Stape tags: \u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://github.com/stape-io/pinterest-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e"
+  },
+  {
     "type": "GROUP",
     "name": "custom",
     "displayName": "Event Data",
@@ -804,6 +811,10 @@ function addDataForGetRequest(data, url) {
     eventData = addConsentStateData(eventData);
   }
 
+  if (data.add_common_cookie) {
+    eventData = addCommonCookie(eventData);
+  }
+
   let customData = getCustomData(data, false);
 
   if (customData.length) {
@@ -852,9 +863,13 @@ function addCommonDataForPostRequest(data, eventData) {
       eventData.viewport_size =
         dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
-    if (data.add_consent_state) {
-      eventData = addConsentStateData(eventData);
-    }
+  }
+  if (data.add_consent_state) {
+    eventData = addConsentStateData(eventData);
+  }
+
+  if (data.add_common_cookie) {
+    eventData = addCommonCookie(eventData);
   }
 
   return eventData;
@@ -1087,6 +1102,39 @@ function getUserAndCustomDataArray() {
     }
   }
   return userAndCustomDataArray;
+}
+
+function addCommonCookie(eventData) {
+  const cookieNames = [
+    // FB cookies
+    '_fbc',
+    '_fbp',
+    '_gtmeec',
+    // TikTok cookies
+    'ttclid',
+    '_ttp',
+    // Pinterest cookies
+    '_epik',
+    // Snapchat cookies
+    '_scid',
+    '_scclid',
+    // Taboola cookies
+    'taboola_cid',
+  ];
+  let commonCookie = null;
+
+  for (var i = 0; i < cookieNames.length; i++) {
+    const name = cookieNames[i];
+    var cookie = getCookieValues(name)[0];
+    if (cookie) {
+      commonCookie = commonCookie || {};
+      commonCookie[name] = cookie;
+    }
+  }
+  if (commonCookie) {
+    eventData.common_cookie = commonCookie;
+  }
+  return eventData;
 }
 
 
@@ -1584,6 +1632,42 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "stape"
+              },
+              {
+                "type": 1,
+                "string": "_fbc"
+              },
+              {
+                "type": 1,
+                "string": "_fbp"
+              },
+              {
+                "type": 1,
+                "string": "_gtmeec"
+              },
+              {
+                "type": 1,
+                "string": "ttclid"
+              },
+              {
+                "type": 1,
+                "string": "_ttp"
+              },
+              {
+                "type": 1,
+                "string": "_epik"
+              },
+              {
+                "type": 1,
+                "string": "_scid"
+              },
+              {
+                "type": 1,
+                "string": "_scclid"
+              },
+              {
+                "type": 1,
+                "string": "taboola_cid"
               }
             ]
           }

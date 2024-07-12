@@ -130,6 +130,10 @@ function addDataForGetRequest(data, url) {
     eventData = addConsentStateData(eventData);
   }
 
+  if (data.add_common_cookie) {
+    eventData = addCommonCookie(eventData);
+  }
+
   let customData = getCustomData(data, false);
 
   if (customData.length) {
@@ -178,9 +182,13 @@ function addCommonDataForPostRequest(data, eventData) {
       eventData.viewport_size =
         dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
-    if (data.add_consent_state) {
-      eventData = addConsentStateData(eventData);
-    }
+  }
+  if (data.add_consent_state) {
+    eventData = addConsentStateData(eventData);
+  }
+
+  if (data.add_common_cookie) {
+    eventData = addCommonCookie(eventData);
   }
 
   return eventData;
@@ -413,4 +421,37 @@ function getUserAndCustomDataArray() {
     }
   }
   return userAndCustomDataArray;
+}
+
+function addCommonCookie(eventData) {
+  const cookieNames = [
+    // FB cookies
+    '_fbc',
+    '_fbp',
+    '_gtmeec',
+    // TikTok cookies
+    'ttclid',
+    '_ttp',
+    // Pinterest cookies
+    '_epik',
+    // Snapchat cookies
+    '_scid',
+    '_scclid',
+    // Taboola cookies
+    'taboola_cid',
+  ];
+  let commonCookie = null;
+
+  for (var i = 0; i < cookieNames.length; i++) {
+    const name = cookieNames[i];
+    var cookie = getCookieValues(name)[0];
+    if (cookie) {
+      commonCookie = commonCookie || {};
+      commonCookie[name] = cookie;
+    }
+  }
+  if (commonCookie) {
+    eventData.common_cookie = commonCookie;
+  }
+  return eventData;
 }
