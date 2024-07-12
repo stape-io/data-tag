@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: d09916e6d815e37dadd258473ce4bc65e2d50727
+    changeNotes: Added common cookie support.
   - sha: f0b3afdab0acd076e71cf57bef517aa1f715c827
     changeNotes: Update load data tag sript URL.
   - sha: 6e81ef3f3e63f5b975277b9e04a0c7fc752c8212
