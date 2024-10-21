@@ -439,6 +439,19 @@ function addCommonCookie(eventData) {
     '_scclid',
     // Taboola cookies
     'taboola_cid',
+    // Awin cookies
+    'awin_awc',
+    'awin_source',
+    // Rakuten cookies
+    'rakuten_site_id',
+    'rakuten_time_entered',
+    'rakuten_ran_mid',
+    'rakuten_ran_eaid',
+    'rakuten_ran_site_id',
+    // Klaviyo cookies
+    'stape_klaviyo_email',
+    'stape_klaviyo_kx',
+    'stape_klaviyo_viewed_items',
   ];
   let commonCookie = null;
 
