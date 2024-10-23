@@ -1720,7 +1720,7 @@ ___WEB_PERMISSIONS___
               },
               {
                 "type": 1,
-                "string": "stape_klaviyo_viewed_item"
+                "string": "stape_klaviyo_viewed_items"
               }
             ]
           }
