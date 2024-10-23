@@ -1681,6 +1681,46 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "taboola_cid"
+              },
+              {
+                "type": 1,
+                "string": "awin_awc"
+              },
+              {
+                "type": 1,
+                "string": "awin_source"
+              },
+              {
+                "type": 1,
+                "string": "rakuten_site_id"
+              },
+              {
+                "type": 1,
+                "string": "rakuten_time_entered"
+              },
+              {
+                "type": 1,
+                "string": "rakuten_ran_mid"
+              },
+              {
+                "type": 1,
+                "string": "rakuten_ran_eaid"
+              },
+              {
+                "type": 1,
+                "string": "rakuten_ran_site_id"
+              },
+              {
+                "type": 1,
+                "string": "stape_klaviyo_email"
+              },
+              {
+                "type": 1,
+                "string": "stape_klaviyo_kx"
+              },
+              {
+                "type": 1,
+                "string": "stape_klaviyo_viewed_items"
               }
             ]
           }

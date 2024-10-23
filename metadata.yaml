@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
-versions:
+versions: 
+  - sha: 32e486606e0fb18da8b44ef328e53a40de9bd795
+    changeNotes: Added cookie permissions for awin, klaviyo, rakuten.
   - sha: 2389936d0bdce0037b5a3e7640e304266b8544e8
     changeNotes: Added common cookie support for awin, klaviyo, rakuten.
   - sha: d09916e6d815e37dadd258473ce4bc65e2d50727
