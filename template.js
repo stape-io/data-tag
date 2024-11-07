@@ -452,6 +452,8 @@ function addCommonCookie(eventData) {
     'stape_klaviyo_email',
     'stape_klaviyo_kx',
     'stape_klaviyo_viewed_items',
+    // Outbrain cookies
+    'outbrain_cid',
   ];
   let commonCookie = null;
 
