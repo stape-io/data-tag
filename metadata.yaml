@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions: 
+  - sha: 9bcc3f21b2f605bc5c9fb4adac6b99785126db45
+    changeNotes: Added outbrain cookies.
   - sha: 32e486606e0fb18da8b44ef328e53a40de9bd795
     changeNotes: Added cookie permissions for awin, klaviyo, rakuten.
   - sha: 2389936d0bdce0037b5a3e7640e304266b8544e8
