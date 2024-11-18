@@ -319,7 +319,19 @@ ___TEMPLATE_PARAMETERS___
             ]
           }
         ]
-      }
+      },
+      {
+        "type": "SELECT",
+        "name": "event_settings_variable",
+        "displayName": "Event Settings Variable",
+        "macrosInSelect": true,
+        "selectItems": [
+          {
+            "value": "none",
+            "displayValue": "None"
+          }
+        ]
+      },
     ]
   },
   {
