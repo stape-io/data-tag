@@ -415,6 +415,20 @@ function getUserAndCustomDataArray() {
     userAndCustomDataArray = data.custom_data;
   }
 
+  if (data.event_settings_variable) {
+    const eventSettings = data.event_settings_variable;
+    for (let paramName in eventSettings) {
+      if (eventSettings.hasOwnProperty(paramName)) {
+        userAndCustomDataArray.push({
+          name: paramName,
+          value: eventSettings[paramName],
+          transformation: 'none',
+          store: 'none'
+        });
+      }
+    }
+  }
+
   if (data.user_data && data.user_data.length) {
     for (let userDataKey in data.user_data) {
       userAndCustomDataArray.push(data.user_data[userDataKey]);
