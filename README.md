@@ -14,4 +14,4 @@ Common data contains: `page_location, page_hostname, page_referrer, page_title, 
 
 ## Open Source
 
-Data Tag for Google Tag Manager Web container is developing and maintained by [Stape Team](https://stape.io/) under the Apache 2.0 license.
+Data Tag for Google Tag Manager Web container is developed and maintained by [Stape Team](https://stape.io/) under the Apache 2.0 license.
