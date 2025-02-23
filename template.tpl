@@ -47,7 +47,7 @@ ___TEMPLATE_PARAMETERS___
             "name": "event_name_standard",
             "selectItems": [
               {
-                "value": "cc",
+                "value": "page_view",
                 "displayValue": "Page View"
               },
               {
