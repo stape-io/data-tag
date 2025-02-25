@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions: 
+  - sha: c859ca69a67a0e4593b780128a9756812b3d0939
+    changeNotes: Added better handling of GTM Server URL. Added support for awin_sn_awc and wg_cid common cookies.
   - sha: 9bcc3f21b2f605bc5c9fb4adac6b99785126db45
     changeNotes: Added outbrain cookies.
   - sha: 32e486606e0fb18da8b44ef328e53a40de9bd795
