@@ -180,13 +180,6 @@ ___TEMPLATE_PARAMETERS___
     "valueValidators": [
       {
         "type": "NON_EMPTY"
-      },
-      {
-        "type": "REGEX",
-        "args": [
-          "^(https://).*"
-        ],
-        "errorMessage": "URL must start with https://"
       }
     ],
     "alwaysInSummary": true
@@ -218,7 +211,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_common_cookie",
     "checkboxText": "Add Common Cookie",
     "simpleValueType": true,
-    "help": "The tag will send common cookies in eventData to avoid some e-commerce platform limitations. Now supported by the next Stape tags: \u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://github.com/stape-io/pinterest-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e"
+    "help": "The tag will send common cookies in eventData to avoid some e-commerce platform limitations. Now supported by the next Stape tags: \u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://github.com/stape-io/pinterest-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e"
   },
   {
     "type": "GROUP",
@@ -515,10 +508,17 @@ ___TEMPLATE_PARAMETERS___
         "displayName": "Path",
         "simpleValueType": true,
         "defaultValue": "/data",
-        "help": "The path used for sending requests to the GTM Server Side container. If you use Data client on GTM Server Side Path should be \u003cb\u003e/data\u003c/b\u003e",
+        "help": "The path used for sending requests to the GTM Server Side container. If you use Data client on GTM Server Side Path should be \u003cb\u003e/data\u003c/b\u003e.",
         "valueValidators": [
           {
             "type": "NON_EMPTY"
+          },
+          {
+            "type": "REGEX",
+            "args": [
+              "^/.*"
+            ],
+            "errorMessage": "The path must start with /."
           }
         ]
       },
@@ -708,8 +708,11 @@ if (
 
   return;
 }
+
 const userAndCustomData = getUserAndCustomDataArray();
 let requestType = determinateRequestType();
+
+const normalizedServerUrl = normalizeServerUrl();
 
 if (requestType === 'post') {
   const dataScriptVersion = 'v8';
@@ -740,8 +743,8 @@ function sendPostRequest() {
   callInWindow(
     'dataTagSendData',
     eventData,
-    data.gtm_server_domain,
-    data.request_path +
+    normalizedServerUrl.gtmServerDomain,
+    normalizedServerUrl.requestPath +
       '?v=' +
       eventData.v +
       '&event_name=' +
@@ -764,8 +767,34 @@ function sendGetRequest() {
   );
 }
 
+function normalizeServerUrl() {
+  let gtmServerDomain = data.gtm_server_domain;
+  let requestPath = data.request_path;
+  
+  // Add 'https://' if gtmServerDomain doesn't start with it
+  if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
+    gtmServerDomain = 'https://' + gtmServerDomain;
+  }
+  
+  // Removes trailing slash from gtmServerDomain if it ends with it
+  if (gtmServerDomain.charAt(gtmServerDomain.length - 1) === '/') {
+    gtmServerDomain = gtmServerDomain.slice(0, -1);
+  }
+  
+  // Adds slash to first position of requestPath if doesn't start with it
+  if (requestPath.charAt(0) !== '/') {
+    requestPath = '/' + requestPath;
+  }
+  
+  return {
+    gtmServerDomain: gtmServerDomain,
+    requestPath: requestPath
+  };
+}
+
+
 function buildEndpoint() {
-  return data.gtm_server_domain + data.request_path;
+  return normalizedServerUrl.gtmServerDomain + normalizedServerUrl.requestPath;
 }
 
 function addRequiredDataForPostRequest(data, eventData) {
@@ -1122,6 +1151,7 @@ function addCommonCookie(eventData) {
     'taboola_cid',
     // Awin cookies
     'awin_awc',
+    'awin_sn_awc',
     'awin_source',
     // Rakuten cookies
     'rakuten_site_id',
@@ -1135,6 +1165,8 @@ function addCommonCookie(eventData) {
     'stape_klaviyo_viewed_items',
     // Outbrain cookies
     'outbrain_cid',
+    // Webgains cookies
+    'wg_cid'
   ];
   let commonCookie = null;
 
@@ -1690,6 +1722,10 @@ ___WEB_PERMISSIONS___
               },
               {
                 "type": 1,
+                "string": "awin_sn_awc"
+              },
+              {
+                "type": 1,
                 "string": "awin_source"
               },
               {
@@ -1727,6 +1763,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "outbrain_cid"
+              },
+              {
+                "type": 1,
+                "string": "wg_cid"
               }
             ]
           }
@@ -2061,7 +2101,73 @@ ___WEB_PERMISSIONS___
 
 ___TESTS___
 
-scenarios: []
+scenarios:
+- name: GTM Server Side URL and Request Path for GET requests are normalized
+  code: "mockData.request_type = 'get';\nmockData.event_type = 'standard';\nmockData.event_name_standard\
+    \ = 'cc';\n\n[\n  { gtm_server_domain: 'example.com', request_path: '/foo', expectedServerUrl:\
+    \ 'https://example.com/foo' },\n  { gtm_server_domain: 'example.com/', request_path:\
+    \ '/foo', expectedServerUrl: 'https://example.com/foo' },\n  { gtm_server_domain:\
+    \ 'https://example.com', request_path: '/foo', expectedServerUrl: 'https://example.com/foo'\
+    \ },\n  { gtm_server_domain: 'https://example.com/', request_path: '/foo', expectedServerUrl:\
+    \ 'https://example.com/foo' },\n  { gtm_server_domain: 'example.com', request_path:\
+    \ 'foo/', expectedServerUrl: 'https://example.com/foo' },\n  { gtm_server_domain:\
+    \ 'example.com/', request_path: 'foo/', expectedServerUrl: 'https://example.com/foo'\
+    \ },\n  { gtm_server_domain: 'https://example.com', request_path: 'foo/', expectedServerUrl:\
+    \ 'https://example.com/foo' },\n  { gtm_server_domain: 'https://example.com/',\
+    \ request_path: 'foo/', expectedServerUrl: 'https://example.com/foo' },\n  { gtm_server_domain:\
+    \ 'http://example.com', request_path: '/foo', expectedServerUrl: 'http://example.com/foo'\
+    \ },\n  { gtm_server_domain: 'http://example.com/', request_path: '/foo', expectedServerUrl:\
+    \ 'http://example.com/foo' },\n  { gtm_server_domain: 'http://example.com', request_path:\
+    \ 'foo/', expectedServerUrl: 'http://example.com/foo' },\n  { gtm_server_domain:\
+    \ 'http://example.com/', request_path: 'foo/', expectedServerUrl: 'http://example.com/foo'\
+    \ },\n].forEach((testCase, testNumber) => {\n  mockData.gtm_server_domain = testCase.gtm_server_domain;\n\
+    \  mockData.request_path = testCase.request_path;\n  \n  mock('sendPixel', function(url,\
+    \ onSuccess, onFailure) {\n    // logToConsole('#' + testNumber + ' - sendPixel\
+    \ called with URL:', url);\n    assertThat(url).contains(testCase.expectedServerUrl);\n\
+    \  });\n\n  runCode(mockData);\n});"
+- name: GTM Server Side URL and Request Path for POST requests are normalized
+  code: "mockData.request_type = 'post';\nmockData.event_type = 'standard';\nmockData.event_name_standard\
+    \ = 'cc';\n\nmock('injectScript', function(url, onSuccess, onFailure, cacheToken)\
+    \ {\n  // logToConsole('injectScript called with URL:', url);\n  onSuccess();\n\
+    });\n\nconst expectedRequestPathParams = '?v=' + mockData.protocol_version + '&event_name='\
+    \ + mockData.event_name_standard;\n\n[\n  { gtm_server_domain: 'example.com',\
+    \ request_path: '/foo', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
+    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'example.com/',\
+    \ request_path: '/foo', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
+    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'https://example.com',\
+    \ request_path: '/foo', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
+    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'https://example.com/',\
+    \ request_path: '/foo', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
+    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'example.com',\
+    \ request_path: 'foo/', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
+    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'example.com/',\
+    \ request_path: 'foo/', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
+    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'https://example.com',\
+    \ request_path: 'foo/', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
+    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'https://example.com/',\
+    \ request_path: 'foo/', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
+    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'http://example.com',\
+    \ request_path: '/foo', expectedGtmServerDomain: 'http://example.com', expectedRequestPath:\
+    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'http://example.com/',\
+    \ request_path: '/foo', expectedGtmServerDomain: 'http://example.com', expectedRequestPath:\
+    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'http://example.com',\
+    \ request_path: 'foo/', expectedGtmServerDomain: 'http://example.com', expectedRequestPath:\
+    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'http://example.com/',\
+    \ request_path: 'foo/', expectedGtmServerDomain: 'http://example.com', expectedRequestPath:\
+    \ '/foo/' + expectedRequestPathParams },\n].forEach((testCase, testNumber) =>\
+    \ {\n  mockData.gtm_server_domain = testCase.gtm_server_domain;\n  mockData.request_path\
+    \ = testCase.request_path;\n  \n  mock('callInWindow', function(functionName,\
+    \ eventData, gtmServerDomain, requestPath, dataLayerEventName, dataLayerVariableName,\
+    \ waitForCookies, useFetchInsteadOfXHR) {\n    /*\n    logToConsole('#' + testNumber\
+    \ + ' - callInWindow called with:', {\n      functionName: functionName,\n   \
+    \   gtmServerDomain: gtmServerDomain,\n      requestPath: requestPath,\n    });\n\
+    \    */\n    \n    assertThat(gtmServerDomain).isEqualTo(testCase.expectedGtmServerDomain);\n\
+    \    assertThat(requestPath).isEqualTo(testCase.expectedRequestPath);\n  });\n\
+    \n  runCode(mockData);\n});"
+setup: |-
+  const mockData = {
+    protocol_version: '2'
+  };
 
 
 ___NOTES___
