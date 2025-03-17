@@ -176,7 +176,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "gtm_server_domain",
     "displayName": "GTM Server Side URL",
     "simpleValueType": true,
-    "help": "Domain to where the tag will send requests. For example https://gtm.example.com",
+    "help": "Domain to where the tag will send requests.\u003cbr\u003eFor example: \u003ci\u003ehttps://gtm.example.com\u003c/i\u003e",
     "valueValidators": [
       {
         "type": "NON_EMPTY"
@@ -189,14 +189,14 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_data_layer",
     "checkboxText": "Send all from DataLayer",
     "simpleValueType": true,
-    "help": "Adds all Data Layer values to the request"
+    "help": "Adds all Data Layer values to the request."
   },
   {
     "type": "CHECKBOX",
     "name": "add_common",
     "checkboxText": "Send common data",
     "simpleValueType": true,
-    "help": "Adds to request page_location, page_path, page_hostname, page_referrer, page_title, page_encoding, screen_resolution, viewport_size",
+    "help": "Adds to request:\n\u003cul\u003e\n\u003cli\u003epage_location\u003c/li\u003e\n\u003cli\u003epage_path\u003c/li\u003e\n\u003cli\u003epage_hostname\u003c/li\u003e\n\u003cli\u003epage_referrer\u003c/li\u003e\n\u003cli\u003epage_title\u003c/li\u003e\n\u003cli\u003epage_encoding\u003c/li\u003e\n\u003cli\u003escreen_resolution\u003c/li\u003e\n\u003cli\u003eviewport_size\u003c/li\u003e\n\u003c/ul\u003e",
     "defaultValue": true
   },
   {
@@ -211,7 +211,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_common_cookie",
     "checkboxText": "Add Common Cookie",
     "simpleValueType": true,
-    "help": "The tag will send common cookies in eventData to avoid some e-commerce platform limitations. Now supported by the next Stape tags: \u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://github.com/stape-io/pinterest-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e"
+    "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations. Now supported by the next Stape tags: \u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://github.com/stape-io/pinterest-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e"
   },
   {
     "type": "GROUP",
@@ -500,7 +500,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "NON_EMPTY"
           }
         ],
-        "help": "We highly recommend using \u003cb\u003eAuto\u003c/b\u003e. Change this only if you know what you do."
+        "help": "We highly recommend using \u003cb\u003eAuto\u003c/b\u003e. Change this only if you know what you are doing."
       },
       {
         "type": "TEXT",
@@ -508,7 +508,7 @@ ___TEMPLATE_PARAMETERS___
         "displayName": "Path",
         "simpleValueType": true,
         "defaultValue": "/data",
-        "help": "The path used for sending requests to the GTM Server Side container. If you use Data client on GTM Server Side Path should be \u003cb\u003e/data\u003c/b\u003e.",
+        "help": "The path used for sending requests to the GTM Server Side container. If you use the Data client on GTM Server Side, the Path should be \u003cb\u003e/data\u003c/b\u003e.",
         "valueValidators": [
           {
             "type": "NON_EMPTY"
@@ -540,7 +540,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "data_tag_load_script_url",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
-        "help": "Url, where to load data tag script from, by default will be loaded from https://stapecdn.com/dtag/${data-script-version}.js. This can be parameterized with ${data-script-version} in order to load the correct version for this tag.",
+        "help": "URL where to load Data tag script from, by default it will be loaded from \u003cI\u003ehttps://stapecdn.com/dtag/${data-script-version}.js\u003c/i\u003e. This can be parameterized with \u003ci\u003e${data-script-version}\u003c/i\u003e in order to load the correct version for this tag.",
         "valueValidators": [
           {
             "type": "REGEX",
@@ -632,7 +632,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "defaultValue": "dataLayer",
-        "help": "Use dataLayer by default. Modify only if you renamed dataLayer object name."
+        "help": "Use \u003ci\u003edataLayer\u003c/i\u003e by default. Modify only if you renamed dataLayer object name."
       },
       {
         "type": "CHECKBOX",
@@ -646,7 +646,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "NOT_EQUALS"
           }
         ],
-        "help": "Useful if you have server-side tags, that (partially) depend on the sendPixelFromBrowser() api for 3rd party cookies (e.g. Google Ads Conversion, Google Ads Remarketing)",
+        "help": "Useful if you have server-side tags, that (partially) depend on the \u003cI\u003esendPixelFromBrowser()\u003c/i\u003e API for 3rd party cookies (e.g. Google Ads Conversion, Google Ads Remarketing).",
         "defaultValue": false
       },
       {
@@ -667,10 +667,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "CHECKBOX",
         "name": "useFetchInsteadOfXHR",
-        "checkboxText": "Use fetch instead of XMLHttpRequest",
+        "checkboxText": "Use fetch instead of XMLHttpRequest (for POST requests only)",
         "simpleValueType": true,
-        "enablingConditions": [],
-        "help": "Using fetch with keepalive option which allow the request to outlive the page. \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Web/API/fetch#keepalive\"\u003eRead more\u003c/a\u003e"
+        "help": "Using \u003ci\u003efetch\u003c/i\u003e with \u003ci\u003ekeepalive\u003c/i\u003e option which allow the request to outlive the page. \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Web/API/fetch#keepalive\"\u003eRead more\u003c/a\u003e.",
+        "defaultValue": true
       }
     ]
   }
