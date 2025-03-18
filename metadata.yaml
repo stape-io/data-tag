@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
-versions: 
+versions:
+  - sha: 5c73996ce88cd98be54ea1b54c9e9e59a618b4e9
+    changeNotes: Use fetch instead of XHR enabled by default.
   - sha: c859ca69a67a0e4593b780128a9756812b3d0939
     changeNotes: Added better handling of GTM Server URL. Added support for awin_sn_awc and wg_cid common cookies.
   - sha: 9bcc3f21b2f605bc5c9fb4adac6b99785126db45
