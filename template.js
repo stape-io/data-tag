@@ -66,7 +66,7 @@ function sendPostRequest() {
     normalizedServerUrl.requestPath +
       '?v=' +
       eventData.v +
-      '&event_name=' +
+      '&event=' +
       encodeUriComponent(eventData.event_name) +
       (data.richsstsse ? '&richsstsse' : ''),
     data.dataLayerEventName,
@@ -89,22 +89,22 @@ function sendGetRequest() {
 function normalizeServerUrl() {
   let gtmServerDomain = data.gtm_server_domain;
   let requestPath = data.request_path;
-  
+
   // Add 'https://' if gtmServerDomain doesn't start with it
   if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
-  
+
   // Removes trailing slash from gtmServerDomain if it ends with it
   if (gtmServerDomain.charAt(gtmServerDomain.length - 1) === '/') {
     gtmServerDomain = gtmServerDomain.slice(0, -1);
   }
-  
+
   // Adds slash to first position of requestPath if doesn't start with it
   if (requestPath.charAt(0) !== '/') {
     requestPath = '/' + requestPath;
   }
-  
+
   return {
     gtmServerDomain: gtmServerDomain,
     requestPath: requestPath
@@ -148,7 +148,7 @@ function addDataForGetRequest(data, url) {
   url +=
     '?v=' +
     data.protocol_version +
-    '&event_name=' +
+    '&event=' +
     encodeUriComponent(getEventName(data));
 
   if (data.add_common) {

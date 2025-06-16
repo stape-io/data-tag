@@ -1,6 +1,6 @@
 # Data Tag for Google Tag Manager WEB Container
 
-Data Tag developed for sending requests from GTM Web Container to GTM Server Side Container [Data client](https://github.com/stape-io/data-client).
+Data Tag developed for sending requests from GTM Web Container to GTM Server Side Container [Data Client](https://github.com/stape-io/data-client).
 
 With the help of Data Tag, you can send any information from the Web Containers to the Server Containers.
 

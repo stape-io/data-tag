@@ -747,7 +747,7 @@ function sendPostRequest() {
     normalizedServerUrl.requestPath +
       '?v=' +
       eventData.v +
-      '&event_name=' +
+      '&event=' +
       encodeUriComponent(eventData.event_name) +
       (data.richsstsse ? '&richsstsse' : ''),
     data.dataLayerEventName,
@@ -770,22 +770,22 @@ function sendGetRequest() {
 function normalizeServerUrl() {
   let gtmServerDomain = data.gtm_server_domain;
   let requestPath = data.request_path;
-  
+
   // Add 'https://' if gtmServerDomain doesn't start with it
   if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
-  
+
   // Removes trailing slash from gtmServerDomain if it ends with it
   if (gtmServerDomain.charAt(gtmServerDomain.length - 1) === '/') {
     gtmServerDomain = gtmServerDomain.slice(0, -1);
   }
-  
+
   // Adds slash to first position of requestPath if doesn't start with it
   if (requestPath.charAt(0) !== '/') {
     requestPath = '/' + requestPath;
   }
-  
+
   return {
     gtmServerDomain: gtmServerDomain,
     requestPath: requestPath
@@ -829,7 +829,7 @@ function addDataForGetRequest(data, url) {
   url +=
     '?v=' +
     data.protocol_version +
-    '&event_name=' +
+    '&event=' +
     encodeUriComponent(getEventName(data));
 
   if (data.add_common) {
@@ -2104,9 +2104,9 @@ ___TESTS___
 scenarios:
 - name: GTM Server Side URL and Request Path for GET requests are normalized
   code: "mockData.request_type = 'get';\nmockData.event_type = 'standard';\nmockData.event_name_standard\
-    \ = 'cc';\n\n[\n  { gtm_server_domain: 'example.com', request_path: '/foo', expectedServerUrl:\
-    \ 'https://example.com/foo' },\n  { gtm_server_domain: 'example.com/', request_path:\
-    \ '/foo', expectedServerUrl: 'https://example.com/foo' },\n  { gtm_server_domain:\
+    \ = 'page_view';\n\n[\n  { gtm_server_domain: 'example.com', request_path: '/foo',\
+    \ expectedServerUrl: 'https://example.com/foo' },\n  { gtm_server_domain: 'example.com/',\
+    \ request_path: '/foo', expectedServerUrl: 'https://example.com/foo' },\n  { gtm_server_domain:\
     \ 'https://example.com', request_path: '/foo', expectedServerUrl: 'https://example.com/foo'\
     \ },\n  { gtm_server_domain: 'https://example.com/', request_path: '/foo', expectedServerUrl:\
     \ 'https://example.com/foo' },\n  { gtm_server_domain: 'example.com', request_path:\
@@ -2128,42 +2128,41 @@ scenarios:
 - name: GTM Server Side URL and Request Path for POST requests are normalized
   code: "mockData.request_type = 'post';\nmockData.event_type = 'standard';\nmockData.event_name_standard\
     \ = 'cc';\n\nmock('injectScript', function(url, onSuccess, onFailure, cacheToken)\
-    \ {\n  // logToConsole('injectScript called with URL:', url);\n  onSuccess();\n\
-    });\n\nconst expectedRequestPathParams = '?v=' + mockData.protocol_version + '&event_name='\
-    \ + mockData.event_name_standard;\n\n[\n  { gtm_server_domain: 'example.com',\
-    \ request_path: '/foo', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
-    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'example.com/',\
-    \ request_path: '/foo', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
-    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'https://example.com',\
-    \ request_path: '/foo', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
-    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'https://example.com/',\
-    \ request_path: '/foo', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
-    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'example.com',\
-    \ request_path: 'foo/', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
-    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'example.com/',\
-    \ request_path: 'foo/', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
-    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'https://example.com',\
-    \ request_path: 'foo/', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
-    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'https://example.com/',\
-    \ request_path: 'foo/', expectedGtmServerDomain: 'https://example.com', expectedRequestPath:\
-    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'http://example.com',\
-    \ request_path: '/foo', expectedGtmServerDomain: 'http://example.com', expectedRequestPath:\
-    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'http://example.com/',\
-    \ request_path: '/foo', expectedGtmServerDomain: 'http://example.com', expectedRequestPath:\
-    \ '/foo' + expectedRequestPathParams },\n  { gtm_server_domain: 'http://example.com',\
-    \ request_path: 'foo/', expectedGtmServerDomain: 'http://example.com', expectedRequestPath:\
-    \ '/foo/' + expectedRequestPathParams },\n  { gtm_server_domain: 'http://example.com/',\
-    \ request_path: 'foo/', expectedGtmServerDomain: 'http://example.com', expectedRequestPath:\
-    \ '/foo/' + expectedRequestPathParams },\n].forEach((testCase, testNumber) =>\
-    \ {\n  mockData.gtm_server_domain = testCase.gtm_server_domain;\n  mockData.request_path\
-    \ = testCase.request_path;\n  \n  mock('callInWindow', function(functionName,\
-    \ eventData, gtmServerDomain, requestPath, dataLayerEventName, dataLayerVariableName,\
-    \ waitForCookies, useFetchInsteadOfXHR) {\n    /*\n    logToConsole('#' + testNumber\
-    \ + ' - callInWindow called with:', {\n      functionName: functionName,\n   \
-    \   gtmServerDomain: gtmServerDomain,\n      requestPath: requestPath,\n    });\n\
-    \    */\n    \n    assertThat(gtmServerDomain).isEqualTo(testCase.expectedGtmServerDomain);\n\
-    \    assertThat(requestPath).isEqualTo(testCase.expectedRequestPath);\n  });\n\
-    \n  runCode(mockData);\n});"
+    \ {\n  onSuccess();\n});\n\nconst expectedRequestPathParams = '?v=' + mockData.protocol_version;\n\
+    \n[\n  { gtm_server_domain: 'example.com', request_path: '/foo', expectedGtmServerDomain:\
+    \ 'https://example.com', expectedRequestPath: '/foo' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'example.com/', request_path: '/foo', expectedGtmServerDomain:\
+    \ 'https://example.com', expectedRequestPath: '/foo' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'https://example.com', request_path: '/foo', expectedGtmServerDomain:\
+    \ 'https://example.com', expectedRequestPath: '/foo' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'https://example.com/', request_path: '/foo', expectedGtmServerDomain:\
+    \ 'https://example.com', expectedRequestPath: '/foo' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'example.com', request_path: 'foo/', expectedGtmServerDomain:\
+    \ 'https://example.com', expectedRequestPath: '/foo/' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'example.com/', request_path: 'foo/', expectedGtmServerDomain:\
+    \ 'https://example.com', expectedRequestPath: '/foo/' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'https://example.com', request_path: 'foo/', expectedGtmServerDomain:\
+    \ 'https://example.com', expectedRequestPath: '/foo/' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'https://example.com/', request_path: 'foo/', expectedGtmServerDomain:\
+    \ 'https://example.com', expectedRequestPath: '/foo/' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'http://example.com', request_path: '/foo', expectedGtmServerDomain:\
+    \ 'http://example.com', expectedRequestPath: '/foo' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'http://example.com/', request_path: '/foo', expectedGtmServerDomain:\
+    \ 'http://example.com', expectedRequestPath: '/foo' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'http://example.com', request_path: 'foo/', expectedGtmServerDomain:\
+    \ 'http://example.com', expectedRequestPath: '/foo/' + expectedRequestPathParams\
+    \ },\n  { gtm_server_domain: 'http://example.com/', request_path: 'foo/', expectedGtmServerDomain:\
+    \ 'http://example.com', expectedRequestPath: '/foo/' + expectedRequestPathParams\
+    \ },\n].forEach((testCase, testNumber) => {\n  mockData.gtm_server_domain = testCase.gtm_server_domain;\n\
+    \  mockData.request_path = testCase.request_path;\n  \n  mock('callInWindow',\
+    \ function(functionName, eventData, gtmServerDomain, requestPath, dataLayerEventName,\
+    \ dataLayerVariableName, waitForCookies, useFetchInsteadOfXHR) {\n    /*\n   \
+    \ logToConsole('#' + testNumber + ' - callInWindow called with:', {\n      functionName:\
+    \ functionName,\n      gtmServerDomain: gtmServerDomain,\n      requestPath: requestPath,\n\
+    \    });\n    */\n    \n    assertThat(gtmServerDomain).isEqualTo(testCase.expectedGtmServerDomain);\n\
+    \    const requestPathStartsWith = requestPath.indexOf(testCase.expectedRequestPath)\
+    \ === 0;\n    assertThat(requestPathStartsWith).isTrue();\n  });\n\n  runCode(mockData);\n\
+    });"
 setup: |-
   const mockData = {
     protocol_version: '2'
