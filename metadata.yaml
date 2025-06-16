@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 15247cd18df16b8d76749c3c1ed3b90b601f0759
+    changeNotes: Changed event name parameter in request URLs.
   - sha: 5c73996ce88cd98be54ea1b54c9e9e59a618b4e9
     changeNotes: Use fetch instead of XHR enabled by default.
   - sha: c859ca69a67a0e4593b780128a9756812b3d0939
