@@ -697,6 +697,7 @@ const setCookie = require('setCookie');
 const getCookieValues = require('getCookieValues');
 const getContainerVersion = require('getContainerVersion');
 const isConsentGranted = require('isConsentGranted');
+const templateStorage = require('templateStorage');
 
 let pageLocation = getUrl();
 
@@ -714,21 +715,32 @@ let requestType = determinateRequestType();
 
 const normalizedServerUrl = normalizeServerUrl();
 
+const eventId = copyFromDataLayer('gtm.uniqueEventId');
+
 if (requestType === 'post') {
-  const dataScriptVersion = 'v8';
-  const dataTagScriptUrl =
-    typeof data.data_tag_load_script_url !== 'undefined'
-      ? data.data_tag_load_script_url.replace(
-          '${data-script-version}',
-          dataScriptVersion
-        )
-      : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
-  injectScript(
-    dataTagScriptUrl,
-    sendPostRequest,
-    data.gtmOnFailure,
-    dataTagScriptUrl
-  );
+  const dataTagScriptStorageKey = 'dataTagScriptLoaded';
+  const dataTagScriptLoaded = templateStorage.getItem(dataTagScriptStorageKey);
+  if (!dataTagScriptLoaded) {
+    const dataScriptVersion = 'v8';
+    const dataTagScriptUrl =
+      typeof data.data_tag_load_script_url !== 'undefined'
+        ? data.data_tag_load_script_url.replace(
+            '${data-script-version}',
+            dataScriptVersion
+          )
+        : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
+    injectScript(
+      dataTagScriptUrl,
+      () => {
+        templateStorage.setItem(dataTagScriptStorageKey, true);
+        sendPostRequest();
+      },
+      data.gtmOnFailure,
+      dataTagScriptUrl
+    );
+  } else {
+    sendPostRequest();
+  }
 } else {
   sendGetRequest();
 }
@@ -876,13 +888,18 @@ function addCommonDataForPostRequest(data, eventData) {
   if (data.add_common || data.add_data_layer) {
     const dataTagData = callInWindow(
       'dataTagGetData',
-      getContainerVersion()['containerId']
+      getContainerVersion()['containerId'],
+      eventId
     );
 
     if (data.add_data_layer && dataTagData.dataModel) {
       for (let dataKey in dataTagData.dataModel) {
         eventData[dataKey] = dataTagData.dataModel[dataKey];
       }
+    }
+
+    if (data.add_data_layer && dataTagData.currentEventObj) {
+      eventData.currentEventObj = dataTagData.currentEventObj;
     }
 
     if (data.add_common) {
