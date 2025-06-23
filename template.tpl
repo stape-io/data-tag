@@ -697,7 +697,8 @@ const setCookie = require('setCookie');
 const getCookieValues = require('getCookieValues');
 const getContainerVersion = require('getContainerVersion');
 const isConsentGranted = require('isConsentGranted');
-const templateStorage = require('templateStorage');
+const copyFromWindow = require('copyFromWindow');
+const setInWindow = require('setInWindow');
 
 let pageLocation = getUrl();
 
@@ -718,21 +719,25 @@ const normalizedServerUrl = normalizeServerUrl();
 const eventId = copyFromDataLayer('gtm.uniqueEventId');
 
 if (requestType === 'post') {
-  const dataTagScriptStorageKey = 'dataTagScriptLoaded';
-  const dataTagScriptLoaded = templateStorage.getItem(dataTagScriptStorageKey);
-  if (!dataTagScriptLoaded) {
-    const dataScriptVersion = 'v8';
-    const dataTagScriptUrl =
-      typeof data.data_tag_load_script_url !== 'undefined'
-        ? data.data_tag_load_script_url.replace(
-            '${data-script-version}',
-            dataScriptVersion
-          )
-        : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
+  const dataScriptVersion = 'v8';
+  const dataTagScriptUrl =
+    typeof data.data_tag_load_script_url !== 'undefined'
+      ? data.data_tag_load_script_url.replace(
+          '${data-script-version}',
+          dataScriptVersion
+        )
+      : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
+
+  const dataTagScriptStorageKey = 'gtm_dataTagScriptLoaded';
+  const dataTagScriptLoaded = copyFromWindow(dataTagScriptStorageKey);
+
+  if (!dataTagScriptLoaded || !dataTagScriptLoaded[dataTagScriptUrl]) {
     injectScript(
       dataTagScriptUrl,
       () => {
-        templateStorage.setItem(dataTagScriptStorageKey, true);
+        const cacheValue = dataTagScriptLoaded || {};
+        cacheValue[dataTagScriptUrl] = true;
+        setInWindow(dataTagScriptStorageKey, cacheValue);
         sendPostRequest();
       },
       data.gtmOnFailure,
@@ -1448,6 +1453,45 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 8,
                     "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "gtm_dataTagScriptLoaded"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
                   }
                 ]
               }

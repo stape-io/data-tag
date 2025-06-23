@@ -215,17 +215,19 @@ function dataTagGetData(containerId, eventId) {
 
     var currentEventObj;
     if (eventId) {
-      var dataLayerName = window.google_tag_manager[containerId].dataLayer.name;
-      var actualDataLayer = window[dataLayerName];
-      var actualDataLayerLength = actualDataLayer.length;
-      for (var i = actualDataLayerLength - 1; i >= 0 ; i--) {
-          var obj = actualDataLayer[i];
-          if (typeof obj !== 'object') continue;
-          if (eventId === obj['gtm.uniqueEventId']) {
-              currentEventObj = obj;
-              break;
-          }
-      }
+        try {
+            var dataLayerName = dataLayerGTM.name;
+            var actualDataLayer = window[dataLayerName];
+            var actualDataLayerLength = actualDataLayer.length;
+            for (var i = actualDataLayerLength - 1; i >= 0 ; i--) {
+                var obj = actualDataLayer[i];
+                if (typeof obj !== 'object') continue;
+                if (eventId === obj['gtm.uniqueEventId']) {
+                    currentEventObj = obj;
+                    break;
+                }
+            }
+        } catch (e) {}
     }
 
     window.dataTagData = {
