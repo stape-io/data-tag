@@ -1,5 +1,7 @@
 homepage: "https://stape.io/"
 versions:
+  - sha: 55e0eccc910f0fc92805b91128851493571e4187
+    changeNotes: Fix race condition issue.
   - sha: 15247cd18df16b8d76749c3c1ed3b90b601f0759
     changeNotes: Changed event name parameter in request URLs.
   - sha: 5c73996ce88cd98be54ea1b54c9e9e59a618b4e9
