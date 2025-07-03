@@ -1,5 +1,8 @@
 homepage: "https://stape.io/"
+documentation: "https://github.com/stape-io/data-tag"
 versions:
+  - sha: a0f132f4d55428920e07f8b554aec57a14e93876
+    changeNotes: Added common cookie support for Postscript.
   - sha: 15247cd18df16b8d76749c3c1ed3b90b601f0759
     changeNotes: Changed event name parameter in request URLs.
   - sha: 5c73996ce88cd98be54ea1b54c9e9e59a618b4e9
