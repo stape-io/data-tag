@@ -1166,7 +1166,9 @@ function addCommonCookie(eventData) {
     // Outbrain cookies
     'outbrain_cid',
     // Webgains cookies
-    'wg_cid'
+    'wg_cid',
+    // Postscript cookies
+    'ps_id'
   ];
   let commonCookie = null;
 
@@ -1767,6 +1769,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "wg_cid"
+              },
+              {
+                "type": 1,
+                "string": "ps_id"
               }
             ]
           }
