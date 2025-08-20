@@ -111,7 +111,6 @@ function normalizeServerUrl() {
   };
 }
 
-
 function buildEndpoint() {
   return normalizedServerUrl.gtmServerDomain + normalizedServerUrl.requestPath;
 }
@@ -487,7 +486,10 @@ function addCommonCookie(eventData) {
     // Webgains cookies
     'wg_cid',
     // Postscript cookies
-    'ps_id'
+    'ps_id',
+    // Microsoft UET CAPI cookies
+    'uet_msclkid', '_uetmsclkid',
+    'uet_vid', '_uetvid'
   ];
   let commonCookie = null;
 
