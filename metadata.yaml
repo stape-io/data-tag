@@ -1,6 +1,8 @@
 homepage: "https://stape.io/"
 documentation: "https://github.com/stape-io/data-tag"
 versions:
+  - sha: 80e00e7b7daf5498a52c0d081190845bfd4d6911
+    changeNotes: Added Microsoft UET CAPI cookies read permission.
   - sha: 306f447046246277f33e46b5762c3d48e97b7e4a
     changeNotes: Added common cookie support for Microsoft UET CAPI.
   - sha: a0f132f4d55428920e07f8b554aec57a14e93876
