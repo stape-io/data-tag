@@ -210,7 +210,26 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
     }
 }
 
-function dataTagGetData(containerId) {
+function dataTagGetData(containerId, eventId) {
+    var dataLayerGTM = window.google_tag_manager[containerId].dataLayer;
+
+    var currentEventObj;
+    if (eventId) {
+        try {
+            var dataLayerName = dataLayerGTM.name;
+            var actualDataLayer = window[dataLayerName];
+            var actualDataLayerLength = actualDataLayer.length;
+            for (var i = actualDataLayerLength - 1; i >= 0 ; i--) {
+                var obj = actualDataLayer[i];
+                if (typeof obj !== 'object') continue;
+                if (eventId === obj['gtm.uniqueEventId']) {
+                    currentEventObj = obj;
+                    break;
+                }
+            }
+        } catch (e) {}
+    }
+
     window.dataTagData = {
         document: {
             characterSet: window.document.characterSet,
@@ -221,9 +240,10 @@ function dataTagGetData(containerId) {
             width: window.screen.width,
             height: window.screen.height,
         },
-        dataModel: window.google_tag_manager[containerId].dataLayer.get({
-            split: function() { return []; }
+        dataModel: dataLayerGTM.get({
+          split: function() { return []; }
         }),
+        currentEventObj: currentEventObj
     };
 
     return window.dataTagData;
