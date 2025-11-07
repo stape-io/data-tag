@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/data-tag'
 versions:
   - sha: 98182665e9c04e5957ea0657bbfe6b84442315a4
     changeNotes: Fix race condition issue.
+=======
+homepage: "https://stape.io/"
+documentation: "https://github.com/stape-io/data-tag"
+versions:
+>>>>>>> origin/main
   - sha: 80e00e7b7daf5498a52c0d081190845bfd4d6911
     changeNotes: Added Microsoft UET CAPI cookies read permission.
   - sha: 306f447046246277f33e46b5762c3d48e97b7e4a
