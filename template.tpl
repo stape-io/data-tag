@@ -189,7 +189,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_data_layer",
     "checkboxText": "Send all from DataLayer",
     "simpleValueType": true,
-    "help": "Adds all Data Layer values to the request."
+    "help": "Adds all Data Layer values to the request. \u003cbr/\u003e\u003cbr/\u003e Note that the values added to the request are from GTM\u0027s internal Data Model (as seen in the GTM Preview Mode variable tab), not the actual Data Layer as seen in the DevTools console tab. \u003cbr/\u003e\u003cbr/\u003e Learn more about: the \u003ca href\u003d\"https://www.simoahava.com/analytics/google-tag-manager-data-model/\"\u003eGTM\u0027s Data Model\u003c/a\u003e and the \u003ca href\u003d\"https://www.simoahava.com/analytics/two-simple-data-model-tricks/#trick-2-get-the-object-representation-of-the-current-state-of-the-data-model\"\u003emethod\u003c/a\u003e used to get the values."
   },
   {
     "type": "CHECKBOX",
@@ -211,7 +211,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_common_cookie",
     "checkboxText": "Add Common Cookie",
     "simpleValueType": true,
-    "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations. Now supported by the next Stape tags: \u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://github.com/stape-io/pinterest-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e"
+    "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations. Now supported by the next Stape tags: \u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://github.com/stape-io/pinterest-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://github.com/stape-io/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://github.com/stape-io/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e"
   },
   {
     "type": "GROUP",
@@ -809,7 +809,6 @@ function normalizeServerUrl() {
   };
 }
 
-
 function buildEndpoint() {
   return normalizedServerUrl.gtmServerDomain + normalizedServerUrl.requestPath;
 }
@@ -1188,7 +1187,12 @@ function addCommonCookie(eventData) {
     // Outbrain cookies
     'outbrain_cid',
     // Webgains cookies
-    'wg_cid'
+    'wg_cid',
+    // Postscript cookies
+    'ps_id',
+    // Microsoft UET CAPI cookies
+    'uet_msclkid', '_uetmsclkid',
+    'uet_vid', '_uetvid'
   ];
   let commonCookie = null;
 
@@ -1828,6 +1832,26 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "wg_cid"
+              },
+              {
+                "type": 1,
+                "string": "ps_id"
+              },
+              {
+                "type": 1,
+                "string": "uet_msclkid"
+              },
+              {
+                "type": 1,
+                "string": "_uetmsclkid"
+              },
+              {
+                "type": 1,
+                "string": "uet_vid"
+              },
+              {
+                "type": 1,
+                "string": "_uetvid"
               }
             ]
           }
