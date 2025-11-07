@@ -264,18 +264,23 @@ function dataTagCreateDataModel(dataLayerArray) {
   try {
     var dataModel = {};
 
-    var od = /\[object (Boolean|Number|String|Function|Array|Date|RegExp)\]/;
-    var pd = function (a) {
+    var typesRegex =
+      /\[object (Boolean|Number|String|Function|Array|Date|RegExp)\]/;
+    var getValueType = function (a) {
       if (a == null) return String(a);
-      var b = od.exec(Object.prototype.toString.call(Object(a)));
+      var b = typesRegex.exec(Object.prototype.toString.call(Object(a)));
       return b ? b[1].toLowerCase() : 'object';
     };
 
-    var qd = function (a, b) {
+    var hasOwnProperty = function (a, b) {
       return Object.prototype.hasOwnProperty.call(Object(a), b);
     };
 
-    var zb = function (a) {
+    var isString = function (a) {
+      return typeof a === 'string';
+    };
+
+    var isArguments = function (a) {
       return (
         !!a &&
         (Object.prototype.toString.call(a) === '[object Arguments]' ||
@@ -283,22 +288,22 @@ function dataTagCreateDataModel(dataLayerArray) {
       );
     };
 
-    var rd = function (a) {
+    var isPlainObject = function (a) {
       if (
         !a ||
-        pd(a) != 'object' ||
+        getValueType(a) != 'object' ||
         a.nodeType ||
         (a.window && a == a.window) ||
-        zb(a)
+        isArguments(a)
       ) {
         return !1;
       }
-
+      
       try {
         if (
           a.constructor &&
-          !qd(a, 'constructor') &&
-          !qd(a.constructor.prototype, 'isPrototypeOf')
+          !hasOwnProperty(a, 'constructor') &&
+          !hasOwnProperty(a.constructor.prototype, 'isPrototypeOf')
         ) {
           return !1;
         }
@@ -306,21 +311,21 @@ function dataTagCreateDataModel(dataLayerArray) {
         return !1;
       }
       for (var b in a);
-      return b === void 0 || qd(a, b);
+      return b === void 0 || hasOwnProperty(a, b);
     };
 
-    var sd = function (a, b) {
-      var c = b || (pd(a) == 'array' ? [] : {}),
+    var recursiveMerge = function (a, b) {
+      var c = b || (getValueType(a) == 'array' ? [] : {}),
         d;
       for (d in a) {
-        if (qd(a, d)) {
+        if (hasOwnProperty(a, d)) {
           var e = a[d];
-          if (pd(e) == 'array') {
-            pd(c[d]) != 'array' && (c[d] = []);
-            c[d] = sd(e, c[d]);
-          } else if (rd(e)) {
-            rd(c[d]) || (c[d] = {});
-            c[d] = sd(e, c[d]);
+          if (getValueType(e) == 'array') {
+            getValueType(c[d]) != 'array' && (c[d] = []);
+            c[d] = recursiveMerge(e, c[d]);
+          } else if (isPlainObject(e)) {
+            isPlainObject(c[d]) || (c[d] = {});
+            c[d] = recursiveMerge(e, c[d]);
           } else {
             c[d] = e;
           }
@@ -329,7 +334,14 @@ function dataTagCreateDataModel(dataLayerArray) {
       return c;
     };
 
-    var Nb = function (a, b) {
+    var cloneObject = function (a) {
+      if (getValueType(a) == 'array' || isPlainObject(a)) {
+        return recursiveMerge(a, null);
+      }
+      return a;
+    };
+
+    var convertDotNotationToNestedObject = function (a, b) {
       var c = {},
         d = c,
         e = a.split('.'),
@@ -341,25 +353,84 @@ function dataTagCreateDataModel(dataLayerArray) {
       return c;
     };
 
-    if (Array.isArray(dataLayerArray)) {
-      for (var i = 0; i < dataLayerArray.length; i++) {
-        var item = dataLayerArray[i];
-        if (rd(item)) {
-          var shouldClear = !!item._clear;
-          for (var key in item) {
-            if (qd(item, key) && key !== '_clear') {
-              if (shouldClear) {
-                var clearObject = Nb(key, undefined);
-                sd(clearObject, dataModel);
-              }
-              var newNestedObject = Nb(key, item[key]);
-              sd(newNestedObject, dataModel);
+    if (!Array.isArray(dataLayerArray)) return;
+
+    for (var i = 0; i < dataLayerArray.length; i++) {
+      delete dataModel.eventModel;
+
+      var item = dataLayerArray[i];
+      var isGtagCommand = false;
+
+      if (isArguments(item)) {
+        var command = item[0];
+        var processedItem = null;
+
+        if (command === 'js' && item.length >= 2 && item[1].getTime) {
+          processedItem = {
+            event: 'gtm.js',
+            'gtm.start': item[1].getTime()
+          };
+        } else if (command === 'set') {
+          if (item.length === 2 && isPlainObject(item[1])) {
+            processedItem = cloneObject(item[1]);
+          } else if (item.length === 3 && isString(item[1])) {
+            processedItem = {};
+            var valueToSet = item[2];
+            if (
+              isPlainObject(valueToSet) ||
+              getValueType(valueToSet) == 'array'
+            ) {
+              processedItem[item[1]] = cloneObject(valueToSet);
+            } else {
+              processedItem[item[1]] = valueToSet;
             }
           }
+        } else if (
+          command === 'event' &&
+          item.length >= 2 &&
+          isString(item[1])
+        ) {
+          var eventParams =
+            item.length > 2 && isPlainObject(item[2])
+              ? cloneObject(item[2])
+              : {};
+          processedItem = {
+            event: item[1],
+            eventModel: eventParams
+          };
+        }
+
+        if (processedItem) {
+          if (item['gtm.uniqueEventId']) {
+            processedItem['gtm.uniqueEventId'] = item['gtm.uniqueEventId'];
+          }
+          isGtagCommand = true;
+          item = processedItem;
         }
       }
-      return dataModel;
+
+      if (!isPlainObject(item)) continue;
+
+      var shouldClear = isGtagCommand || !!item._clear;
+      for (var key in item) {
+        if (hasOwnProperty(item, key) && key !== '_clear') {
+          if (shouldClear) {
+            var clearObject = convertDotNotationToNestedObject(
+              key,
+              undefined
+            );
+            recursiveMerge(clearObject, dataModel);
+          }
+          var newNestedObject = convertDotNotationToNestedObject(
+            key,
+            item[key]
+          );
+          recursiveMerge(newNestedObject, dataModel);
+        }
+      }
+      
     }
+    return dataModel;
   } catch (e) {}
 }
 
