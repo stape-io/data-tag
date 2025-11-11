@@ -203,7 +203,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ],
-        "help": "Enable this option if your event captures data layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the data layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/34\"\u003e[3]\u003c/a\u003e."
+        "help": "Enable this option if your event captures data layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the data layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e."
       }
     ]
   },
