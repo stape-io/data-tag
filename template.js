@@ -212,17 +212,14 @@ function addCommonDataForPostRequest(data, eventData) {
     const dataTagData = callInWindow(
       'dataTagGetData',
       getContainerVersion()['containerId'],
-      eventId
+      eventId,
+      !!data.add_data_layer_use_own_data_model
     );
 
     if (data.add_data_layer && dataTagData.dataModel) {
       for (let dataKey in dataTagData.dataModel) {
         eventData[dataKey] = dataTagData.dataModel[dataKey];
       }
-    }
-
-    if (data.add_data_layer && dataTagData.currentEventObj) {
-      eventData.currentEventObj = dataTagData.currentEventObj;
     }
 
     if (data.add_common) {
@@ -233,6 +230,7 @@ function addCommonDataForPostRequest(data, eventData) {
         dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
+  
   if (data.add_consent_state) {
     eventData = addConsentStateData(eventData);
   }
@@ -510,8 +508,10 @@ function addCommonCookie(eventData) {
     // Postscript cookies
     'ps_id',
     // Microsoft UET CAPI cookies
-    'uet_msclkid', '_uetmsclkid',
-    'uet_vid', '_uetvid'
+    'uet_msclkid',
+    '_uetmsclkid',
+    'uet_vid',
+    '_uetvid',
   ];
   let commonCookie = null;
 

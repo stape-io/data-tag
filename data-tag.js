@@ -210,21 +210,20 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
     }
 }
 
-function dataTagGetData(containerId, eventId) {
+function dataTagGetData(containerId, eventId, useOwnDataModel) {
     var dataLayerGTM = window.google_tag_manager[containerId].dataLayer;
 
     var dataModelUntilCurrentEvent;
-    var currentEventObj;
-    if (eventId) {
-        var isObjectEmpty = function(obj) {
-            if (typeof obj !== 'object') return;
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
-            }
-            return true;
-        };
-
+    if (typeof eventId !== 'undefined' && useOwnDataModel) {
         try {
+            var isObjectEmpty = function(obj) {
+                if (typeof obj !== 'object') return;
+                for (var key in obj) {
+                    if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
+                }
+                return true;
+            };
+        
             var dataLayerName = dataLayerGTM.name;
             var actualDataLayer = window[dataLayerName];
             var actualDataLayerLength = actualDataLayer.length;
@@ -232,8 +231,7 @@ function dataTagGetData(containerId, eventId) {
                 var obj = actualDataLayer[i];
                 if (typeof obj !== 'object') continue;
                 if (eventId === obj['gtm.uniqueEventId']) {
-                    currentEventObj = obj;
-                    dataModelUntilCurrentEvent = dataTagCreateDataModel(actualDataLayer.slice(0, i + 1));
+                    dataModelUntilCurrentEvent = dataTagGetOwnDataModel(actualDataLayer.slice(0, i + 1));
                     if (typeof dataModelUntilCurrentEvent !== 'object' || isObjectEmpty(dataModelUntilCurrentEvent)) {
                         dataModelUntilCurrentEvent = null;
                     }
@@ -253,14 +251,13 @@ function dataTagGetData(containerId, eventId) {
             width: window.screen.width,
             height: window.screen.height,
         },
-        dataModel: dataModelUntilCurrentEvent || dataLayerGTM.get({ split: function() { return []; } }),
-        currentEventObj: currentEventObj
+        dataModel: dataModelUntilCurrentEvent || dataLayerGTM.get({ split: function() { return []; } })
     };
 
     return window.dataTagData;
 }
 
-function dataTagCreateDataModel(dataLayerArray) {
+function dataTagGetOwnDataModel(dataLayerArray) {
   try {
     var dataModel = {};
 
