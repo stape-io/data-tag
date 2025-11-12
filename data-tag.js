@@ -315,6 +315,9 @@ function dataTagGetOwnDataModel(dataLayerArray) {
       var c = b || (getValueType(a) == 'array' ? [] : {}),
         d;
       for (d in a) {
+        if (d === '__proto__' || d === 'constructor' || d === 'prototype') {
+          continue;
+        }
         if (hasOwnProperty(a, d)) {
           var e = a[d];
           if (getValueType(e) == 'array') {
