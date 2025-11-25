@@ -16,6 +16,8 @@ const setCookie = require('setCookie');
 const getCookieValues = require('getCookieValues');
 const getContainerVersion = require('getContainerVersion');
 const isConsentGranted = require('isConsentGranted');
+const copyFromWindow = require('copyFromWindow');
+const setInWindow = require('setInWindow');
 
 let pageLocation = getUrl();
 
@@ -33,6 +35,8 @@ let requestType = determinateRequestType();
 
 const normalizedServerUrl = normalizeServerUrl();
 
+const eventId = copyFromDataLayer('gtm.uniqueEventId');
+
 if (requestType === 'post') {
   const dataScriptVersion = 'v8';
   const dataTagScriptUrl =
@@ -42,12 +46,25 @@ if (requestType === 'post') {
           dataScriptVersion
         )
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
-  injectScript(
-    dataTagScriptUrl,
-    sendPostRequest,
-    data.gtmOnFailure,
-    dataTagScriptUrl
-  );
+
+  const dataTagScriptStorageKey = 'gtm_dataTagScriptLoaded';
+  const dataTagScriptLoaded = copyFromWindow(dataTagScriptStorageKey);
+
+  if (!dataTagScriptLoaded || !dataTagScriptLoaded[dataTagScriptUrl]) {
+    injectScript(
+      dataTagScriptUrl,
+      () => {
+        const cacheValue = dataTagScriptLoaded || {};
+        cacheValue[dataTagScriptUrl] = true;
+        setInWindow(dataTagScriptStorageKey, cacheValue);
+        sendPostRequest();
+      },
+      data.gtmOnFailure,
+      dataTagScriptUrl
+    );
+  } else {
+    sendPostRequest();
+  }
 } else {
   sendGetRequest();
 }
@@ -194,7 +211,9 @@ function addCommonDataForPostRequest(data, eventData) {
   if (data.add_common || data.add_data_layer) {
     const dataTagData = callInWindow(
       'dataTagGetData',
-      getContainerVersion()['containerId']
+      getContainerVersion()['containerId'],
+      eventId,
+      !!data.add_data_layer_use_own_data_model
     );
 
     if (data.add_data_layer && dataTagData.dataModel) {
@@ -211,6 +230,7 @@ function addCommonDataForPostRequest(data, eventData) {
         dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
+  
   if (data.add_consent_state) {
     eventData = addConsentStateData(eventData);
   }
@@ -488,8 +508,10 @@ function addCommonCookie(eventData) {
     // Postscript cookies
     'ps_id',
     // Microsoft UET CAPI cookies
-    'uet_msclkid', '_uetmsclkid',
-    'uet_vid', '_uetvid'
+    'uet_msclkid',
+    '_uetmsclkid',
+    'uet_vid',
+    '_uetvid',
   ];
   let commonCookie = null;
 

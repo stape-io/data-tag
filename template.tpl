@@ -189,7 +189,23 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_data_layer",
     "checkboxText": "Send all from DataLayer",
     "simpleValueType": true,
-    "help": "Adds all Data Layer values to the request."
+    "help": "Adds all Data Layer values to the request. \u003cbr/\u003e\u003cbr/\u003e Note that the values added to the request are from GTM\u0027s internal Data Model (as seen in the GTM Preview Mode variable tab), not the actual Data Layer as seen in the DevTools console tab. \u003cbr/\u003e\u003cbr/\u003e Learn more about: the \u003ca href\u003d\"https://www.simoahava.com/analytics/google-tag-manager-data-model/\"\u003eGTM\u0027s Data Model\u003c/a\u003e and the \u003ca href\u003d\"https://www.simoahava.com/analytics/two-simple-data-model-tricks/#trick-2-get-the-object-representation-of-the-current-state-of-the-data-model\"\u003emethod\u003c/a\u003e used to get the values.",
+    "subParams": [
+      {
+        "type": "CHECKBOX",
+        "name": "add_data_layer_use_own_data_model",
+        "checkboxText": "Use own Data Model",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "add_data_layer",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ],
+        "help": "Enable this option if your event captures data layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the data layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e."
+      }
+    ]
   },
   {
     "type": "CHECKBOX",
@@ -697,6 +713,8 @@ const setCookie = require('setCookie');
 const getCookieValues = require('getCookieValues');
 const getContainerVersion = require('getContainerVersion');
 const isConsentGranted = require('isConsentGranted');
+const copyFromWindow = require('copyFromWindow');
+const setInWindow = require('setInWindow');
 
 let pageLocation = getUrl();
 
@@ -714,6 +732,8 @@ let requestType = determinateRequestType();
 
 const normalizedServerUrl = normalizeServerUrl();
 
+const eventId = copyFromDataLayer('gtm.uniqueEventId');
+
 if (requestType === 'post') {
   const dataScriptVersion = 'v8';
   const dataTagScriptUrl =
@@ -723,12 +743,25 @@ if (requestType === 'post') {
           dataScriptVersion
         )
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
-  injectScript(
-    dataTagScriptUrl,
-    sendPostRequest,
-    data.gtmOnFailure,
-    dataTagScriptUrl
-  );
+
+  const dataTagScriptStorageKey = 'gtm_dataTagScriptLoaded';
+  const dataTagScriptLoaded = copyFromWindow(dataTagScriptStorageKey);
+
+  if (!dataTagScriptLoaded || !dataTagScriptLoaded[dataTagScriptUrl]) {
+    injectScript(
+      dataTagScriptUrl,
+      () => {
+        const cacheValue = dataTagScriptLoaded || {};
+        cacheValue[dataTagScriptUrl] = true;
+        setInWindow(dataTagScriptStorageKey, cacheValue);
+        sendPostRequest();
+      },
+      data.gtmOnFailure,
+      dataTagScriptUrl
+    );
+  } else {
+    sendPostRequest();
+  }
 } else {
   sendGetRequest();
 }
@@ -875,7 +908,9 @@ function addCommonDataForPostRequest(data, eventData) {
   if (data.add_common || data.add_data_layer) {
     const dataTagData = callInWindow(
       'dataTagGetData',
-      getContainerVersion()['containerId']
+      getContainerVersion()['containerId'],
+      eventId,
+      !!data.add_data_layer_use_own_data_model
     );
 
     if (data.add_data_layer && dataTagData.dataModel) {
@@ -892,6 +927,7 @@ function addCommonDataForPostRequest(data, eventData) {
         dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
+  
   if (data.add_consent_state) {
     eventData = addConsentStateData(eventData);
   }
@@ -1169,8 +1205,10 @@ function addCommonCookie(eventData) {
     // Postscript cookies
     'ps_id',
     // Microsoft UET CAPI cookies
-    'uet_msclkid', '_uetmsclkid',
-    'uet_vid', '_uetvid'
+    'uet_msclkid',
+    '_uetmsclkid',
+    'uet_vid',
+    '_uetvid',
   ];
   let commonCookie = null;
 
@@ -1435,6 +1473,45 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 8,
                     "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "gtm_dataTagScriptLoaded"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
                   }
                 ]
               }
