@@ -409,6 +409,15 @@ function dataTagGetOwnDataModel(dataLayerArray) {
         }
       }
 
+      // DataLayer event from GTM template using createQueue() API
+      if (
+        typeof item === 'object' && 
+        typeof item.getUntrustedMessageValue === 'function' && 
+        typeof item.value === 'object'
+      ) {
+        item = item.value;
+      }
+
       if (!isPlainObject(item)) continue;
 
       var shouldClear = isGtagCommand || !!item._clear;
