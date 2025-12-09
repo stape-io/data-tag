@@ -31,26 +31,51 @@ if (
 const userAndCustomData = getUserAndCustomDataArray();
 let requestType = determinateRequestType();
 
-const normalizedServerUrl = normalizeServerUrl();
+const bootstrapCookie = getCookieValues('_bootstrap_cid')[0];
+if (!bootstrapCookie) {
+  const bootstrapUrl = data.gtm_server_domain + data.request_path +
+    '?event_name=bootstrap' +
+    '&v=1';
 
-if (requestType === 'post') {
-  const dataScriptVersion = 'v8';
-  const dataTagScriptUrl =
-    typeof data.data_tag_load_script_url !== 'undefined'
-      ? data.data_tag_load_script_url.replace(
-          '${data-script-version}',
-          dataScriptVersion
-        )
-      : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
-  injectScript(
-    dataTagScriptUrl,
-    sendPostRequest,
-    data.gtmOnFailure,
-    dataTagScriptUrl
-  );
-} else {
-  sendGetRequest();
+    sendPixel(
+      bootstrapUrl,
+      function() {
+        // bootstrap succeeded, now execute normal tags
+        executeNormalTag();
+      },
+      function() {
+        // bootstrap failed, still execute the normal tags
+        executeNormalTag();
+      }
+    );
+    return; // exit early, executeNormalTag will be called from callback
 }
+
+// If boostrap isnt needed, then execute normally
+executeNormalTag();
+
+function executeNormalTag() {
+    if (requestType === 'post') {
+        const dataScriptVersion = 'v8';
+        const dataTagScriptUrl =
+            typeof data.data_tag_load_script_url !== 'undefined'
+                ? data.data_tag_load_script_url.replace(
+                    '${data-script-version}',
+                    dataScriptVersion
+                )
+                : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
+        injectScript(
+            dataTagScriptUrl,
+            sendPostRequest,
+            data.gtmOnFailure,
+            dataTagScriptUrl
+        );
+    } else {
+        sendGetRequest();
+    }
+}
+
+const normalizedServerUrl = normalizeServerUrl();
 
 function sendPostRequest() {
   let eventData = {};
