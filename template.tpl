@@ -1791,6 +1791,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "_uetvid"
+              },
+              {
+                "type": 1,
+                "string": "_bootstrap_cid"
               }
             ]
           }
