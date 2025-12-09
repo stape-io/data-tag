@@ -33,26 +33,28 @@ let requestType = determinateRequestType();
 
 const bootstrapCookie = getCookieValues('_bootstrap_cid')[0];
 if (!bootstrapCookie) {
-  const bootstrapUrl = data.gtm_server_domain + data.request_path +
-    '?event_name=bootstrap' +
-    '&v=1';
+    const normalizedUrl = normalizeServerUrl();
+    const bootstrapUrl = normalizedUrl.gtmServerDomain + normalizedUrl.requestPath +
+        '?event_name=bootstrap' +
+        '&v=1';
 
+    // Send bootstrap and wait for response before sending other events
+    // This ensures the server sets the _bootstrap_cid cookie first
     sendPixel(
-      bootstrapUrl,
-      function() {
-        // bootstrap succeeded, now execute normal tags
-        executeNormalTag();
-      },
-      function() {
-        // bootstrap failed, still execute the normal tags
-        executeNormalTag();
-      }
+        bootstrapUrl,
+        function () {
+            // Bootstrap complete, now send the actual event
+            executeNormalTag();
+        },
+        function () {
+            // Bootstrap failed, still try to send the actual event
+            executeNormalTag();
+        }
     );
-    return; // exit early, executeNormalTag will be called from callback
+} else {
+    // Bootstrap cookie exists, execute normally
+    executeNormalTag();
 }
-
-// If boostrap isnt needed, then execute normally
-executeNormalTag();
 
 function executeNormalTag() {
     if (requestType === 'post') {
@@ -66,8 +68,12 @@ function executeNormalTag() {
                 : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
         injectScript(
             dataTagScriptUrl,
-            sendPostRequest,
-            data.gtmOnFailure,
+            function () {
+                sendPostRequest();
+            },
+            function () {
+                data.gtmOnFailure();
+            },
             dataTagScriptUrl
         );
     } else {
