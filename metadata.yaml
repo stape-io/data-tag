@@ -1,6 +1,8 @@
 homepage: "https://stape.io/"
 documentation: "https://github.com/stape-io/data-tag"
 versions:
+  - sha: 7ffe0f07c35f0a55d77d334583e60e5c0be89e83
+    changeNotes: Code organization and formatting only.
   - sha: a0aececc652374243dc1018dc83f31cb7dd6d41e
     changeNotes: |2
       Fixed the Client ID auto generation when the _dcid cookie does not exist and multiple requests are sent at once.
