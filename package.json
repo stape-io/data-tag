@@ -18,6 +18,7 @@
   "homepage": "https://github.com/stape-io/data-tag#readme",
   "devDependencies": {
     "prettier": "^2.8.7",
+    "stape-gtm-api-types": "^0.1.2",
     "uglify-js": "^3.17.4"
   }
 }

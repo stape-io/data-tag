@@ -1,4 +1,6 @@
+**/.DS_Store
 src/
 dtag.js
 node_modules/
 npm-debug.log
+jsconfig.json

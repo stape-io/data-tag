@@ -21,19 +21,16 @@ const generateRandom = require('generateRandom');
 const copyFromWindow = require('copyFromWindow');
 const setInWindow = require('setInWindow');
 
-let pageLocation = getUrl();
+/*==============================================================================
+==============================================================================*/
 
-if (
-  pageLocation &&
-  pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0
-) {
-  data.gtmOnSuccess();
-
-  return;
+const pageLocation = getUrl();
+if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
+  return data.gtmOnSuccess();
 }
 
 const userAndCustomData = getUserAndCustomDataArray();
-let requestType = determinateRequestType();
+const requestType = determinateRequestType();
 
 const normalizedServerUrl = normalizeServerUrl();
 
@@ -41,20 +38,16 @@ if (requestType === 'post') {
   const dataScriptVersion = 'v8';
   const dataTagScriptUrl =
     typeof data.data_tag_load_script_url !== 'undefined'
-      ? data.data_tag_load_script_url.replace(
-          '${data-script-version}',
-          dataScriptVersion
-        )
+      ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
-  injectScript(
-    dataTagScriptUrl,
-    sendPostRequest,
-    data.gtmOnFailure,
-    dataTagScriptUrl
-  );
+  injectScript(dataTagScriptUrl, sendPostRequest, data.gtmOnFailure, dataTagScriptUrl);
 } else {
   sendGetRequest();
 }
+
+/*==============================================================================
+  Vendor related functions
+==============================================================================*/
 
 function sendPostRequest() {
   let eventData = {};
@@ -83,11 +76,7 @@ function sendPostRequest() {
 }
 
 function sendGetRequest() {
-  sendPixel(
-    addDataForGetRequest(data, buildEndpoint()),
-    data.gtmOnSuccess,
-    data.gtmOnFailure
-  );
+  sendPixel(addDataForGetRequest(data, buildEndpoint()), data.gtmOnSuccess, data.gtmOnFailure);
 }
 
 function normalizeServerUrl() {
@@ -150,11 +139,7 @@ function addGaRequiredData(data, eventData) {
 
 function addDataForGetRequest(data, url) {
   let eventData = {};
-  url +=
-    '?v=' +
-    data.protocol_version +
-    '&event=' +
-    encodeUriComponent(getEventName(data));
+  url += '?v=' + data.protocol_version + '&event=' + encodeUriComponent(getEventName(data));
 
   if (data.add_common) {
     eventData = addCommonData(data, eventData);
@@ -172,17 +157,14 @@ function addDataForGetRequest(data, url) {
 
   if (customData.length) {
     for (let customDataKey in customData) {
-      eventData[customData[customDataKey].name] =
-        customData[customDataKey].value;
+      eventData[customData[customDataKey].name] = customData[customDataKey].value;
     }
   }
 
   eventData = addTempClientId(eventData);
 
   if (data.request_type === 'auto') {
-    return (
-      url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)))
-    );
+    return url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)));
   }
 
   for (let eventDataKey in eventData) {
@@ -190,9 +172,7 @@ function addDataForGetRequest(data, url) {
       '&' +
       eventDataKey +
       '=' +
-      (eventData[eventDataKey]
-        ? encodeUriComponent(eventData[eventDataKey])
-        : '');
+      (eventData[eventDataKey] ? encodeUriComponent(eventData[eventDataKey]) : '');
   }
 
   return url;
@@ -200,10 +180,7 @@ function addDataForGetRequest(data, url) {
 
 function addCommonDataForPostRequest(data, eventData) {
   if (data.add_common || data.add_data_layer) {
-    const dataTagData = callInWindow(
-      'dataTagGetData',
-      getContainerVersion()['containerId']
-    );
+    const dataTagData = callInWindow('dataTagGetData', getContainerVersion()['containerId']);
 
     if (data.add_data_layer && dataTagData.dataModel) {
       for (let dataKey in dataTagData.dataModel) {
@@ -213,10 +190,8 @@ function addCommonDataForPostRequest(data, eventData) {
 
     if (data.add_common) {
       eventData = addCommonData(data, eventData);
-      eventData.screen_resolution =
-        dataTagData.screen.width + 'x' + dataTagData.screen.height;
-      eventData.viewport_size =
-        dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
+      eventData.screen_resolution = dataTagData.screen.width + 'x' + dataTagData.screen.height;
+      eventData.viewport_size = dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
   if (data.add_consent_state) {
@@ -248,19 +223,17 @@ function addConsentStateData(eventData) {
     analytics_storage: isConsentGranted('analytics_storage'),
     functionality_storage: isConsentGranted('functionality_storage'),
     personalization_storage: isConsentGranted('personalization_storage'),
-    security_storage: isConsentGranted('security_storage'),
+    security_storage: isConsentGranted('security_storage')
   };
   return eventData;
 }
 
 function addTempClientId(eventData) {
   const tempClientIdStorageKey = 'gtm_dataTagTempClientId';
-  const tempClientId = copyFromWindow(tempClientIdStorageKey) || 
-    'dcid.1.' +
-    getTimestampMillis() +
-    '.' +
-    generateRandom(100000000, 999999999);
-  
+  const tempClientId =
+    copyFromWindow(tempClientIdStorageKey) ||
+    'dcid.1.' + getTimestampMillis() + '.' + generateRandom(100000000, 999999999);
+
   eventData._dcid_temp = tempClientId;
   setInWindow(tempClientIdStorageKey, eventData._dcid_temp);
 
@@ -312,27 +285,19 @@ function getCustomData(data, dtagLoaded) {
 
       if (dtagLoaded && dataTransformation === 'sha256base64') {
         dataValue = makeString(dataValue);
-        dataValue = callInWindow(
-          'dataTag256',
-          dataValue.trim().toLowerCase(),
-          'B64'
-        );
+        dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'B64');
       }
 
       if (dtagLoaded && dataTransformation === 'sha256hex') {
         dataValue = makeString(dataValue);
-        dataValue = callInWindow(
-          'dataTag256',
-          dataValue.trim().toLowerCase(),
-          'HEX'
-        );
+        dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'HEX');
       }
 
       if (customData[dataKey].store && customData[dataKey].store !== 'none') {
         dataToStore.push({
           store: customData[dataKey].store,
           name: customData[dataKey].name,
-          value: dataValue,
+          value: dataValue
         });
       }
 
@@ -372,8 +337,7 @@ function storeData(dataToStore) {
       if (dataToStoreLocalStorage) {
         for (let attrName in dataToStoreLocalStorage) {
           if (dataToStoreLocalStorage[attrName])
-            dataToStoreLocalStorageResult[attrName] =
-              dataToStoreLocalStorage[attrName];
+            dataToStoreLocalStorageResult[attrName] = dataToStoreLocalStorage[attrName];
         }
       }
     }
@@ -381,49 +345,27 @@ function storeData(dataToStore) {
 
   for (let attrName in dataToStore) {
     if (dataToStore[attrName].value) {
-      if (
-        dataToStore[attrName].store === 'all' ||
-        dataToStore[attrName].store === 'localStorage'
-      ) {
-        dataToStoreLocalStorageResult[dataToStore[attrName].name] =
-          dataToStore[attrName].value;
+      if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'localStorage') {
+        dataToStoreLocalStorageResult[dataToStore[attrName].name] = dataToStore[attrName].value;
       }
 
-      if (
-        dataToStore[attrName].store === 'all' ||
-        dataToStore[attrName].store === 'cookies'
-      ) {
-        dataToStoreCookieResult[dataToStore[attrName].name] =
-          dataToStore[attrName].value;
+      if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'cookies') {
+        dataToStoreCookieResult[dataToStore[attrName].name] = dataToStore[attrName].value;
       }
     }
   }
 
   if (localStorage && getObjectLength(dataToStoreLocalStorageResult) !== 0) {
-    localStorage.setItem(
-      'stape',
-      JSON.stringify(dataToStoreLocalStorageResult)
-    );
+    localStorage.setItem('stape', JSON.stringify(dataToStoreLocalStorageResult));
   }
 
   if (getObjectLength(dataToStoreCookieResult) !== 0) {
     setCookie('stape', JSON.stringify(dataToStoreCookieResult), {
       secure: true,
       domain: 'auto',
-      path: '/',
+      path: '/'
     });
   }
-}
-
-function getObjectLength(object) {
-  let length = 0;
-
-  for (let key in object) {
-    if (object.hasOwnProperty(key)) {
-      ++length;
-    }
-  }
-  return length;
 }
 
 function determinateRequestType() {
@@ -452,9 +394,7 @@ function determinateRequestType() {
 
   if (isHashingEnabled) return 'post';
 
-  const userAndCustomDataLength = makeNumber(
-    JSON.stringify(userAndCustomData).length
-  );
+  const userAndCustomDataLength = makeNumber(JSON.stringify(userAndCustomData).length);
   return userAndCustomDataLength > 1500 ? 'post' : 'get';
 }
 
@@ -510,8 +450,10 @@ function addCommonCookie(eventData) {
     // Postscript cookies
     'ps_id',
     // Microsoft UET CAPI cookies
-    'uet_msclkid', '_uetmsclkid',
-    'uet_vid', '_uetvid'
+    'uet_msclkid',
+    '_uetmsclkid',
+    'uet_vid',
+    '_uetvid'
   ];
   let commonCookie = null;
 
@@ -527,4 +469,19 @@ function addCommonCookie(eventData) {
     eventData.common_cookie = commonCookie;
   }
   return eventData;
+}
+
+/*==============================================================================
+  Helpers
+==============================================================================*/
+
+function getObjectLength(object) {
+  let length = 0;
+
+  for (let key in object) {
+    if (object.hasOwnProperty(key)) {
+      ++length;
+    }
+  }
+  return length;
 }
