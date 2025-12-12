@@ -1,6 +1,10 @@
 homepage: "https://stape.io/"
 documentation: "https://github.com/stape-io/data-tag"
 versions:
+  - sha: a0aececc652374243dc1018dc83f31cb7dd6d41e
+    changeNotes: |2
+      Fixed the Client ID auto generation when the _dcid cookie does not exist and multiple requests are sent at once.
+      Make sure to update the Data Client in sGTM as well.
   - sha: 80e00e7b7daf5498a52c0d081190845bfd4d6911
     changeNotes: Added Microsoft UET CAPI cookies read permission.
   - sha: 306f447046246277f33e46b5762c3d48e97b7e4a

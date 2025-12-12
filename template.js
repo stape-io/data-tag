@@ -16,6 +16,10 @@ const setCookie = require('setCookie');
 const getCookieValues = require('getCookieValues');
 const getContainerVersion = require('getContainerVersion');
 const isConsentGranted = require('isConsentGranted');
+const getTimestampMillis = require('getTimestampMillis');
+const generateRandom = require('generateRandom');
+const copyFromWindow = require('copyFromWindow');
+const setInWindow = require('setInWindow');
 
 let pageLocation = getUrl();
 
@@ -125,6 +129,8 @@ function addRequiredDataForPostRequest(data, eventData) {
     eventData[customData[key].name] = customData[key].value;
   }
 
+  eventData = addTempClientId(eventData);
+
   return eventData;
 }
 
@@ -170,6 +176,8 @@ function addDataForGetRequest(data, url) {
         customData[customDataKey].value;
     }
   }
+
+  eventData = addTempClientId(eventData);
 
   if (data.request_type === 'auto') {
     return (
@@ -242,6 +250,20 @@ function addConsentStateData(eventData) {
     personalization_storage: isConsentGranted('personalization_storage'),
     security_storage: isConsentGranted('security_storage'),
   };
+  return eventData;
+}
+
+function addTempClientId(eventData) {
+  const tempClientIdStorageKey = 'gtm_dataTagTempClientId';
+  const tempClientId = copyFromWindow(tempClientIdStorageKey) || 
+    'dcid.1.' +
+    getTimestampMillis() +
+    '.' +
+    generateRandom(100000000, 999999999);
+  
+  eventData._dcid_temp = tempClientId;
+  setInWindow(tempClientIdStorageKey, eventData._dcid_temp);
+
   return eventData;
 }
 
