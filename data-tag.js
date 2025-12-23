@@ -210,35 +210,60 @@ function dataTagSendData(data, gtmServerDomain, requestPath, dataLayerEventName,
     }
 }
 
-function dataTagGetData(containerId, eventId, useOwnDataModel) {
+function dataTagGetData(containerId, eventId, useOwnDataModel, useOnlyCurrentEventObj) {
     var dataLayerGTM = window.google_tag_manager[containerId].dataLayer;
 
     var dataModelUntilCurrentEvent;
-    if (typeof eventId !== 'undefined' && useOwnDataModel) {
-        try {
-            var isObjectEmpty = function(obj) {
-                if (typeof obj !== 'object') return;
-                for (var key in obj) {
-                    if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
-                }
-                return true;
-            };
-        
-            var dataLayerName = dataLayerGTM.name;
-            var actualDataLayer = window[dataLayerName];
-            var actualDataLayerLength = actualDataLayer.length;
-            for (var i = actualDataLayerLength - 1; i >= 0 ; i--) {
-                var obj = actualDataLayer[i];
-                if (typeof obj !== 'object') continue;
-                if (eventId === obj['gtm.uniqueEventId']) {
-                    dataModelUntilCurrentEvent = dataTagGetOwnDataModel(actualDataLayer.slice(0, i + 1));
-                    if (typeof dataModelUntilCurrentEvent !== 'object' || isObjectEmpty(dataModelUntilCurrentEvent)) {
-                        dataModelUntilCurrentEvent = null;
-                    }
-                    break;
-                }
+    var currentEventObj;
+    if (
+      typeof eventId !== 'undefined' &&
+      (useOwnDataModel || useOnlyCurrentEventObj)
+    ) {
+      try {
+        var isObjectEmpty = function (obj) {
+          if (typeof obj !== 'object') return;
+          for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
+          }
+          return true;
+        };
+
+        var dataLayerName = dataLayerGTM.name;
+        var actualDataLayer = window[dataLayerName];
+        var actualDataLayerLength = actualDataLayer.length;
+        for (var i = actualDataLayerLength - 1; i >= 0; i--) {
+          var obj = actualDataLayer[i];
+
+          if (!obj || typeof obj !== 'object') continue;
+
+          // DataLayer event from GTM template using createQueue() API
+          if (
+            !obj.hasOwnProperty('gtm.uniqueEventId') &&
+            typeof obj.getUntrustedMessageValue === 'function' &&
+            typeof obj.value === 'object'
+          ) {
+            obj = obj.value;
+          }
+
+          if (eventId === obj['gtm.uniqueEventId']) {
+            if (useOwnDataModel) {
+              dataModelUntilCurrentEvent = dataTagGetOwnDataModel(
+                actualDataLayer.slice(0, i + 1)
+              );
+              if (
+                typeof dataModelUntilCurrentEvent !== 'object' ||
+                isObjectEmpty(dataModelUntilCurrentEvent)
+              ) {
+                dataModelUntilCurrentEvent = null;
+              }
+            } else if (useOnlyCurrentEventObj) {
+              currentEventObj = obj;
             }
-        } catch (e) {}
+
+            break;
+          }
+        }
+      } catch (e) {}
     }
 
     window.dataTagData = {
@@ -251,7 +276,7 @@ function dataTagGetData(containerId, eventId, useOwnDataModel) {
             width: window.screen.width,
             height: window.screen.height,
         },
-        dataModel: dataModelUntilCurrentEvent || dataLayerGTM.get({ split: function() { return []; } })
+        dataModel: dataModelUntilCurrentEvent || currentEventObj || dataLayerGTM.get({ split: function() { return []; } })
     };
 
     return window.dataTagData;
@@ -295,7 +320,7 @@ function dataTagGetOwnDataModel(dataLayerArray) {
       ) {
         return !1;
       }
-      
+
       try {
         if (
           a.constructor &&
@@ -411,8 +436,9 @@ function dataTagGetOwnDataModel(dataLayerArray) {
 
       // DataLayer event from GTM template using createQueue() API
       if (
-        typeof item === 'object' && 
-        typeof item.getUntrustedMessageValue === 'function' && 
+        item &&
+        typeof item === 'object' &&
+        typeof item.getUntrustedMessageValue === 'function' &&
         typeof item.value === 'object'
       ) {
         item = item.value;
@@ -437,7 +463,7 @@ function dataTagGetOwnDataModel(dataLayerArray) {
           recursiveMerge(newNestedObject, dataModel);
         }
       }
-      
+
     }
     return dataModel;
   } catch (e) {}

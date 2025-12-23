@@ -108,7 +108,10 @@ function normalizeServerUrl() {
   let requestPath = data.request_path;
 
   // Add 'https://' if gtmServerDomain doesn't start with it
-  if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
+  if (
+    gtmServerDomain.indexOf('http://') !== 0 &&
+    gtmServerDomain.indexOf('https://') !== 0
+  ) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
 
@@ -124,7 +127,7 @@ function normalizeServerUrl() {
 
   return {
     gtmServerDomain: gtmServerDomain,
-    requestPath: requestPath
+    requestPath: requestPath,
   };
 }
 
@@ -213,7 +216,8 @@ function addCommonDataForPostRequest(data, eventData) {
       'dataTagGetData',
       getContainerVersion()['containerId'],
       eventId,
-      !!data.add_data_layer_use_own_data_model
+      data.add_data_layer_use_own_data_model,
+      data.add_data_layer_use_only_current_push
     );
 
     if (data.add_data_layer && dataTagData.dataModel) {
@@ -230,7 +234,7 @@ function addCommonDataForPostRequest(data, eventData) {
         dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
-  
+
   if (data.add_consent_state) {
     eventData = addConsentStateData(eventData);
   }
