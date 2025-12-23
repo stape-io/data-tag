@@ -38,7 +38,7 @@ const normalizedServerUrl = normalizeServerUrl();
 const eventId = copyFromDataLayer('gtm.uniqueEventId');
 
 if (requestType === 'post') {
-  const dataScriptVersion = 'v8';
+  const dataScriptVersion = 'v9-rc';
   const dataTagScriptUrl =
     typeof data.data_tag_load_script_url !== 'undefined'
       ? data.data_tag_load_script_url.replace(
