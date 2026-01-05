@@ -511,7 +511,12 @@ function addCommonCookie(eventData) {
     'ps_id',
     // Microsoft UET CAPI cookies
     'uet_msclkid', '_uetmsclkid',
-    'uet_vid', '_uetvid'
+    'uet_vid', '_uetvid',
+    // Google cookies
+    '_dm_session_attributes',
+    'FPGCLAW', '_gcl_aw',
+    'FPGCLAG', '_gcl_ag',
+    'FPGCLGB', '_gcl_gb'
   ];
   let commonCookie = null;
 
