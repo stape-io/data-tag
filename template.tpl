@@ -187,9 +187,45 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "CHECKBOX",
     "name": "add_data_layer",
-    "checkboxText": "Send all from DataLayer",
+    "checkboxText": "Send all from Data Layer",
     "simpleValueType": true,
-    "help": "Adds all Data Layer values to the request."
+    "help": "Adds all Data Layer values to the request.\n\u003cbr/\u003e\u003cbr/\u003e \nNote that the values added to the request are from GTM\u0027s internal Data Model (as seen in the GTM Preview Mode variable tab), not the actual Data Layer event as seen in the DevTools Console tab.\n\u003cbr/\u003e\nIf you want only the values from the event that triggered the tag, enable the \u003ci\u003eSend the current Data Layer event object data only\u003c/i\u003e option.\n\u003cbr/\u003e\u003cbr/\u003e Learn more about: the \u003ca href\u003d\"https://www.simoahava.com/analytics/google-tag-manager-data-model/\"\u003eGTM\u0027s Data Model\u003c/a\u003e and the \u003ca href\u003d\"https://www.simoahava.com/analytics/two-simple-data-model-tricks/#trick-2-get-the-object-representation-of-the-current-state-of-the-data-model\"\u003emethod\u003c/a\u003e used to get the values.",
+    "subParams": [
+      {
+        "type": "GROUP",
+        "name": "add_data_layer_group",
+        "subParams": [
+          {
+            "type": "CHECKBOX",
+            "name": "add_data_layer_use_own_data_model",
+            "checkboxText": "Use own Data Model",
+            "simpleValueType": true,
+            "help": "Enable this option if your event captures Data Layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the Data Layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e."
+          },
+          {
+            "type": "CHECKBOX",
+            "name": "add_data_layer_use_only_current_push",
+            "checkboxText": "Send the current Data Layer event object data only",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "add_data_layer_use_own_data_model",
+                "paramValue": true,
+                "type": "NOT_EQUALS"
+              }
+            ],
+            "help": "Enable this option to only capture data from the Data Layer event that triggered the tag, not from the whole GTM\u0027s internal Data Model."
+          }
+        ],
+        "enablingConditions": [
+          {
+            "paramName": "add_data_layer",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ]
+      }
+    ]
   },
   {
     "type": "CHECKBOX",
@@ -550,7 +586,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "alwaysInSummary": false,
-        "defaultValue": "https://stapecdn.com/dtag/v8.js"
+        "defaultValue": "https://stapecdn.com/dtag/v9.js"
       },
       {
         "type": "CHECKBOX",
@@ -718,8 +754,10 @@ let requestType = determinateRequestType();
 
 const normalizedServerUrl = normalizeServerUrl();
 
+const eventId = copyFromDataLayer('gtm.uniqueEventId');
+
 if (requestType === 'post') {
-  const dataScriptVersion = 'v8';
+  const dataScriptVersion = 'v9';
   const dataTagScriptUrl =
     typeof data.data_tag_load_script_url !== 'undefined'
       ? data.data_tag_load_script_url.replace(
@@ -727,12 +765,25 @@ if (requestType === 'post') {
           dataScriptVersion
         )
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
-  injectScript(
-    dataTagScriptUrl,
-    sendPostRequest,
-    data.gtmOnFailure,
-    dataTagScriptUrl
-  );
+
+  const dataTagScriptLoadedCacheKey = 'gtm_dataTagScriptLoadedCache';
+  const dataTagScriptLoadedCache =
+    copyFromWindow(dataTagScriptLoadedCacheKey) || {};
+
+  if (!dataTagScriptLoadedCache[dataTagScriptUrl]) {
+    injectScript(
+      dataTagScriptUrl,
+      () => {
+        dataTagScriptLoadedCache[dataTagScriptUrl] = true;
+        setInWindow(dataTagScriptLoadedCacheKey, dataTagScriptLoadedCache);
+        sendPostRequest();
+      },
+      data.gtmOnFailure,
+      dataTagScriptUrl
+    );
+  } else {
+    sendPostRequest();
+  }
 } else {
   sendGetRequest();
 }
@@ -776,7 +827,10 @@ function normalizeServerUrl() {
   let requestPath = data.request_path;
 
   // Add 'https://' if gtmServerDomain doesn't start with it
-  if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
+  if (
+    gtmServerDomain.indexOf('http://') !== 0 &&
+    gtmServerDomain.indexOf('https://') !== 0
+  ) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
 
@@ -792,7 +846,7 @@ function normalizeServerUrl() {
 
   return {
     gtmServerDomain: gtmServerDomain,
-    requestPath: requestPath
+    requestPath: requestPath,
   };
 }
 
@@ -883,7 +937,10 @@ function addCommonDataForPostRequest(data, eventData) {
   if (data.add_common || data.add_data_layer) {
     const dataTagData = callInWindow(
       'dataTagGetData',
-      getContainerVersion()['containerId']
+      getContainerVersion()['containerId'],
+      eventId,
+      data.add_data_layer_use_own_data_model,
+      data.add_data_layer_use_only_current_push
     );
 
     if (data.add_data_layer && dataTagData.dataModel) {
@@ -900,6 +957,7 @@ function addCommonDataForPostRequest(data, eventData) {
         dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
+
   if (data.add_consent_state) {
     eventData = addConsentStateData(eventData);
   }
@@ -936,12 +994,13 @@ function addConsentStateData(eventData) {
 
 function addTempClientId(eventData) {
   const tempClientIdStorageKey = 'gtm_dataTagTempClientId';
-  const tempClientId = copyFromWindow(tempClientIdStorageKey) || 
+  const tempClientId =
+    copyFromWindow(tempClientIdStorageKey) ||
     'dcid.1.' +
-    getTimestampMillis() +
-    '.' +
-    generateRandom(100000000, 999999999);
-  
+      getTimestampMillis() +
+      '.' +
+      generateRandom(100000000, 999999999);
+
   eventData._dcid_temp = tempClientId;
   setInWindow(tempClientIdStorageKey, eventData._dcid_temp);
 
@@ -1191,13 +1250,18 @@ function addCommonCookie(eventData) {
     // Postscript cookies
     'ps_id',
     // Microsoft UET CAPI cookies
-    'uet_msclkid', '_uetmsclkid',
-    'uet_vid', '_uetvid',
+    'uet_msclkid',
+    '_uetmsclkid',
+    'uet_vid',
+    '_uetvid',
     // Google cookies
     '_dm_session_attributes',
-    'FPGCLAW', '_gcl_aw',
-    'FPGCLAG', '_gcl_ag',
-    'FPGCLGB', '_gcl_gb'
+    'FPGCLAW',
+    '_gcl_aw',
+    'FPGCLAG',
+    '_gcl_ag',
+    'FPGCLGB',
+    '_gcl_gb',
   ];
   let commonCookie = null;
 
@@ -1489,6 +1553,45 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 1,
                     "string": "gtm_dataTagTempClientId"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "gtm_dataTagScriptLoadedCache"
                   },
                   {
                     "type": 8,
@@ -2290,5 +2393,4 @@ setup: |-
 ___NOTES___
 
 Created on 21/03/2021, 11:26:46
-
 

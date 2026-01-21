@@ -1,6 +1,8 @@
-homepage: "https://stape.io/"
-documentation: "https://github.com/stape-io/data-tag"
+homepage: 'https://stape.io/'
+documentation: 'https://github.com/stape-io/data-tag'
 versions:
+  - sha: da99b1a9696a3eebe9f20a624ff15b1373b2ca0e
+    changeNotes: Fixed the race condition issue affecting the 'Send all from DataLayer' feature.
   - sha: 7b7305d40e9666c737f3f9a5550b427c5e28b726
     changeNotes: Added common cookie support for Google Advertising platforms.
   - sha: a0aececc652374243dc1018dc83f31cb7dd6d41e
