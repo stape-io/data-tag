@@ -200,7 +200,7 @@ ___TEMPLATE_PARAMETERS___
             "name": "add_data_layer_use_own_data_model",
             "checkboxText": "Use own Data Model",
             "simpleValueType": true,
-            "help": "Enable this option if your event captures Data Layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the Data Layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e."
+            "help": "Enable this option if your event captures Data Layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the Data Layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e."
           },
           {
             "type": "CHECKBOX",
@@ -214,7 +214,7 @@ ___TEMPLATE_PARAMETERS___
                 "type": "NOT_EQUALS"
               }
             ],
-            "help": "Enable this option to only capture data from the Data Layer event that triggered the tag, not from the whole GTM\u0027s internal Data Model."
+            "help": "Enable this option to only capture data from the Data Layer event that triggered the tag, not from the whole GTM\u0027s internal Data Model.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section."
           }
         ],
         "enablingConditions": [
@@ -576,7 +576,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "data_tag_load_script_url",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
-        "help": "URL where to load Data tag script from, by default it will be loaded from \u003cI\u003ehttps://stapecdn.com/dtag/${data-script-version}.js\u003c/i\u003e. This can be parameterized with \u003ci\u003e${data-script-version}\u003c/i\u003e in order to load the correct version for this tag.",
+        "help": "URL where to load Data tag script from, by default it will be loaded from \u003cI\u003ehttps://stapecdn.com/dtag/${data-script-version}.js\u003c/i\u003e. \n\u003cbr/\u003e\nThis can be parameterized with \u003ci\u003e${data-script-version}\u003c/i\u003e in order to load the correct version for this tag.\n\u003cbr/\u003e\u003cbr/\u003e\nLatest version: \u003cb\u003ev9\u003c/b\u003e.",
         "valueValidators": [
           {
             "type": "REGEX",
