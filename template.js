@@ -1,48 +1,44 @@
-const copyFromDataLayer = require('copyFromDataLayer');
-const JSON = require('JSON');
-const getUrl = require('getUrl');
-const getReferrerUrl = require('getReferrerUrl');
-const readTitle = require('readTitle');
-const injectScript = require('injectScript');
 const callInWindow = require('callInWindow');
-const makeNumber = require('makeNumber');
-const readCharacterSet = require('readCharacterSet');
-const localStorage = require('localStorage');
-const sendPixel = require('sendPixel');
-const encodeUriComponent = require('encodeUriComponent');
-const toBase64 = require('toBase64');
-const makeString = require('makeString');
-const setCookie = require('setCookie');
-const getCookieValues = require('getCookieValues');
-const getContainerVersion = require('getContainerVersion');
-const isConsentGranted = require('isConsentGranted');
-const getTimestampMillis = require('getTimestampMillis');
-const generateRandom = require('generateRandom');
+const copyFromDataLayer = require('copyFromDataLayer');
 const copyFromWindow = require('copyFromWindow');
+const encodeUriComponent = require('encodeUriComponent');
+const generateRandom = require('generateRandom');
+const getContainerVersion = require('getContainerVersion');
+const getCookieValues = require('getCookieValues');
+const getReferrerUrl = require('getReferrerUrl');
+const getTimestampMillis = require('getTimestampMillis');
+const getType = require('getType');
+const getUrl = require('getUrl');
+const injectScript = require('injectScript');
+const isConsentGranted = require('isConsentGranted');
+const JSON = require('JSON');
+const localStorage = require('localStorage');
+const makeNumber = require('makeNumber');
+const makeString = require('makeString');
+const readCharacterSet = require('readCharacterSet');
+const readTitle = require('readTitle');
+const sendPixel = require('sendPixel');
+const setCookie = require('setCookie');
 const setInWindow = require('setInWindow');
+const toBase64 = require('toBase64');
 
 /*==============================================================================
 ==============================================================================*/
 
-let pageLocation = getUrl();
-
+const pageLocation = getUrl();
 if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
-  data.gtmOnSuccess();
-
-  return;
+  return data.gtmOnSuccess();
 }
 
 const userAndCustomData = getUserAndCustomDataArray();
-let requestType = determinateRequestType();
-
+const requestType = determinateRequestType();
 const normalizedServerUrl = normalizeServerUrl();
-
 const eventId = copyFromDataLayer('gtm.uniqueEventId');
 
 if (requestType === 'post') {
   const dataScriptVersion = 'v9';
   const dataTagScriptUrl =
-    typeof data.data_tag_load_script_url !== 'undefined'
+    getType(data.data_tag_load_script_url) !== 'undefined'
       ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
 
@@ -164,18 +160,18 @@ function addDataForGetRequest(data, url) {
   url += '?v=' + data.protocol_version + '&event=' + encodeUriComponent(getEventName(data));
 
   if (data.add_common) {
-    eventData = addCommonData(data, eventData);
+    eventData = addCommonData(eventData);
   }
 
-  if (data.add_consent_state) {
+  if (data.add_consent_state && data.request_type === 'auto') {
     eventData = addConsentStateData(eventData);
   }
 
-  if (data.add_common_cookie) {
+  if (data.add_common_cookie && data.request_type === 'auto') {
     eventData = addCommonCookie(eventData);
   }
 
-  let customData = getCustomData(data, false);
+  const customData = getCustomData(data, false);
 
   if (customData.length) {
     for (let customDataKey in customData) {
@@ -190,11 +186,8 @@ function addDataForGetRequest(data, url) {
   }
 
   for (let eventDataKey in eventData) {
-    url +=
-      '&' +
-      eventDataKey +
-      '=' +
-      (eventData[eventDataKey] ? encodeUriComponent(eventData[eventDataKey]) : '');
+    const value = eventData[eventDataKey];
+    url += '&' + eventDataKey + '=' + (value ? encodeUriComponent(value) : '');
   }
 
   return url;
@@ -217,7 +210,7 @@ function addCommonDataForPostRequest(data, eventData) {
     }
 
     if (data.add_common) {
-      eventData = addCommonData(data, eventData);
+      eventData = addCommonData(eventData);
       eventData.screen_resolution = dataTagData.screen.width + 'x' + dataTagData.screen.height;
       eventData.viewport_size = dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
@@ -234,7 +227,7 @@ function addCommonDataForPostRequest(data, eventData) {
   return eventData;
 }
 
-function addCommonData(data, eventData) {
+function addCommonData(eventData) {
   eventData.page_location = getUrl();
   eventData.page_hostname = getUrl('host');
   eventData.page_referrer = getReferrerUrl();
@@ -413,15 +406,7 @@ function determinateRequestType() {
     return data.request_type;
   }
 
-  if (data.add_data_layer) {
-    return 'post';
-  }
-
-  if (data.dataLayerEventPush) {
-    return 'post';
-  }
-
-  if (data.richsstsse) {
+  if (data.add_data_layer || data.addGaParameters || data.dataLayerEventPush || data.richsstsse) {
     return 'post';
   }
 
@@ -431,7 +416,6 @@ function determinateRequestType() {
       item.transformation === 'sha256base64' ||
       item.transformation === 'sha256hex'
   );
-
   if (isHashingEnabled) return 'post';
 
   const userAndCustomDataLength = makeNumber(JSON.stringify(userAndCustomData).length);
