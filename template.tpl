@@ -738,12 +738,12 @@ const generateRandom = require('generateRandom');
 const copyFromWindow = require('copyFromWindow');
 const setInWindow = require('setInWindow');
 
+/*==============================================================================
+==============================================================================*/
+
 let pageLocation = getUrl();
 
-if (
-  pageLocation &&
-  pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0
-) {
+if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
   data.gtmOnSuccess();
 
   return;
@@ -760,15 +760,11 @@ if (requestType === 'post') {
   const dataScriptVersion = 'v9';
   const dataTagScriptUrl =
     typeof data.data_tag_load_script_url !== 'undefined'
-      ? data.data_tag_load_script_url.replace(
-          '${data-script-version}',
-          dataScriptVersion
-        )
+      ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
 
   const dataTagScriptLoadedCacheKey = 'gtm_dataTagScriptLoadedCache';
-  const dataTagScriptLoadedCache =
-    copyFromWindow(dataTagScriptLoadedCacheKey) || {};
+  const dataTagScriptLoadedCache = copyFromWindow(dataTagScriptLoadedCacheKey) || {};
 
   if (!dataTagScriptLoadedCache[dataTagScriptUrl]) {
     injectScript(
@@ -787,6 +783,10 @@ if (requestType === 'post') {
 } else {
   sendGetRequest();
 }
+
+/*==============================================================================
+  Vendor related functions
+==============================================================================*/
 
 function sendPostRequest() {
   let eventData = {};
@@ -815,11 +815,7 @@ function sendPostRequest() {
 }
 
 function sendGetRequest() {
-  sendPixel(
-    addDataForGetRequest(data, buildEndpoint()),
-    data.gtmOnSuccess,
-    data.gtmOnFailure
-  );
+  sendPixel(addDataForGetRequest(data, buildEndpoint()), data.gtmOnSuccess, data.gtmOnFailure);
 }
 
 function normalizeServerUrl() {
@@ -827,10 +823,7 @@ function normalizeServerUrl() {
   let requestPath = data.request_path;
 
   // Add 'https://' if gtmServerDomain doesn't start with it
-  if (
-    gtmServerDomain.indexOf('http://') !== 0 &&
-    gtmServerDomain.indexOf('https://') !== 0
-  ) {
+  if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
 
@@ -846,7 +839,7 @@ function normalizeServerUrl() {
 
   return {
     gtmServerDomain: gtmServerDomain,
-    requestPath: requestPath,
+    requestPath: requestPath
   };
 }
 
@@ -885,11 +878,7 @@ function addGaRequiredData(data, eventData) {
 
 function addDataForGetRequest(data, url) {
   let eventData = {};
-  url +=
-    '?v=' +
-    data.protocol_version +
-    '&event=' +
-    encodeUriComponent(getEventName(data));
+  url += '?v=' + data.protocol_version + '&event=' + encodeUriComponent(getEventName(data));
 
   if (data.add_common) {
     eventData = addCommonData(data, eventData);
@@ -907,17 +896,14 @@ function addDataForGetRequest(data, url) {
 
   if (customData.length) {
     for (let customDataKey in customData) {
-      eventData[customData[customDataKey].name] =
-        customData[customDataKey].value;
+      eventData[customData[customDataKey].name] = customData[customDataKey].value;
     }
   }
 
   eventData = addTempClientId(eventData);
 
   if (data.request_type === 'auto') {
-    return (
-      url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)))
-    );
+    return url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)));
   }
 
   for (let eventDataKey in eventData) {
@@ -925,9 +911,7 @@ function addDataForGetRequest(data, url) {
       '&' +
       eventDataKey +
       '=' +
-      (eventData[eventDataKey]
-        ? encodeUriComponent(eventData[eventDataKey])
-        : '');
+      (eventData[eventDataKey] ? encodeUriComponent(eventData[eventDataKey]) : '');
   }
 
   return url;
@@ -951,10 +935,8 @@ function addCommonDataForPostRequest(data, eventData) {
 
     if (data.add_common) {
       eventData = addCommonData(data, eventData);
-      eventData.screen_resolution =
-        dataTagData.screen.width + 'x' + dataTagData.screen.height;
-      eventData.viewport_size =
-        dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
+      eventData.screen_resolution = dataTagData.screen.width + 'x' + dataTagData.screen.height;
+      eventData.viewport_size = dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
 
@@ -987,7 +969,7 @@ function addConsentStateData(eventData) {
     analytics_storage: isConsentGranted('analytics_storage'),
     functionality_storage: isConsentGranted('functionality_storage'),
     personalization_storage: isConsentGranted('personalization_storage'),
-    security_storage: isConsentGranted('security_storage'),
+    security_storage: isConsentGranted('security_storage')
   };
   return eventData;
 }
@@ -996,10 +978,7 @@ function addTempClientId(eventData) {
   const tempClientIdStorageKey = 'gtm_dataTagTempClientId';
   const tempClientId =
     copyFromWindow(tempClientIdStorageKey) ||
-    'dcid.1.' +
-      getTimestampMillis() +
-      '.' +
-      generateRandom(100000000, 999999999);
+    'dcid.1.' + getTimestampMillis() + '.' + generateRandom(100000000, 999999999);
 
   eventData._dcid_temp = tempClientId;
   setInWindow(tempClientIdStorageKey, eventData._dcid_temp);
@@ -1052,27 +1031,19 @@ function getCustomData(data, dtagLoaded) {
 
       if (dtagLoaded && dataTransformation === 'sha256base64') {
         dataValue = makeString(dataValue);
-        dataValue = callInWindow(
-          'dataTag256',
-          dataValue.trim().toLowerCase(),
-          'B64'
-        );
+        dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'B64');
       }
 
       if (dtagLoaded && dataTransformation === 'sha256hex') {
         dataValue = makeString(dataValue);
-        dataValue = callInWindow(
-          'dataTag256',
-          dataValue.trim().toLowerCase(),
-          'HEX'
-        );
+        dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'HEX');
       }
 
       if (customData[dataKey].store && customData[dataKey].store !== 'none') {
         dataToStore.push({
           store: customData[dataKey].store,
           name: customData[dataKey].name,
-          value: dataValue,
+          value: dataValue
         });
       }
 
@@ -1112,8 +1083,7 @@ function storeData(dataToStore) {
       if (dataToStoreLocalStorage) {
         for (let attrName in dataToStoreLocalStorage) {
           if (dataToStoreLocalStorage[attrName])
-            dataToStoreLocalStorageResult[attrName] =
-              dataToStoreLocalStorage[attrName];
+            dataToStoreLocalStorageResult[attrName] = dataToStoreLocalStorage[attrName];
         }
       }
     }
@@ -1121,36 +1091,25 @@ function storeData(dataToStore) {
 
   for (let attrName in dataToStore) {
     if (dataToStore[attrName].value) {
-      if (
-        dataToStore[attrName].store === 'all' ||
-        dataToStore[attrName].store === 'localStorage'
-      ) {
-        dataToStoreLocalStorageResult[dataToStore[attrName].name] =
-          dataToStore[attrName].value;
+      if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'localStorage') {
+        dataToStoreLocalStorageResult[dataToStore[attrName].name] = dataToStore[attrName].value;
       }
 
-      if (
-        dataToStore[attrName].store === 'all' ||
-        dataToStore[attrName].store === 'cookies'
-      ) {
-        dataToStoreCookieResult[dataToStore[attrName].name] =
-          dataToStore[attrName].value;
+      if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'cookies') {
+        dataToStoreCookieResult[dataToStore[attrName].name] = dataToStore[attrName].value;
       }
     }
   }
 
   if (localStorage && getObjectLength(dataToStoreLocalStorageResult) !== 0) {
-    localStorage.setItem(
-      'stape',
-      JSON.stringify(dataToStoreLocalStorageResult)
-    );
+    localStorage.setItem('stape', JSON.stringify(dataToStoreLocalStorageResult));
   }
 
   if (getObjectLength(dataToStoreCookieResult) !== 0) {
     setCookie('stape', JSON.stringify(dataToStoreCookieResult), {
       secure: true,
       domain: 'auto',
-      path: '/',
+      path: '/'
     });
   }
 }
@@ -1192,9 +1151,7 @@ function determinateRequestType() {
 
   if (isHashingEnabled) return 'post';
 
-  const userAndCustomDataLength = makeNumber(
-    JSON.stringify(userAndCustomData).length
-  );
+  const userAndCustomDataLength = makeNumber(JSON.stringify(userAndCustomData).length);
   return userAndCustomDataLength > 1500 ? 'post' : 'get';
 }
 
@@ -1261,7 +1218,7 @@ function addCommonCookie(eventData) {
     'FPGCLAG',
     '_gcl_ag',
     'FPGCLGB',
-    '_gcl_gb',
+    '_gcl_gb'
   ];
   let commonCookie = null;
 
