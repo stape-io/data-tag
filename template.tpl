@@ -225,6 +225,13 @@ ___TEMPLATE_PARAMETERS___
           }
         ]
       }
+    ],
+    "enablingConditions": [
+      {
+        "paramName": "request_type",
+        "paramValue": "get",
+        "type": "NOT_EQUALS"
+      }
     ]
   },
   {
@@ -232,7 +239,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_common",
     "checkboxText": "Send common data",
     "simpleValueType": true,
-    "help": "Adds to request:\n\u003cul\u003e\n\u003cli\u003epage_location\u003c/li\u003e\n\u003cli\u003epage_path\u003c/li\u003e\n\u003cli\u003epage_hostname\u003c/li\u003e\n\u003cli\u003epage_referrer\u003c/li\u003e\n\u003cli\u003epage_title\u003c/li\u003e\n\u003cli\u003epage_encoding\u003c/li\u003e\n\u003cli\u003escreen_resolution\u003c/li\u003e\n\u003cli\u003eviewport_size\u003c/li\u003e\n\u003c/ul\u003e",
+    "help": "Adds the following Common Event Data parameters to the request:\n\u003cul\u003e\n\u003cli\u003epage_location\u003c/li\u003e\n\u003cli\u003epage_path\u003c/li\u003e\n\u003cli\u003epage_hostname\u003c/li\u003e\n\u003cli\u003epage_referrer\u003c/li\u003e\n\u003cli\u003epage_title\u003c/li\u003e\n\u003cli\u003epage_encoding\u003c/li\u003e\n\u003cli\u003escreen_resolution\u003c/li\u003e\n\u003cli\u003eviewport_size\u003c/li\u003e\n\u003c/ul\u003e",
     "defaultValue": true
   },
   {
@@ -240,14 +247,14 @@ ___TEMPLATE_PARAMETERS___
     "name": "add_consent_state",
     "checkboxText": "Add consent state",
     "simpleValueType": true,
-    "help": "Adds \u003cb\u003econsent_state\u003c/b\u003e object to request.\u003cbr/\u003e\nIncluding following properties:\u003cbr/\u003e \nad_storage\u003cbr/\u003e\nad_user_data\u003cbr/\u003e\nad_personalization\u003cbr/\u003e\nanalytics_storage\u003cbr/\u003e\nfunctionality_storage\u003cbr/\u003e\npersonalization_storage\u003cbr/\u003e\nsecurity_storage"
+    "help": "Adds the \u003ci\u003econsent_state\u003c/i\u003e object including the following properties to the request:\n\u003cul\u003e \n\u003cli\u003ead_storage\u003c/li\u003e\n\u003cli\u003ead_user_data\u003c/li\u003e\n\u003cli\u003ead_personalization\u003c/li\u003e\n\u003cli\u003eanalytics_storage\u003c/li\u003e\n\u003cli\u003efunctionality_storage\u003c/li\u003e\n\u003cli\u003epersonalization_storage\u003c/li\u003e\n\u003cli\u003esecurity_storage\u003c/li\u003e\n\u003cul\u003e"
   },
   {
     "type": "CHECKBOX",
     "name": "add_common_cookie",
     "checkboxText": "Add Common Cookie",
     "simpleValueType": true,
-    "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations. Supported Stape\u0027s tags: \u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e"
+    "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e"
   },
   {
     "type": "GROUP",
@@ -513,7 +520,7 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "SELECT",
         "name": "request_type",
-        "displayName": "Request type",
+        "displayName": "Request Type",
         "macrosInSelect": false,
         "selectItems": [
           {
@@ -536,7 +543,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "NON_EMPTY"
           }
         ],
-        "help": "We highly recommend using \u003cb\u003eAuto\u003c/b\u003e. Change this only if you know what you are doing."
+        "help": "We highly recommend using \u003cb\u003eAuto\u003c/b\u003e. Change this only if you know what you are doing.\n\u003cbr/\u003e\u003cbr/\u003e\nSome features will become unavailable if you choose \u003ci\u003eGET\u003c/i\u003e."
       },
       {
         "type": "TEXT",
@@ -586,20 +593,27 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "alwaysInSummary": false,
-        "defaultValue": "https://stapecdn.com/dtag/v9.js"
+        "defaultValue": "https://stapecdn.com/dtag/v9.js",
+        "enablingConditions": [
+          {
+            "paramName": "request_type",
+            "paramValue": "get",
+            "type": "NOT_EQUALS"
+          }
+        ]
       },
       {
         "type": "CHECKBOX",
         "name": "addGaParameters",
         "checkboxText": "Add GA4 specific parameters",
         "simpleValueType": true,
-        "help": "Adds specific parameters for the server GA4 tag.",
+        "help": "Adds specific parameters for the server GA4 tag.\n\u003cbr/\u003e\nSuch as:\n\u003cul\u003e\n\u003cli\u003ex-ga-measurement_id\u0027 \u003d {GA4 Measurement ID}\u003c/li\u003e\n\u003cli\u003ex-ga-page_id \u003d copyFromDataLayer(\u0027gtm.start\u0027)\u003c/li\u003e\n\u003cli\u003ex-ga-mp2-richsstsse \u003d \u0027\u0027\u003c/li\u003e\n\u003cli\u003ex-ga-mp2-seg \u003d 1\u003c/li\u003e\n\u003cli\u003ex-ga-request_count \u003d 1\u003c/li\u003e\n\u003cli\u003ex-ga-protocol_version \u003d 2\u003c/li\u003e\n\u003c/ul\u003e",
         "defaultValue": false,
         "enablingConditions": [
           {
             "paramName": "request_type",
-            "paramValue": "post",
-            "type": "EQUALS"
+            "paramValue": "get",
+            "type": "NOT_EQUALS"
           }
         ]
       },
@@ -629,7 +643,14 @@ ___TEMPLATE_PARAMETERS___
         "checkboxText": "Push event to DataLayer after tag receives a response",
         "simpleValueType": true,
         "help": "Helpful in obtaining data from the server.",
-        "defaultValue": false
+        "defaultValue": false,
+        "enablingConditions": [
+          {
+            "paramName": "request_type",
+            "paramValue": "get",
+            "type": "NOT_EQUALS"
+          }
+        ]
       },
       {
         "type": "TEXT",
@@ -706,7 +727,14 @@ ___TEMPLATE_PARAMETERS___
         "checkboxText": "Use fetch instead of XMLHttpRequest (for POST requests only)",
         "simpleValueType": true,
         "help": "Using \u003ci\u003efetch\u003c/i\u003e with \u003ci\u003ekeepalive\u003c/i\u003e option which allow the request to outlive the page. \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Web/API/fetch#keepalive\"\u003eRead more\u003c/a\u003e.",
-        "defaultValue": true
+        "defaultValue": true,
+        "enablingConditions": [
+          {
+            "paramName": "request_type",
+            "paramValue": "get",
+            "type": "NOT_EQUALS"
+          }
+        ]
       }
     ]
   }
@@ -715,60 +743,52 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-const copyFromDataLayer = require('copyFromDataLayer');
-const JSON = require('JSON');
-const getUrl = require('getUrl');
-const getReferrerUrl = require('getReferrerUrl');
-const readTitle = require('readTitle');
-const injectScript = require('injectScript');
 const callInWindow = require('callInWindow');
-const makeNumber = require('makeNumber');
-const readCharacterSet = require('readCharacterSet');
-const localStorage = require('localStorage');
-const sendPixel = require('sendPixel');
-const encodeUriComponent = require('encodeUriComponent');
-const toBase64 = require('toBase64');
-const makeString = require('makeString');
-const setCookie = require('setCookie');
-const getCookieValues = require('getCookieValues');
-const getContainerVersion = require('getContainerVersion');
-const isConsentGranted = require('isConsentGranted');
-const getTimestampMillis = require('getTimestampMillis');
-const generateRandom = require('generateRandom');
+const copyFromDataLayer = require('copyFromDataLayer');
 const copyFromWindow = require('copyFromWindow');
+const encodeUriComponent = require('encodeUriComponent');
+const generateRandom = require('generateRandom');
+const getContainerVersion = require('getContainerVersion');
+const getCookieValues = require('getCookieValues');
+const getReferrerUrl = require('getReferrerUrl');
+const getTimestampMillis = require('getTimestampMillis');
+const getType = require('getType');
+const getUrl = require('getUrl');
+const injectScript = require('injectScript');
+const isConsentGranted = require('isConsentGranted');
+const JSON = require('JSON');
+const localStorage = require('localStorage');
+const makeNumber = require('makeNumber');
+const makeString = require('makeString');
+const readCharacterSet = require('readCharacterSet');
+const readTitle = require('readTitle');
+const sendPixel = require('sendPixel');
+const setCookie = require('setCookie');
 const setInWindow = require('setInWindow');
+const toBase64 = require('toBase64');
 
-let pageLocation = getUrl();
+/*==============================================================================
+==============================================================================*/
 
-if (
-  pageLocation &&
-  pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0
-) {
-  data.gtmOnSuccess();
-
-  return;
+const pageLocation = getUrl();
+if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
+  return data.gtmOnSuccess();
 }
 
 const userAndCustomData = getUserAndCustomDataArray();
-let requestType = determinateRequestType();
-
+const requestType = determinateRequestType();
 const normalizedServerUrl = normalizeServerUrl();
-
 const eventId = copyFromDataLayer('gtm.uniqueEventId');
 
 if (requestType === 'post') {
   const dataScriptVersion = 'v9';
   const dataTagScriptUrl =
-    typeof data.data_tag_load_script_url !== 'undefined'
-      ? data.data_tag_load_script_url.replace(
-          '${data-script-version}',
-          dataScriptVersion
-        )
+    getType(data.data_tag_load_script_url) !== 'undefined'
+      ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
 
   const dataTagScriptLoadedCacheKey = 'gtm_dataTagScriptLoadedCache';
-  const dataTagScriptLoadedCache =
-    copyFromWindow(dataTagScriptLoadedCacheKey) || {};
+  const dataTagScriptLoadedCache = copyFromWindow(dataTagScriptLoadedCacheKey) || {};
 
   if (!dataTagScriptLoadedCache[dataTagScriptUrl]) {
     injectScript(
@@ -787,6 +807,10 @@ if (requestType === 'post') {
 } else {
   sendGetRequest();
 }
+
+/*==============================================================================
+  Vendor related functions
+==============================================================================*/
 
 function sendPostRequest() {
   let eventData = {};
@@ -815,11 +839,7 @@ function sendPostRequest() {
 }
 
 function sendGetRequest() {
-  sendPixel(
-    addDataForGetRequest(data, buildEndpoint()),
-    data.gtmOnSuccess,
-    data.gtmOnFailure
-  );
+  sendPixel(addDataForGetRequest(data, buildEndpoint()), data.gtmOnSuccess, data.gtmOnFailure);
 }
 
 function normalizeServerUrl() {
@@ -827,10 +847,7 @@ function normalizeServerUrl() {
   let requestPath = data.request_path;
 
   // Add 'https://' if gtmServerDomain doesn't start with it
-  if (
-    gtmServerDomain.indexOf('http://') !== 0 &&
-    gtmServerDomain.indexOf('https://') !== 0
-  ) {
+  if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
 
@@ -846,7 +863,7 @@ function normalizeServerUrl() {
 
   return {
     gtmServerDomain: gtmServerDomain,
-    requestPath: requestPath,
+    requestPath: requestPath
   };
 }
 
@@ -885,49 +902,37 @@ function addGaRequiredData(data, eventData) {
 
 function addDataForGetRequest(data, url) {
   let eventData = {};
-  url +=
-    '?v=' +
-    data.protocol_version +
-    '&event=' +
-    encodeUriComponent(getEventName(data));
+  url += '?v=' + data.protocol_version + '&event=' + encodeUriComponent(getEventName(data));
 
   if (data.add_common) {
-    eventData = addCommonData(data, eventData);
+    eventData = addCommonData(eventData);
   }
 
-  if (data.add_consent_state) {
+  if (data.add_consent_state && data.request_type === 'auto') {
     eventData = addConsentStateData(eventData);
   }
 
-  if (data.add_common_cookie) {
+  if (data.add_common_cookie && data.request_type === 'auto') {
     eventData = addCommonCookie(eventData);
   }
 
-  let customData = getCustomData(data, false);
+  const customData = getCustomData(data, false);
 
   if (customData.length) {
     for (let customDataKey in customData) {
-      eventData[customData[customDataKey].name] =
-        customData[customDataKey].value;
+      eventData[customData[customDataKey].name] = customData[customDataKey].value;
     }
   }
 
   eventData = addTempClientId(eventData);
 
   if (data.request_type === 'auto') {
-    return (
-      url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)))
-    );
+    return url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)));
   }
 
   for (let eventDataKey in eventData) {
-    url +=
-      '&' +
-      eventDataKey +
-      '=' +
-      (eventData[eventDataKey]
-        ? encodeUriComponent(eventData[eventDataKey])
-        : '');
+    const value = eventData[eventDataKey];
+    url += '&' + eventDataKey + '=' + (value ? encodeUriComponent(value) : '');
   }
 
   return url;
@@ -950,11 +955,9 @@ function addCommonDataForPostRequest(data, eventData) {
     }
 
     if (data.add_common) {
-      eventData = addCommonData(data, eventData);
-      eventData.screen_resolution =
-        dataTagData.screen.width + 'x' + dataTagData.screen.height;
-      eventData.viewport_size =
-        dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
+      eventData = addCommonData(eventData);
+      eventData.screen_resolution = dataTagData.screen.width + 'x' + dataTagData.screen.height;
+      eventData.viewport_size = dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
 
@@ -969,7 +972,7 @@ function addCommonDataForPostRequest(data, eventData) {
   return eventData;
 }
 
-function addCommonData(data, eventData) {
+function addCommonData(eventData) {
   eventData.page_location = getUrl();
   eventData.page_hostname = getUrl('host');
   eventData.page_referrer = getReferrerUrl();
@@ -987,7 +990,7 @@ function addConsentStateData(eventData) {
     analytics_storage: isConsentGranted('analytics_storage'),
     functionality_storage: isConsentGranted('functionality_storage'),
     personalization_storage: isConsentGranted('personalization_storage'),
-    security_storage: isConsentGranted('security_storage'),
+    security_storage: isConsentGranted('security_storage')
   };
   return eventData;
 }
@@ -996,10 +999,7 @@ function addTempClientId(eventData) {
   const tempClientIdStorageKey = 'gtm_dataTagTempClientId';
   const tempClientId =
     copyFromWindow(tempClientIdStorageKey) ||
-    'dcid.1.' +
-      getTimestampMillis() +
-      '.' +
-      generateRandom(100000000, 999999999);
+    'dcid.1.' + getTimestampMillis() + '.' + generateRandom(100000000, 999999999);
 
   eventData._dcid_temp = tempClientId;
   setInWindow(tempClientIdStorageKey, eventData._dcid_temp);
@@ -1052,27 +1052,19 @@ function getCustomData(data, dtagLoaded) {
 
       if (dtagLoaded && dataTransformation === 'sha256base64') {
         dataValue = makeString(dataValue);
-        dataValue = callInWindow(
-          'dataTag256',
-          dataValue.trim().toLowerCase(),
-          'B64'
-        );
+        dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'B64');
       }
 
       if (dtagLoaded && dataTransformation === 'sha256hex') {
         dataValue = makeString(dataValue);
-        dataValue = callInWindow(
-          'dataTag256',
-          dataValue.trim().toLowerCase(),
-          'HEX'
-        );
+        dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'HEX');
       }
 
       if (customData[dataKey].store && customData[dataKey].store !== 'none') {
         dataToStore.push({
           store: customData[dataKey].store,
           name: customData[dataKey].name,
-          value: dataValue,
+          value: dataValue
         });
       }
 
@@ -1112,8 +1104,7 @@ function storeData(dataToStore) {
       if (dataToStoreLocalStorage) {
         for (let attrName in dataToStoreLocalStorage) {
           if (dataToStoreLocalStorage[attrName])
-            dataToStoreLocalStorageResult[attrName] =
-              dataToStoreLocalStorage[attrName];
+            dataToStoreLocalStorageResult[attrName] = dataToStoreLocalStorage[attrName];
         }
       }
     }
@@ -1121,36 +1112,25 @@ function storeData(dataToStore) {
 
   for (let attrName in dataToStore) {
     if (dataToStore[attrName].value) {
-      if (
-        dataToStore[attrName].store === 'all' ||
-        dataToStore[attrName].store === 'localStorage'
-      ) {
-        dataToStoreLocalStorageResult[dataToStore[attrName].name] =
-          dataToStore[attrName].value;
+      if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'localStorage') {
+        dataToStoreLocalStorageResult[dataToStore[attrName].name] = dataToStore[attrName].value;
       }
 
-      if (
-        dataToStore[attrName].store === 'all' ||
-        dataToStore[attrName].store === 'cookies'
-      ) {
-        dataToStoreCookieResult[dataToStore[attrName].name] =
-          dataToStore[attrName].value;
+      if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'cookies') {
+        dataToStoreCookieResult[dataToStore[attrName].name] = dataToStore[attrName].value;
       }
     }
   }
 
   if (localStorage && getObjectLength(dataToStoreLocalStorageResult) !== 0) {
-    localStorage.setItem(
-      'stape',
-      JSON.stringify(dataToStoreLocalStorageResult)
-    );
+    localStorage.setItem('stape', JSON.stringify(dataToStoreLocalStorageResult));
   }
 
   if (getObjectLength(dataToStoreCookieResult) !== 0) {
     setCookie('stape', JSON.stringify(dataToStoreCookieResult), {
       secure: true,
       domain: 'auto',
-      path: '/',
+      path: '/'
     });
   }
 }
@@ -1171,15 +1151,7 @@ function determinateRequestType() {
     return data.request_type;
   }
 
-  if (data.add_data_layer) {
-    return 'post';
-  }
-
-  if (data.dataLayerEventPush) {
-    return 'post';
-  }
-
-  if (data.richsstsse) {
+  if (data.add_data_layer || data.addGaParameters || data.dataLayerEventPush || data.richsstsse) {
     return 'post';
   }
 
@@ -1189,12 +1161,9 @@ function determinateRequestType() {
       item.transformation === 'sha256base64' ||
       item.transformation === 'sha256hex'
   );
-
   if (isHashingEnabled) return 'post';
 
-  const userAndCustomDataLength = makeNumber(
-    JSON.stringify(userAndCustomData).length
-  );
+  const userAndCustomDataLength = makeNumber(JSON.stringify(userAndCustomData).length);
   return userAndCustomDataLength > 1500 ? 'post' : 'get';
 }
 
@@ -1261,7 +1230,7 @@ function addCommonCookie(eventData) {
     'FPGCLAG',
     '_gcl_ag',
     'FPGCLGB',
-    '_gcl_gb',
+    '_gcl_gb'
   ];
   let commonCookie = null;
 

@@ -1,6 +1,11 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/data-tag'
 versions:
+  - sha: edfbb6d3f0d8aa537c73f2ea966a630f18ab2380
+    changeNotes: |2
+      Removed common cookie and consent state being sent as [object Object] in user-chosen GET requests.
+      Added enabling conditions to UI elements not available in user-chosen GET requests.
+      Format code.
   - sha: 03884c517c32384513927f236b22e1756259be9a
     changeNotes: |2
       CONT.

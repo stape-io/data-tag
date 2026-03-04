@@ -1,57 +1,49 @@
-const copyFromDataLayer = require('copyFromDataLayer');
-const JSON = require('JSON');
-const getUrl = require('getUrl');
-const getReferrerUrl = require('getReferrerUrl');
-const readTitle = require('readTitle');
-const injectScript = require('injectScript');
 const callInWindow = require('callInWindow');
-const makeNumber = require('makeNumber');
-const readCharacterSet = require('readCharacterSet');
-const localStorage = require('localStorage');
-const sendPixel = require('sendPixel');
-const encodeUriComponent = require('encodeUriComponent');
-const toBase64 = require('toBase64');
-const makeString = require('makeString');
-const setCookie = require('setCookie');
-const getCookieValues = require('getCookieValues');
-const getContainerVersion = require('getContainerVersion');
-const isConsentGranted = require('isConsentGranted');
-const getTimestampMillis = require('getTimestampMillis');
-const generateRandom = require('generateRandom');
+const copyFromDataLayer = require('copyFromDataLayer');
 const copyFromWindow = require('copyFromWindow');
+const encodeUriComponent = require('encodeUriComponent');
+const generateRandom = require('generateRandom');
+const getContainerVersion = require('getContainerVersion');
+const getCookieValues = require('getCookieValues');
+const getReferrerUrl = require('getReferrerUrl');
+const getTimestampMillis = require('getTimestampMillis');
+const getType = require('getType');
+const getUrl = require('getUrl');
+const injectScript = require('injectScript');
+const isConsentGranted = require('isConsentGranted');
+const JSON = require('JSON');
+const localStorage = require('localStorage');
+const makeNumber = require('makeNumber');
+const makeString = require('makeString');
+const readCharacterSet = require('readCharacterSet');
+const readTitle = require('readTitle');
+const sendPixel = require('sendPixel');
+const setCookie = require('setCookie');
 const setInWindow = require('setInWindow');
+const toBase64 = require('toBase64');
 
-let pageLocation = getUrl();
+/*==============================================================================
+==============================================================================*/
 
-if (
-  pageLocation &&
-  pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0
-) {
-  data.gtmOnSuccess();
-
-  return;
+const pageLocation = getUrl();
+if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
+  return data.gtmOnSuccess();
 }
 
 const userAndCustomData = getUserAndCustomDataArray();
-let requestType = determinateRequestType();
-
+const requestType = determinateRequestType();
 const normalizedServerUrl = normalizeServerUrl();
-
 const eventId = copyFromDataLayer('gtm.uniqueEventId');
 
 if (requestType === 'post') {
   const dataScriptVersion = 'v9';
   const dataTagScriptUrl =
-    typeof data.data_tag_load_script_url !== 'undefined'
-      ? data.data_tag_load_script_url.replace(
-          '${data-script-version}',
-          dataScriptVersion
-        )
+    getType(data.data_tag_load_script_url) !== 'undefined'
+      ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
 
   const dataTagScriptLoadedCacheKey = 'gtm_dataTagScriptLoadedCache';
-  const dataTagScriptLoadedCache =
-    copyFromWindow(dataTagScriptLoadedCacheKey) || {};
+  const dataTagScriptLoadedCache = copyFromWindow(dataTagScriptLoadedCacheKey) || {};
 
   if (!dataTagScriptLoadedCache[dataTagScriptUrl]) {
     injectScript(
@@ -70,6 +62,10 @@ if (requestType === 'post') {
 } else {
   sendGetRequest();
 }
+
+/*==============================================================================
+  Vendor related functions
+==============================================================================*/
 
 function sendPostRequest() {
   let eventData = {};
@@ -98,11 +94,7 @@ function sendPostRequest() {
 }
 
 function sendGetRequest() {
-  sendPixel(
-    addDataForGetRequest(data, buildEndpoint()),
-    data.gtmOnSuccess,
-    data.gtmOnFailure
-  );
+  sendPixel(addDataForGetRequest(data, buildEndpoint()), data.gtmOnSuccess, data.gtmOnFailure);
 }
 
 function normalizeServerUrl() {
@@ -110,10 +102,7 @@ function normalizeServerUrl() {
   let requestPath = data.request_path;
 
   // Add 'https://' if gtmServerDomain doesn't start with it
-  if (
-    gtmServerDomain.indexOf('http://') !== 0 &&
-    gtmServerDomain.indexOf('https://') !== 0
-  ) {
+  if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
 
@@ -129,7 +118,7 @@ function normalizeServerUrl() {
 
   return {
     gtmServerDomain: gtmServerDomain,
-    requestPath: requestPath,
+    requestPath: requestPath
   };
 }
 
@@ -168,49 +157,37 @@ function addGaRequiredData(data, eventData) {
 
 function addDataForGetRequest(data, url) {
   let eventData = {};
-  url +=
-    '?v=' +
-    data.protocol_version +
-    '&event=' +
-    encodeUriComponent(getEventName(data));
+  url += '?v=' + data.protocol_version + '&event=' + encodeUriComponent(getEventName(data));
 
   if (data.add_common) {
-    eventData = addCommonData(data, eventData);
+    eventData = addCommonData(eventData);
   }
 
-  if (data.add_consent_state) {
+  if (data.add_consent_state && data.request_type === 'auto') {
     eventData = addConsentStateData(eventData);
   }
 
-  if (data.add_common_cookie) {
+  if (data.add_common_cookie && data.request_type === 'auto') {
     eventData = addCommonCookie(eventData);
   }
 
-  let customData = getCustomData(data, false);
+  const customData = getCustomData(data, false);
 
   if (customData.length) {
     for (let customDataKey in customData) {
-      eventData[customData[customDataKey].name] =
-        customData[customDataKey].value;
+      eventData[customData[customDataKey].name] = customData[customDataKey].value;
     }
   }
 
   eventData = addTempClientId(eventData);
 
   if (data.request_type === 'auto') {
-    return (
-      url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)))
-    );
+    return url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)));
   }
 
   for (let eventDataKey in eventData) {
-    url +=
-      '&' +
-      eventDataKey +
-      '=' +
-      (eventData[eventDataKey]
-        ? encodeUriComponent(eventData[eventDataKey])
-        : '');
+    const value = eventData[eventDataKey];
+    url += '&' + eventDataKey + '=' + (value ? encodeUriComponent(value) : '');
   }
 
   return url;
@@ -233,11 +210,9 @@ function addCommonDataForPostRequest(data, eventData) {
     }
 
     if (data.add_common) {
-      eventData = addCommonData(data, eventData);
-      eventData.screen_resolution =
-        dataTagData.screen.width + 'x' + dataTagData.screen.height;
-      eventData.viewport_size =
-        dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
+      eventData = addCommonData(eventData);
+      eventData.screen_resolution = dataTagData.screen.width + 'x' + dataTagData.screen.height;
+      eventData.viewport_size = dataTagData.innerWidth + 'x' + dataTagData.innerHeight;
     }
   }
 
@@ -252,7 +227,7 @@ function addCommonDataForPostRequest(data, eventData) {
   return eventData;
 }
 
-function addCommonData(data, eventData) {
+function addCommonData(eventData) {
   eventData.page_location = getUrl();
   eventData.page_hostname = getUrl('host');
   eventData.page_referrer = getReferrerUrl();
@@ -270,7 +245,7 @@ function addConsentStateData(eventData) {
     analytics_storage: isConsentGranted('analytics_storage'),
     functionality_storage: isConsentGranted('functionality_storage'),
     personalization_storage: isConsentGranted('personalization_storage'),
-    security_storage: isConsentGranted('security_storage'),
+    security_storage: isConsentGranted('security_storage')
   };
   return eventData;
 }
@@ -279,10 +254,7 @@ function addTempClientId(eventData) {
   const tempClientIdStorageKey = 'gtm_dataTagTempClientId';
   const tempClientId =
     copyFromWindow(tempClientIdStorageKey) ||
-    'dcid.1.' +
-      getTimestampMillis() +
-      '.' +
-      generateRandom(100000000, 999999999);
+    'dcid.1.' + getTimestampMillis() + '.' + generateRandom(100000000, 999999999);
 
   eventData._dcid_temp = tempClientId;
   setInWindow(tempClientIdStorageKey, eventData._dcid_temp);
@@ -335,27 +307,19 @@ function getCustomData(data, dtagLoaded) {
 
       if (dtagLoaded && dataTransformation === 'sha256base64') {
         dataValue = makeString(dataValue);
-        dataValue = callInWindow(
-          'dataTag256',
-          dataValue.trim().toLowerCase(),
-          'B64'
-        );
+        dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'B64');
       }
 
       if (dtagLoaded && dataTransformation === 'sha256hex') {
         dataValue = makeString(dataValue);
-        dataValue = callInWindow(
-          'dataTag256',
-          dataValue.trim().toLowerCase(),
-          'HEX'
-        );
+        dataValue = callInWindow('dataTag256', dataValue.trim().toLowerCase(), 'HEX');
       }
 
       if (customData[dataKey].store && customData[dataKey].store !== 'none') {
         dataToStore.push({
           store: customData[dataKey].store,
           name: customData[dataKey].name,
-          value: dataValue,
+          value: dataValue
         });
       }
 
@@ -395,8 +359,7 @@ function storeData(dataToStore) {
       if (dataToStoreLocalStorage) {
         for (let attrName in dataToStoreLocalStorage) {
           if (dataToStoreLocalStorage[attrName])
-            dataToStoreLocalStorageResult[attrName] =
-              dataToStoreLocalStorage[attrName];
+            dataToStoreLocalStorageResult[attrName] = dataToStoreLocalStorage[attrName];
         }
       }
     }
@@ -404,36 +367,25 @@ function storeData(dataToStore) {
 
   for (let attrName in dataToStore) {
     if (dataToStore[attrName].value) {
-      if (
-        dataToStore[attrName].store === 'all' ||
-        dataToStore[attrName].store === 'localStorage'
-      ) {
-        dataToStoreLocalStorageResult[dataToStore[attrName].name] =
-          dataToStore[attrName].value;
+      if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'localStorage') {
+        dataToStoreLocalStorageResult[dataToStore[attrName].name] = dataToStore[attrName].value;
       }
 
-      if (
-        dataToStore[attrName].store === 'all' ||
-        dataToStore[attrName].store === 'cookies'
-      ) {
-        dataToStoreCookieResult[dataToStore[attrName].name] =
-          dataToStore[attrName].value;
+      if (dataToStore[attrName].store === 'all' || dataToStore[attrName].store === 'cookies') {
+        dataToStoreCookieResult[dataToStore[attrName].name] = dataToStore[attrName].value;
       }
     }
   }
 
   if (localStorage && getObjectLength(dataToStoreLocalStorageResult) !== 0) {
-    localStorage.setItem(
-      'stape',
-      JSON.stringify(dataToStoreLocalStorageResult)
-    );
+    localStorage.setItem('stape', JSON.stringify(dataToStoreLocalStorageResult));
   }
 
   if (getObjectLength(dataToStoreCookieResult) !== 0) {
     setCookie('stape', JSON.stringify(dataToStoreCookieResult), {
       secure: true,
       domain: 'auto',
-      path: '/',
+      path: '/'
     });
   }
 }
@@ -454,15 +406,7 @@ function determinateRequestType() {
     return data.request_type;
   }
 
-  if (data.add_data_layer) {
-    return 'post';
-  }
-
-  if (data.dataLayerEventPush) {
-    return 'post';
-  }
-
-  if (data.richsstsse) {
+  if (data.add_data_layer || data.addGaParameters || data.dataLayerEventPush || data.richsstsse) {
     return 'post';
   }
 
@@ -472,12 +416,9 @@ function determinateRequestType() {
       item.transformation === 'sha256base64' ||
       item.transformation === 'sha256hex'
   );
-
   if (isHashingEnabled) return 'post';
 
-  const userAndCustomDataLength = makeNumber(
-    JSON.stringify(userAndCustomData).length
-  );
+  const userAndCustomDataLength = makeNumber(JSON.stringify(userAndCustomData).length);
   return userAndCustomDataLength > 1500 ? 'post' : 'get';
 }
 
@@ -544,7 +485,7 @@ function addCommonCookie(eventData) {
     'FPGCLAG',
     '_gcl_ag',
     'FPGCLGB',
-    '_gcl_gb',
+    '_gcl_gb'
   ];
   let commonCookie = null;
 
