@@ -1,7 +1,7 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/data-tag'
 versions:
-  - sha: 45fb8a927fd87f854b72283fa5e2c3d5d8414845
+  - sha: d8f9db72e7b5f3d8fb580de848c2b2cb0ca37dd4
     changeNotes: Add Linkedin cookie to common cookies list.
   - sha: edfbb6d3f0d8aa537c73f2ea966a630f18ab2380
     changeNotes: |2
