@@ -1959,6 +1959,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "_gcl_gb"
+              },
+              {
+                "type": 1,
+                "string": "li_fat_id"
               }
             ]
           }
