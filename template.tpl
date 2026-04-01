@@ -34,231 +34,239 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "type": "RADIO",
-    "name": "event_type",
-    "displayName": "Event Name",
-    "radioItems": [
-      {
-        "value": "standard",
-        "displayValue": "Standard",
-        "subParams": [
-          {
-            "type": "SELECT",
-            "name": "event_name_standard",
-            "selectItems": [
-              {
-                "value": "page_view",
-                "displayValue": "Page View"
-              },
-              {
-                "value": "add_payment_info",
-                "displayValue": "Add Payment Info"
-              },
-              {
-                "value": "add_to_cart",
-                "displayValue": "Add To Cart"
-              },
-              {
-                "value": "add_to_wishlist",
-                "displayValue": "Add To Wishlist"
-              },
-              {
-                "value": "begin_checkout",
-                "displayValue": "Begin Checkout"
-              },
-              {
-                "value": "contact",
-                "displayValue": "Contact"
-              },
-              {
-                "value": "customize_product",
-                "displayValue": "Customize Product"
-              },
-              {
-                "value": "donate",
-                "displayValue": "Donate"
-              },
-              {
-                "value": "exception",
-                "displayValue": "Exception"
-              },
-              {
-                "value": "find_location",
-                "displayValue": "Find Location"
-              },
-              {
-                "value": "generate_lead",
-                "displayValue": "Generate Lead"
-              },
-              {
-                "value": "join_group",
-                "displayValue": "Join Group"
-              },
-              {
-                "value": "login",
-                "displayValue": "Login"
-              },
-              {
-                "value": "purchase",
-                "displayValue": "Purchase"
-              },
-              {
-                "value": "refund",
-                "displayValue": "Refund"
-              },
-              {
-                "value": "schedule",
-                "displayValue": "Schedule"
-              },
-              {
-                "value": "search",
-                "displayValue": "Search"
-              },
-              {
-                "value": "select_content",
-                "displayValue": "Select Content"
-              },
-              {
-                "value": "share",
-                "displayValue": "Share"
-              },
-              {
-                "value": "sign_up",
-                "displayValue": "Sign Up"
-              },
-              {
-                "value": "start_trial",
-                "displayValue": "Start Trial"
-              },
-              {
-                "value": "submit_application",
-                "displayValue": "Submit Application"
-              },
-              {
-                "value": "subscribe",
-                "displayValue": "Subscribe"
-              },
-              {
-                "value": "view_item",
-                "displayValue": "View Item"
-              },
-              {
-                "value": "view_item_list",
-                "displayValue": "View Item List"
-              },
-              {
-                "value": "view_search_results",
-                "displayValue": "View Search Results"
-              }
-            ],
-            "simpleValueType": true,
-            "defaultValue": "page_view",
-            "alwaysInSummary": true
-          }
-        ]
-      },
-      {
-        "value": "custom",
-        "displayValue": "Custom",
-        "subParams": [
-          {
-            "type": "TEXT",
-            "name": "event_name_custom",
-            "simpleValueType": true
-          }
-        ]
-      }
-    ],
-    "simpleValueType": true
-  },
-  {
-    "type": "TEXT",
-    "name": "gtm_server_domain",
-    "displayName": "GTM Server Side URL",
-    "simpleValueType": true,
-    "help": "Domain to where the tag will send requests.\u003cbr\u003eFor example: \u003ci\u003ehttps://gtm.example.com\u003c/i\u003e",
-    "valueValidators": [
-      {
-        "type": "NON_EMPTY"
-      }
-    ],
-    "alwaysInSummary": true
-  },
-  {
-    "type": "CHECKBOX",
-    "name": "add_data_layer",
-    "checkboxText": "Send all from Data Layer",
-    "simpleValueType": true,
-    "help": "Adds all Data Layer values to the request.\n\u003cbr/\u003e\u003cbr/\u003e \nNote that the values added to the request are from GTM\u0027s internal Data Model (as seen in the GTM Preview Mode variable tab), not the actual Data Layer event as seen in the DevTools Console tab.\n\u003cbr/\u003e\nIf you want only the values from the event that triggered the tag, enable the \u003ci\u003eSend the current Data Layer event object data only\u003c/i\u003e option.\n\u003cbr/\u003e\u003cbr/\u003e Learn more about: the \u003ca href\u003d\"https://www.simoahava.com/analytics/google-tag-manager-data-model/\"\u003eGTM\u0027s Data Model\u003c/a\u003e and the \u003ca href\u003d\"https://www.simoahava.com/analytics/two-simple-data-model-tricks/#trick-2-get-the-object-representation-of-the-current-state-of-the-data-model\"\u003emethod\u003c/a\u003e used to get the values.",
+    "type": "GROUP",
+    "name": "configGroup",
+    "displayName": "",
+    "groupStyle": "NO_ZIPPY",
     "subParams": [
       {
-        "type": "GROUP",
-        "name": "add_data_layer_group",
-        "subParams": [
+        "type": "RADIO",
+        "name": "event_type",
+        "displayName": "Event Name",
+        "radioItems": [
           {
-            "type": "CHECKBOX",
-            "name": "add_data_layer_use_own_data_model",
-            "checkboxText": "Use own Data Model",
-            "simpleValueType": true,
-            "help": "Enable this option if your event captures Data Layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the Data Layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e."
+            "value": "standard",
+            "displayValue": "Standard",
+            "subParams": [
+              {
+                "type": "SELECT",
+                "name": "event_name_standard",
+                "selectItems": [
+                  {
+                    "value": "page_view",
+                    "displayValue": "Page View"
+                  },
+                  {
+                    "value": "add_payment_info",
+                    "displayValue": "Add Payment Info"
+                  },
+                  {
+                    "value": "add_to_cart",
+                    "displayValue": "Add To Cart"
+                  },
+                  {
+                    "value": "add_to_wishlist",
+                    "displayValue": "Add To Wishlist"
+                  },
+                  {
+                    "value": "begin_checkout",
+                    "displayValue": "Begin Checkout"
+                  },
+                  {
+                    "value": "contact",
+                    "displayValue": "Contact"
+                  },
+                  {
+                    "value": "customize_product",
+                    "displayValue": "Customize Product"
+                  },
+                  {
+                    "value": "donate",
+                    "displayValue": "Donate"
+                  },
+                  {
+                    "value": "exception",
+                    "displayValue": "Exception"
+                  },
+                  {
+                    "value": "find_location",
+                    "displayValue": "Find Location"
+                  },
+                  {
+                    "value": "generate_lead",
+                    "displayValue": "Generate Lead"
+                  },
+                  {
+                    "value": "join_group",
+                    "displayValue": "Join Group"
+                  },
+                  {
+                    "value": "login",
+                    "displayValue": "Login"
+                  },
+                  {
+                    "value": "purchase",
+                    "displayValue": "Purchase"
+                  },
+                  {
+                    "value": "refund",
+                    "displayValue": "Refund"
+                  },
+                  {
+                    "value": "schedule",
+                    "displayValue": "Schedule"
+                  },
+                  {
+                    "value": "search",
+                    "displayValue": "Search"
+                  },
+                  {
+                    "value": "select_content",
+                    "displayValue": "Select Content"
+                  },
+                  {
+                    "value": "share",
+                    "displayValue": "Share"
+                  },
+                  {
+                    "value": "sign_up",
+                    "displayValue": "Sign Up"
+                  },
+                  {
+                    "value": "start_trial",
+                    "displayValue": "Start Trial"
+                  },
+                  {
+                    "value": "submit_application",
+                    "displayValue": "Submit Application"
+                  },
+                  {
+                    "value": "subscribe",
+                    "displayValue": "Subscribe"
+                  },
+                  {
+                    "value": "view_item",
+                    "displayValue": "View Item"
+                  },
+                  {
+                    "value": "view_item_list",
+                    "displayValue": "View Item List"
+                  },
+                  {
+                    "value": "view_search_results",
+                    "displayValue": "View Search Results"
+                  }
+                ],
+                "simpleValueType": true,
+                "defaultValue": "page_view",
+                "alwaysInSummary": true
+              }
+            ]
           },
           {
-            "type": "CHECKBOX",
-            "name": "add_data_layer_use_only_current_push",
-            "checkboxText": "Send the current Data Layer event object data only",
-            "simpleValueType": true,
-            "enablingConditions": [
+            "value": "custom",
+            "displayValue": "Custom",
+            "subParams": [
               {
-                "paramName": "add_data_layer_use_own_data_model",
-                "paramValue": true,
-                "type": "NOT_EQUALS"
+                "type": "TEXT",
+                "name": "event_name_custom",
+                "simpleValueType": true
+              }
+            ]
+          }
+        ],
+        "simpleValueType": true
+      },
+      {
+        "type": "TEXT",
+        "name": "gtm_server_domain",
+        "displayName": "GTM Server Side URL",
+        "simpleValueType": true,
+        "help": "Domain to where the tag will send requests.\u003cbr\u003eFor example: \u003ci\u003ehttps://gtm.example.com\u003c/i\u003e",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "alwaysInSummary": true
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "add_data_layer",
+        "checkboxText": "Send all from Data Layer",
+        "simpleValueType": true,
+        "help": "Adds all Data Layer values to the request.\n\u003cbr/\u003e\u003cbr/\u003e \nNote that the values added to the request are from GTM\u0027s internal Data Model (as seen in the GTM Preview Mode variable tab), not the actual Data Layer event as seen in the DevTools Console tab.\n\u003cbr/\u003e\nIf you want only the values from the event that triggered the tag, enable the \u003ci\u003eSend the current Data Layer event object data only\u003c/i\u003e option.\n\u003cbr/\u003e\u003cbr/\u003e Learn more about: the \u003ca href\u003d\"https://www.simoahava.com/analytics/google-tag-manager-data-model/\"\u003eGTM\u0027s Data Model\u003c/a\u003e and the \u003ca href\u003d\"https://www.simoahava.com/analytics/two-simple-data-model-tricks/#trick-2-get-the-object-representation-of-the-current-state-of-the-data-model\"\u003emethod\u003c/a\u003e used to get the values.",
+        "subParams": [
+          {
+            "type": "GROUP",
+            "name": "add_data_layer_group",
+            "subParams": [
+              {
+                "type": "CHECKBOX",
+                "name": "add_data_layer_use_own_data_model",
+                "checkboxText": "Use own Data Model",
+                "simpleValueType": true,
+                "help": "Enable this option if your event captures Data Layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the Data Layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e."
+              },
+              {
+                "type": "CHECKBOX",
+                "name": "add_data_layer_use_only_current_push",
+                "checkboxText": "Send the current Data Layer event object data only",
+                "simpleValueType": true,
+                "enablingConditions": [
+                  {
+                    "paramName": "add_data_layer_use_own_data_model",
+                    "paramValue": true,
+                    "type": "NOT_EQUALS"
+                  }
+                ],
+                "help": "Enable this option to only capture data from the Data Layer event that triggered the tag, not from the whole GTM\u0027s internal Data Model.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section."
               }
             ],
-            "help": "Enable this option to only capture data from the Data Layer event that triggered the tag, not from the whole GTM\u0027s internal Data Model.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section."
+            "enablingConditions": [
+              {
+                "paramName": "add_data_layer",
+                "paramValue": true,
+                "type": "EQUALS"
+              }
+            ]
           }
         ],
         "enablingConditions": [
           {
-            "paramName": "add_data_layer",
-            "paramValue": true,
-            "type": "EQUALS"
+            "paramName": "request_type",
+            "paramValue": "get",
+            "type": "NOT_EQUALS"
           }
         ]
-      }
-    ],
-    "enablingConditions": [
+      },
       {
-        "paramName": "request_type",
-        "paramValue": "get",
-        "type": "NOT_EQUALS"
+        "type": "CHECKBOX",
+        "name": "add_common",
+        "checkboxText": "Send common data",
+        "simpleValueType": true,
+        "help": "Adds the following Common Event Data parameters to the request:\n\u003cul\u003e\n\u003cli\u003epage_location\u003c/li\u003e\n\u003cli\u003epage_path\u003c/li\u003e\n\u003cli\u003epage_hostname\u003c/li\u003e\n\u003cli\u003epage_referrer\u003c/li\u003e\n\u003cli\u003epage_title\u003c/li\u003e\n\u003cli\u003epage_encoding\u003c/li\u003e\n\u003cli\u003escreen_resolution\u003c/li\u003e\n\u003cli\u003eviewport_size\u003c/li\u003e\n\u003c/ul\u003e",
+        "defaultValue": true
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "add_consent_state",
+        "checkboxText": "Add consent state",
+        "simpleValueType": true,
+        "help": "Adds the \u003ci\u003econsent_state\u003c/i\u003e object including the following properties to the request:\n\u003cul\u003e \n\u003cli\u003ead_storage\u003c/li\u003e\n\u003cli\u003ead_user_data\u003c/li\u003e\n\u003cli\u003ead_personalization\u003c/li\u003e\n\u003cli\u003eanalytics_storage\u003c/li\u003e\n\u003cli\u003efunctionality_storage\u003c/li\u003e\n\u003cli\u003epersonalization_storage\u003c/li\u003e\n\u003cli\u003esecurity_storage\u003c/li\u003e\n\u003cul\u003e"
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "add_common_cookie",
+        "checkboxText": "Add Common Cookie",
+        "simpleValueType": true,
+        "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/linkedin-tag\"\u003e LinkedIn Conversions API \u003c/a\u003e\n\u003c/br\u003e"
       }
     ]
   },
   {
-    "type": "CHECKBOX",
-    "name": "add_common",
-    "checkboxText": "Send common data",
-    "simpleValueType": true,
-    "help": "Adds the following Common Event Data parameters to the request:\n\u003cul\u003e\n\u003cli\u003epage_location\u003c/li\u003e\n\u003cli\u003epage_path\u003c/li\u003e\n\u003cli\u003epage_hostname\u003c/li\u003e\n\u003cli\u003epage_referrer\u003c/li\u003e\n\u003cli\u003epage_title\u003c/li\u003e\n\u003cli\u003epage_encoding\u003c/li\u003e\n\u003cli\u003escreen_resolution\u003c/li\u003e\n\u003cli\u003eviewport_size\u003c/li\u003e\n\u003c/ul\u003e",
-    "defaultValue": true
-  },
-  {
-    "type": "CHECKBOX",
-    "name": "add_consent_state",
-    "checkboxText": "Add consent state",
-    "simpleValueType": true,
-    "help": "Adds the \u003ci\u003econsent_state\u003c/i\u003e object including the following properties to the request:\n\u003cul\u003e \n\u003cli\u003ead_storage\u003c/li\u003e\n\u003cli\u003ead_user_data\u003c/li\u003e\n\u003cli\u003ead_personalization\u003c/li\u003e\n\u003cli\u003eanalytics_storage\u003c/li\u003e\n\u003cli\u003efunctionality_storage\u003c/li\u003e\n\u003cli\u003epersonalization_storage\u003c/li\u003e\n\u003cli\u003esecurity_storage\u003c/li\u003e\n\u003cul\u003e"
-  },
-  {
-    "type": "CHECKBOX",
-    "name": "add_common_cookie",
-    "checkboxText": "Add Common Cookie",
-    "simpleValueType": true,
-    "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e"
-  },
-  {
     "type": "GROUP",
-    "name": "custom",
+    "name": "customDataGroup",
     "displayName": "Event Data",
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
@@ -360,7 +368,7 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "GROUP",
-    "name": "user",
+    "name": "userDataGroup",
     "displayName": "User Data",
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
@@ -513,7 +521,7 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "GROUP",
-    "name": "settings",
+    "name": "settingsGroup",
     "displayName": "Settings",
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
@@ -2368,4 +2376,5 @@ setup: |-
 ___NOTES___
 
 Created on 21/03/2021, 11:26:46
+
 
