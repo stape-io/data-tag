@@ -439,6 +439,8 @@ function getUserAndCustomDataArray() {
 
 function addCommonCookie(eventData) {
   const cookieNames = [
+    // Linkedin cookie
+    'li_fat_id',
     // FB cookies
     '_fbc',
     '_fbp',
@@ -487,6 +489,7 @@ function addCommonCookie(eventData) {
     'FPGCLGB',
     '_gcl_gb'
   ];
+
   let commonCookie = null;
 
   for (var i = 0; i < cookieNames.length; i++) {
