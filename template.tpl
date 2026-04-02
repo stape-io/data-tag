@@ -36,8 +36,6 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "GROUP",
     "name": "configGroup",
-    "displayName": "",
-    "groupStyle": "NO_ZIPPY",
     "subParams": [
       {
         "type": "RADIO",
@@ -195,7 +193,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "add_data_layer",
         "checkboxText": "Send all from Data Layer",
         "simpleValueType": true,
-        "help": "Adds all Data Layer values to the request.\n\u003cbr/\u003e\u003cbr/\u003e \nNote that the values added to the request are from GTM\u0027s internal Data Model (as seen in the GTM Preview Mode variable tab), not the actual Data Layer event as seen in the DevTools Console tab.\n\u003cbr/\u003e\nIf you want only the values from the event that triggered the tag, enable the \u003ci\u003eSend the current Data Layer event object data only\u003c/i\u003e option.\n\u003cbr/\u003e\u003cbr/\u003e Learn more about: the \u003ca href\u003d\"https://www.simoahava.com/analytics/google-tag-manager-data-model/\"\u003eGTM\u0027s Data Model\u003c/a\u003e and the \u003ca href\u003d\"https://www.simoahava.com/analytics/two-simple-data-model-tricks/#trick-2-get-the-object-representation-of-the-current-state-of-the-data-model\"\u003emethod\u003c/a\u003e used to get the values.",
+        "help": "Adds all Data Layer values to the request.\n\u003cbr/\u003e\u003cbr/\u003e \nNote that the values added to the request are from GTM\u0027s internal Data Model (as seen in the GTM Preview Mode variable tab), not the actual Data Layer event as seen in the DevTools Console tab.\n\u003cbr/\u003e\u003cbr/\u003e\nIf you want only the values from the Data Layer event that triggered the tag:\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003edisable\u003c/b\u003e the \u003ci\u003eUse own Data Model\u003c/i\u003e option\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eenable\u003c/b\u003e the \u003ci\u003eSend the current Data Layer event object data only\u003c/i\u003e option\u003c/li\u003e\n\u003c/ul\u003e\n\u003cbr/\u003e\nLearn more about: the \u003ca href\u003d\"https://www.simoahava.com/analytics/google-tag-manager-data-model/\"\u003eGTM\u0027s Data Model\u003c/a\u003e and the \u003ca href\u003d\"https://www.simoahava.com/analytics/two-simple-data-model-tricks/#trick-2-get-the-object-representation-of-the-current-state-of-the-data-model\"\u003emethod\u003c/a\u003e used to get the values.",
         "subParams": [
           {
             "type": "GROUP",
@@ -206,7 +204,9 @@ ___TEMPLATE_PARAMETERS___
                 "name": "add_data_layer_use_own_data_model",
                 "checkboxText": "Use own Data Model",
                 "simpleValueType": true,
-                "help": "Enable this option if your event captures Data Layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the Data Layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e."
+                "help": "Enable this option if your event captures Data Layer values that don’t match what was available when the tag fired.\nFor example, when certain values weren’t yet defined in the Data Layer but still appeared in the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\nThis usually happens when the Data Tag fires before the Data Tag JavaScript script has fully loaded.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section.\n\u003cbr/\u003e\u003cbr/\u003e\nLearn more: \u003ca href\u003d\"https://github.com/stape-io/data-tag/issues/28\"\u003e[1]\u003c/a\u003e, \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/33\"\u003e[2]\u003c/a\u003e and \u003ca href\u003d\"https://github.com/stape-io/data-tag/pull/41\"\u003e[3]\u003c/a\u003e.",
+                "defaultValue": true,
+                "alwaysInSummary": true
               },
               {
                 "type": "CHECKBOX",
@@ -220,7 +220,8 @@ ___TEMPLATE_PARAMETERS___
                     "type": "NOT_EQUALS"
                   }
                 ],
-                "help": "Enable this option to only capture data from the Data Layer event that triggered the tag, not from the whole GTM\u0027s internal Data Model.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section."
+                "help": "Enable this option to only capture data from the Data Layer event that triggered the tag, not from the whole GTM\u0027s internal Data Model.\n\u003cbr/\u003e\u003cbr/\u003e\nMake sure to use the \u003cb\u003ev9\u003c/b\u003e version of the \u003ci\u003eData Tag Script URL\u003c/i\u003e under the \u003ci\u003eSettings\u003c/i\u003e section.",
+                "alwaysInSummary": true
               }
             ],
             "enablingConditions": [
@@ -238,7 +239,8 @@ ___TEMPLATE_PARAMETERS___
             "paramValue": "get",
             "type": "NOT_EQUALS"
           }
-        ]
+        ],
+        "alwaysInSummary": true
       },
       {
         "type": "CHECKBOX",
@@ -246,27 +248,30 @@ ___TEMPLATE_PARAMETERS___
         "checkboxText": "Send common data",
         "simpleValueType": true,
         "help": "Adds the following Common Event Data parameters to the request:\n\u003cul\u003e\n\u003cli\u003epage_location\u003c/li\u003e\n\u003cli\u003epage_path\u003c/li\u003e\n\u003cli\u003epage_hostname\u003c/li\u003e\n\u003cli\u003epage_referrer\u003c/li\u003e\n\u003cli\u003epage_title\u003c/li\u003e\n\u003cli\u003epage_encoding\u003c/li\u003e\n\u003cli\u003escreen_resolution\u003c/li\u003e\n\u003cli\u003eviewport_size\u003c/li\u003e\n\u003c/ul\u003e",
-        "defaultValue": true
+        "defaultValue": true,
+        "alwaysInSummary": true
       },
       {
         "type": "CHECKBOX",
         "name": "add_consent_state",
         "checkboxText": "Add consent state",
         "simpleValueType": true,
-        "help": "Adds the \u003ci\u003econsent_state\u003c/i\u003e object including the following properties to the request:\n\u003cul\u003e \n\u003cli\u003ead_storage\u003c/li\u003e\n\u003cli\u003ead_user_data\u003c/li\u003e\n\u003cli\u003ead_personalization\u003c/li\u003e\n\u003cli\u003eanalytics_storage\u003c/li\u003e\n\u003cli\u003efunctionality_storage\u003c/li\u003e\n\u003cli\u003epersonalization_storage\u003c/li\u003e\n\u003cli\u003esecurity_storage\u003c/li\u003e\n\u003cul\u003e"
+        "help": "Adds the \u003ci\u003econsent_state\u003c/i\u003e object including the following properties to the request:\n\u003cul\u003e \n\u003cli\u003ead_storage\u003c/li\u003e\n\u003cli\u003ead_user_data\u003c/li\u003e\n\u003cli\u003ead_personalization\u003c/li\u003e\n\u003cli\u003eanalytics_storage\u003c/li\u003e\n\u003cli\u003efunctionality_storage\u003c/li\u003e\n\u003cli\u003epersonalization_storage\u003c/li\u003e\n\u003cli\u003esecurity_storage\u003c/li\u003e\n\u003cul\u003e",
+        "alwaysInSummary": true
       },
       {
         "type": "CHECKBOX",
         "name": "add_common_cookie",
         "checkboxText": "Add Common Cookie",
         "simpleValueType": true,
-        "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/linkedin-tag\"\u003e LinkedIn Conversions API \u003c/a\u003e\n\u003c/br\u003e"
+        "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/linkedin-tag\"\u003e LinkedIn Conversions API \u003c/a\u003e\n\u003c/br\u003e",
+        "alwaysInSummary": true
       }
     ]
   },
   {
     "type": "GROUP",
-    "name": "customDataGroup",
+    "name": "eventDataGroup",
     "displayName": "Event Data",
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
@@ -623,27 +628,29 @@ ___TEMPLATE_PARAMETERS___
             "paramValue": "get",
             "type": "NOT_EQUALS"
           }
+        ],
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "gaId",
+            "displayName": "Measurement ID",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "addGaParameters",
+                "paramValue": true,
+                "type": "EQUALS"
+              }
+            ],
+            "valueHint": "G-ABCD123456",
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ],
+            "help": "Enter the Measurement ID of your GA4 property."
+          }
         ]
-      },
-      {
-        "type": "TEXT",
-        "name": "gaId",
-        "displayName": "Measurement ID",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "addGaParameters",
-            "paramValue": true,
-            "type": "EQUALS"
-          }
-        ],
-        "valueHint": "G-ABCD123456",
-        "valueValidators": [
-          {
-            "type": "NON_EMPTY"
-          }
-        ],
-        "help": "Enter the Measurement ID of your GA4 property."
       },
       {
         "type": "CHECKBOX",
@@ -658,46 +665,48 @@ ___TEMPLATE_PARAMETERS___
             "paramValue": "get",
             "type": "NOT_EQUALS"
           }
+        ],
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "dataLayerEventName",
+            "displayName": "DataLayer Event Name",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "dataLayerEventPush",
+                "paramValue": true,
+                "type": "EQUALS"
+              }
+            ],
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ],
+            "valueHint": "page_view_response"
+          },
+          {
+            "type": "TEXT",
+            "name": "dataLayerVariableName",
+            "displayName": "DataLayer Object Name",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "dataLayerEventPush",
+                "paramValue": true,
+                "type": "EQUALS"
+              }
+            ],
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ],
+            "defaultValue": "dataLayer",
+            "help": "Use \u003ci\u003edataLayer\u003c/i\u003e by default. Modify only if you renamed dataLayer object name."
+          }
         ]
-      },
-      {
-        "type": "TEXT",
-        "name": "dataLayerEventName",
-        "displayName": "DataLayer Event Name",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "dataLayerEventPush",
-            "paramValue": true,
-            "type": "EQUALS"
-          }
-        ],
-        "valueValidators": [
-          {
-            "type": "NON_EMPTY"
-          }
-        ],
-        "valueHint": "page_view_response"
-      },
-      {
-        "type": "TEXT",
-        "name": "dataLayerVariableName",
-        "displayName": "DataLayer Object Name",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "dataLayerEventPush",
-            "paramValue": true,
-            "type": "EQUALS"
-          }
-        ],
-        "valueValidators": [
-          {
-            "type": "NON_EMPTY"
-          }
-        ],
-        "defaultValue": "dataLayer",
-        "help": "Use \u003ci\u003edataLayer\u003c/i\u003e by default. Modify only if you renamed dataLayer object name."
       },
       {
         "type": "CHECKBOX",
@@ -712,22 +721,24 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "help": "Useful if you have server-side tags, that (partially) depend on the \u003cI\u003esendPixelFromBrowser()\u003c/i\u003e API for 3rd party cookies (e.g. Google Ads Conversion, Google Ads Remarketing).",
-        "defaultValue": false
-      },
-      {
-        "type": "CHECKBOX",
-        "name": "waitForCookies",
-        "checkboxText": "Wait for cookies before event is pushed",
-        "simpleValueType": true,
         "defaultValue": false,
-        "enablingConditions": [
+        "subParams": [
           {
-            "paramName": "richsstsse",
-            "paramValue": true,
-            "type": "EQUALS"
+            "type": "CHECKBOX",
+            "name": "waitForCookies",
+            "checkboxText": "Wait for cookies before event is pushed",
+            "simpleValueType": true,
+            "defaultValue": false,
+            "enablingConditions": [
+              {
+                "paramName": "richsstsse",
+                "paramValue": true,
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Wait for all cookies to be set before event is pushed to DataLayer. Helpful if a server-side tag sets cookies that a web tag relies on."
           }
-        ],
-        "help": "Wait for all cookies to be set before event is pushed to DataLayer. Helpful if a server-side tag sets cookies that a web tag relies on."
+        ]
       },
       {
         "type": "CHECKBOX",
