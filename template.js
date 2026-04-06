@@ -485,8 +485,11 @@ function addCommonCookie(eventData) {
     'FPGCLAG',
     '_gcl_ag',
     'FPGCLGB',
-    '_gcl_gb'
+    '_gcl_gb',
+    // Linkedin cookie
+    'li_fat_id'
   ];
+
   let commonCookie = null;
 
   for (var i = 0; i < cookieNames.length; i++) {
