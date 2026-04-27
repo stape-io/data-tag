@@ -1251,8 +1251,11 @@ function addCommonCookie(eventData) {
     'FPGCLGB',
     '_gcl_gb',
     // Linkedin cookie
-    'li_fat_id'
+    'li_fat_id',
+    // OpenAI cookie
+    '__oppref'
   ];
+
   let commonCookie = null;
 
   for (var i = 0; i < cookieNames.length; i++) {
@@ -1982,6 +1985,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "li_fat_id"
+              },
+              {
+                "type": 1,
+                "string": "__oppref"
               }
             ]
           }
@@ -2386,6 +2393,8 @@ setup: |-
 
 ___NOTES___
 
-Created on 21/03/2021, 11:26:46
+2026-04-27 Changes Notes:
+  - Add __oppref OpenAI Click ID cookie to common_cookie object.
 
+Created on 21/03/2021, 11:26:46
 
