@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/data-tag'
 versions:
+  - sha: 0113800a5c66e68f4db256f273fd8da792cae763
+    changeNotes: Add OpenAI Click ID cookie to common cookie object.
   - sha: f1fd022a401016d303a17c08304b84901d4c24fe
     changeNotes: Add Linkedin cookie to common cookies list.
   - sha: edfbb6d3f0d8aa537c73f2ea966a630f18ab2380
