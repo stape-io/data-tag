@@ -486,6 +486,8 @@ function addCommonCookie(eventData) {
     '_gcl_ag',
     'FPGCLGB',
     '_gcl_gb',
+    'FPGCLDC',
+    '_gcl_dc',
     // Linkedin cookie
     'li_fat_id',
     // OpenAI cookie

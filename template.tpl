@@ -1250,6 +1250,8 @@ function addCommonCookie(eventData) {
     '_gcl_ag',
     'FPGCLGB',
     '_gcl_gb',
+    'FPGCLDC',
+    '_gcl_dc',
     // Linkedin cookie
     'li_fat_id',
     // OpenAI cookie
@@ -1984,6 +1986,14 @@ ___WEB_PERMISSIONS___
               },
               {
                 "type": 1,
+                "string": "FPGCLDC"
+              },
+              {
+                "type": 1,
+                "string": "_gcl_dc"
+              },
+              {
+                "type": 1,
                 "string": "li_fat_id"
               },
               {
@@ -2393,8 +2403,8 @@ setup: |-
 
 ___NOTES___
 
-2026-04-27 Changes Notes:
-  - Add __oppref OpenAI Click ID cookie to common_cookie object.
+2026-06-05 - Change Notes:
+  - Add FPGCLDC and _gcl_dc (Display & Video 360 click ID cookies) to the common cookie object and read permissions, extending conversion tracking support for CM360 campaigns
 
 Created on 21/03/2021, 11:26:46
 
