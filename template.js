@@ -490,8 +490,9 @@ function addCommonCookie(eventData) {
     '_gcl_dc',
     // Linkedin cookie
     'li_fat_id',
-    // OpenAI cookie
-    '__oppref'
+    // OpenAI cookies
+    '__oppref',
+    '__obref'
   ];
 
   let commonCookie = null;
