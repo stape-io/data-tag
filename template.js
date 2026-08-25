@@ -31,14 +31,14 @@ if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) 
 }
 
 const userAndCustomData = getUserAndCustomDataArray();
-const requestType = determinateRequestType();
+const requestType = determinateRequestType(userAndCustomData);
 const normalizedServerUrl = normalizeServerUrl();
-const eventId = copyFromDataLayer('gtm.uniqueEventId');
+const eventId = copyFromDataLayer('gtm.uniqueEventId'); // Must be read before any asynchronous operation to ensure the correct value is captured.
 
 if (requestType === 'post') {
-  const dataScriptVersion = 'v9';
+  const dataScriptVersion = 'v10';
   const dataTagScriptUrl =
-    getType(data.data_tag_load_script_url) !== 'undefined'
+    getType(data.data_tag_load_script_url) === 'string'
       ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
 
@@ -51,27 +51,33 @@ if (requestType === 'post') {
       () => {
         dataTagScriptLoadedCache[dataTagScriptUrl] = true;
         setInWindow(dataTagScriptLoadedCacheKey, dataTagScriptLoadedCache);
-        sendPostRequest();
+        sendPostRequest(normalizedServerUrl, userAndCustomData);
       },
-      data.gtmOnFailure,
+      () => {
+        if (data.postFallbackToGet) {
+          sendGetRequest(normalizedServerUrl, userAndCustomData, true);
+        } else {
+          data.gtmOnFailure();
+        }
+      },
       dataTagScriptUrl
     );
   } else {
-    sendPostRequest();
+    sendPostRequest(normalizedServerUrl, userAndCustomData);
   }
 } else {
-  sendGetRequest();
+  sendGetRequest(normalizedServerUrl, userAndCustomData, false);
 }
 
 /*==============================================================================
   Vendor related functions
 ==============================================================================*/
 
-function sendPostRequest() {
+function sendPostRequest(normalizedServerUrl, userAndCustomData) {
   let eventData = {};
 
   eventData = addCommonDataForPostRequest(data, eventData);
-  eventData = addRequiredDataForPostRequest(data, eventData);
+  eventData = addRequiredDataForPostRequest(data, eventData, userAndCustomData);
   eventData = addGaRequiredData(data, eventData);
 
   callInWindow(
@@ -93,25 +99,31 @@ function sendPostRequest() {
   data.gtmOnSuccess();
 }
 
-function sendGetRequest() {
-  sendPixel(addDataForGetRequest(data, buildEndpoint()), data.gtmOnSuccess, data.gtmOnFailure);
+function sendGetRequest(normalizedServerUrl, userAndCustomData, isPostFallback) {
+  sendPixel(
+    addDataForGetRequest(
+      data,
+      buildEndpoint(normalizedServerUrl),
+      userAndCustomData,
+      isPostFallback
+    ),
+    data.gtmOnSuccess,
+    data.gtmOnFailure
+  );
 }
 
 function normalizeServerUrl() {
   let gtmServerDomain = data.gtm_server_domain;
   let requestPath = data.request_path;
 
-  // Add 'https://' if gtmServerDomain doesn't start with it
   if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
 
-  // Removes trailing slash from gtmServerDomain if it ends with it
   if (gtmServerDomain.charAt(gtmServerDomain.length - 1) === '/') {
     gtmServerDomain = gtmServerDomain.slice(0, -1);
   }
 
-  // Adds slash to first position of requestPath if doesn't start with it
   if (requestPath.charAt(0) !== '/') {
     requestPath = '/' + requestPath;
   }
@@ -122,15 +134,15 @@ function normalizeServerUrl() {
   };
 }
 
-function buildEndpoint() {
+function buildEndpoint(normalizedServerUrl) {
   return normalizedServerUrl.gtmServerDomain + normalizedServerUrl.requestPath;
 }
 
-function addRequiredDataForPostRequest(data, eventData) {
+function addRequiredDataForPostRequest(data, eventData, userAndCustomData) {
   eventData.event_name = getEventName(data);
   eventData.v = makeNumber(data.protocol_version);
 
-  let customData = getCustomData(data, true);
+  const customData = getCustomData(data, true, userAndCustomData);
 
   for (let key in customData) {
     eventData[customData[key].name] = customData[key].value;
@@ -155,7 +167,7 @@ function addGaRequiredData(data, eventData) {
   return eventData;
 }
 
-function addDataForGetRequest(data, url) {
+function addDataForGetRequest(data, url, userAndCustomData, isPostFallback) {
   let eventData = {};
   url += '?v=' + data.protocol_version + '&event=' + encodeUriComponent(getEventName(data));
 
@@ -163,15 +175,15 @@ function addDataForGetRequest(data, url) {
     eventData = addCommonData(eventData);
   }
 
-  if (data.add_consent_state && data.request_type === 'auto') {
+  if (data.add_consent_state && (data.request_type === 'auto' || isPostFallback)) {
     eventData = addConsentStateData(eventData);
   }
 
-  if (data.add_common_cookie && data.request_type === 'auto') {
+  if (data.add_common_cookie && (data.request_type === 'auto' || isPostFallback)) {
     eventData = addCommonCookie(eventData);
   }
 
-  const customData = getCustomData(data, false);
+  const customData = getCustomData(data, false, userAndCustomData);
 
   if (customData.length) {
     for (let customDataKey in customData) {
@@ -181,7 +193,11 @@ function addDataForGetRequest(data, url) {
 
   eventData = addTempClientId(eventData);
 
-  if (data.request_type === 'auto') {
+  if (isPostFallback) {
+    eventData.data_tag_post_fallback = true;
+  }
+
+  if (data.request_type === 'auto' || isPostFallback) {
     return url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)));
   }
 
@@ -276,13 +292,13 @@ function getEventName(data) {
   return eventName;
 }
 
-function getCustomData(data, dtagLoaded) {
-  let dataToStore = [];
-  let customData = userAndCustomData;
+function getCustomData(data, dtagLoaded, userAndCustomData) {
+  const dataToStore = [];
+  const customData = userAndCustomData;
 
   for (let dataKey in customData) {
     let dataValue = customData[dataKey].value;
-    let dataTransformation = customData[dataKey].transformation;
+    const dataTransformation = customData[dataKey].transformation;
 
     if (dataValue) {
       if (dataTransformation === 'trim') {
@@ -335,8 +351,8 @@ function getCustomData(data, dtagLoaded) {
 }
 
 function storeData(dataToStore) {
-  let dataToStoreCookieResult = {};
-  let dataToStoreLocalStorageResult = {};
+  const dataToStoreCookieResult = {};
+  const dataToStoreLocalStorageResult = {};
   let dataToStoreCookie = getCookieValues('stape')[0];
 
   if (dataToStoreCookie) {
@@ -401,7 +417,7 @@ function getObjectLength(object) {
   return length;
 }
 
-function determinateRequestType() {
+function determinateRequestType(userAndCustomData) {
   if (data.request_type !== 'auto') {
     return data.request_type;
   }

@@ -262,9 +262,9 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "CHECKBOX",
         "name": "add_common_cookie",
-        "checkboxText": "Add Common Cookie",
+        "checkboxText": "Add common cookies",
         "simpleValueType": true,
-        "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/linkedin-tag\"\u003e LinkedIn Conversions API \u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/openai-capi-tag\"\u003e OpenAI Ads Conversions API \u003c/a\u003e\n\u003c/br\u003e",
+        "help": "The tag will send common cookies in the \u003ci\u003ecommon_cookie\u003c/i\u003e object to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/linkedin-tag\"\u003e LinkedIn Conversions API \u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/openai-capi-tag\"\u003e OpenAI Ads Conversions API \u003c/a\u003e\n\u003c/br\u003e",
         "alwaysInSummary": true
       }
     ]
@@ -367,7 +367,8 @@ ___TEMPLATE_PARAMETERS___
               }
             ]
           }
-        ]
+        ],
+        "newRowButtonText": "Add Property"
       }
     ]
   },
@@ -520,7 +521,8 @@ ___TEMPLATE_PARAMETERS___
               }
             ]
           }
-        ]
+        ],
+        "newRowButtonText": "Add Property"
       }
     ]
   },
@@ -556,7 +558,43 @@ ___TEMPLATE_PARAMETERS___
             "type": "NON_EMPTY"
           }
         ],
-        "help": "We highly recommend using \u003cb\u003eAuto\u003c/b\u003e. Change this only if you know what you are doing.\n\u003cbr/\u003e\u003cbr/\u003e\nSome features will become unavailable if you choose \u003ci\u003eGET\u003c/i\u003e."
+        "help": "Determines how the event data is sent to your GTM Server Side container.\n\u003cbr/\u003e\u003cbr/\u003e\n\u003cb\u003eAuto\u003c/b\u003e (recommended): the tag automatically picks \u003ci\u003ePOST\u003c/i\u003e or \u003ci\u003eGET\u003c/i\u003e for you, based on the features you\u0027ve enabled and the size of the event payload.\n\u003cbr/\u003e\u003cbr/\u003e\n\u003cb\u003ePOST\u003c/b\u003e: always sends the event as a POST request (via the Data Tag script). Supports all features (Data Layer enrichment, GA4 parameters, rich command protocol, hashing, etc.) but requires loading the Data Tag script first.\n\u003cbr/\u003e\u003cbr/\u003e\n\u003cb\u003eGET\u003c/b\u003e: always sends the event as a GET request (pixel/beacon). Doesn\u0027t require loading any extra script, but some features are unavailable (e.g. value hashing, Data Layer enrichment, GA4 parameters, rich command protocol).\n\u003cbr/\u003e\u003cbr/\u003e\nOnly change this setting if you know what you are doing.",
+        "subParams": [
+          {
+            "type": "LABEL",
+            "name": "requestTypeNestedFieldsSeparatorLabel"
+          },
+          {
+            "type": "CHECKBOX",
+            "name": "useFetchInsteadOfXHR",
+            "checkboxText": "Use fetch instead of XMLHttpRequest for POST requests",
+            "simpleValueType": true,
+            "help": "Using \u003ci\u003efetch\u003c/i\u003e with \u003ci\u003ekeepalive\u003c/i\u003e option which allow the request to outlive the page. \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Web/API/fetch#keepalive\"\u003eRead more\u003c/a\u003e.",
+            "defaultValue": true,
+            "enablingConditions": [
+              {
+                "paramName": "request_type",
+                "paramValue": "get",
+                "type": "NOT_EQUALS"
+              }
+            ]
+          },
+          {
+            "type": "CHECKBOX",
+            "name": "postFallbackToGet",
+            "checkboxText": "Fall back to a GET request if the Data Tag script fails to load",
+            "simpleValueType": true,
+            "defaultValue": false,
+            "help": "If the Data Tag script fails to load  the tag will send the event as a \u003ci\u003eGET\u003c/i\u003e request instead of failing silently. A \u003ci\u003edata_tag_post_fallback\u003dtrue\u003c/i\u003e parameter is added to the event so you can identify fallback events server-side.\n\u003cbr/\u003e\u003cbr/\u003e\n\u003cb\u003eLimitations when falling back to GET:\u003c/b\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eHashed fields (MD5/SHA-256) are sent unhashed\u003c/b\u003e since hashing requires the Data Tag script.\u003c/li\u003e\n\u003cli\u003eDataLayer data, screen resolution and viewport size are not included.\u003c/li\u003e\n\u003cli\u003eRich command protocol (\u003ci\u003erichsstsse\u003c/i\u003e parameter) and \"Wait for cookies\" are not supported.\u003c/li\u003e\n\u003cli\u003e\"Push event to DataLayer after tag receives a response\" will not happen.\u003c/li\u003e\n\u003cli\u003eGA4 specific parameters are not added.\u003c/li\u003e\n\u003cli\u003eVery large payloads may exceed URL length limits.\u003c/li\u003e\n\u003c/ul\u003e",
+            "enablingConditions": [
+              {
+                "paramName": "request_type",
+                "paramValue": "get",
+                "type": "NOT_EQUALS"
+              }
+            ]
+          }
+        ]
       },
       {
         "type": "TEXT",
@@ -596,7 +634,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "data_tag_load_script_url",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
-        "help": "URL where to load Data tag script from, by default it will be loaded from \u003cI\u003ehttps://stapecdn.com/dtag/${data-script-version}.js\u003c/i\u003e. \n\u003cbr/\u003e\nThis can be parameterized with \u003ci\u003e${data-script-version}\u003c/i\u003e in order to load the correct version for this tag.\n\u003cbr/\u003e\u003cbr/\u003e\nLatest version: \u003cb\u003ev9\u003c/b\u003e.",
+        "help": "The URL where to load Data tag script from (for POST requests), by default it will be loaded from \u003cI\u003ehttps://stapecdn.com/dtag/${data-script-version}.js\u003c/i\u003e. \n\u003cbr/\u003e\nThis can be parameterized with \u003ci\u003e${data-script-version}\u003c/i\u003e in order to load the correct version for this tag.\n\u003cbr/\u003e\u003cbr/\u003e\nLatest version: \u003cb\u003ev10\u003c/b\u003e.",
         "valueValidators": [
           {
             "type": "REGEX",
@@ -606,7 +644,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "alwaysInSummary": false,
-        "defaultValue": "https://stapecdn.com/dtag/v9.js",
+        "defaultValue": "https://stapecdn.com/dtag/${data-script-version}.js",
         "enablingConditions": [
           {
             "paramName": "request_type",
@@ -739,21 +777,6 @@ ___TEMPLATE_PARAMETERS___
             "help": "Wait for all cookies to be set before event is pushed to DataLayer. Helpful if a server-side tag sets cookies that a web tag relies on."
           }
         ]
-      },
-      {
-        "type": "CHECKBOX",
-        "name": "useFetchInsteadOfXHR",
-        "checkboxText": "Use fetch instead of XMLHttpRequest (for POST requests only)",
-        "simpleValueType": true,
-        "help": "Using \u003ci\u003efetch\u003c/i\u003e with \u003ci\u003ekeepalive\u003c/i\u003e option which allow the request to outlive the page. \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Web/API/fetch#keepalive\"\u003eRead more\u003c/a\u003e.",
-        "defaultValue": true,
-        "enablingConditions": [
-          {
-            "paramName": "request_type",
-            "paramValue": "get",
-            "type": "NOT_EQUALS"
-          }
-        ]
       }
     ]
   }
@@ -795,14 +818,14 @@ if (pageLocation && pageLocation.lastIndexOf('https://gtm-msr.appspot.com/', 0) 
 }
 
 const userAndCustomData = getUserAndCustomDataArray();
-const requestType = determinateRequestType();
+const requestType = determinateRequestType(userAndCustomData);
 const normalizedServerUrl = normalizeServerUrl();
-const eventId = copyFromDataLayer('gtm.uniqueEventId');
+const eventId = copyFromDataLayer('gtm.uniqueEventId'); // Must be read before any asynchronous operation to ensure the correct value is captured.
 
 if (requestType === 'post') {
-  const dataScriptVersion = 'v9';
+  const dataScriptVersion = 'v10';
   const dataTagScriptUrl =
-    getType(data.data_tag_load_script_url) !== 'undefined'
+    getType(data.data_tag_load_script_url) === 'string'
       ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
 
@@ -815,27 +838,33 @@ if (requestType === 'post') {
       () => {
         dataTagScriptLoadedCache[dataTagScriptUrl] = true;
         setInWindow(dataTagScriptLoadedCacheKey, dataTagScriptLoadedCache);
-        sendPostRequest();
+        sendPostRequest(normalizedServerUrl, userAndCustomData);
       },
-      data.gtmOnFailure,
+      () => {
+        if (data.postFallbackToGet) {
+          sendGetRequest(normalizedServerUrl, userAndCustomData, true);
+        } else {
+          data.gtmOnFailure();
+        }
+      },
       dataTagScriptUrl
     );
   } else {
-    sendPostRequest();
+    sendPostRequest(normalizedServerUrl, userAndCustomData);
   }
 } else {
-  sendGetRequest();
+  sendGetRequest(normalizedServerUrl, userAndCustomData, false);
 }
 
 /*==============================================================================
   Vendor related functions
 ==============================================================================*/
 
-function sendPostRequest() {
+function sendPostRequest(normalizedServerUrl, userAndCustomData) {
   let eventData = {};
 
   eventData = addCommonDataForPostRequest(data, eventData);
-  eventData = addRequiredDataForPostRequest(data, eventData);
+  eventData = addRequiredDataForPostRequest(data, eventData, userAndCustomData);
   eventData = addGaRequiredData(data, eventData);
 
   callInWindow(
@@ -857,25 +886,31 @@ function sendPostRequest() {
   data.gtmOnSuccess();
 }
 
-function sendGetRequest() {
-  sendPixel(addDataForGetRequest(data, buildEndpoint()), data.gtmOnSuccess, data.gtmOnFailure);
+function sendGetRequest(normalizedServerUrl, userAndCustomData, isPostFallback) {
+  sendPixel(
+    addDataForGetRequest(
+      data,
+      buildEndpoint(normalizedServerUrl),
+      userAndCustomData,
+      isPostFallback
+    ),
+    data.gtmOnSuccess,
+    data.gtmOnFailure
+  );
 }
 
 function normalizeServerUrl() {
   let gtmServerDomain = data.gtm_server_domain;
   let requestPath = data.request_path;
 
-  // Add 'https://' if gtmServerDomain doesn't start with it
   if (gtmServerDomain.indexOf('http://') !== 0 && gtmServerDomain.indexOf('https://') !== 0) {
     gtmServerDomain = 'https://' + gtmServerDomain;
   }
 
-  // Removes trailing slash from gtmServerDomain if it ends with it
   if (gtmServerDomain.charAt(gtmServerDomain.length - 1) === '/') {
     gtmServerDomain = gtmServerDomain.slice(0, -1);
   }
 
-  // Adds slash to first position of requestPath if doesn't start with it
   if (requestPath.charAt(0) !== '/') {
     requestPath = '/' + requestPath;
   }
@@ -886,15 +921,15 @@ function normalizeServerUrl() {
   };
 }
 
-function buildEndpoint() {
+function buildEndpoint(normalizedServerUrl) {
   return normalizedServerUrl.gtmServerDomain + normalizedServerUrl.requestPath;
 }
 
-function addRequiredDataForPostRequest(data, eventData) {
+function addRequiredDataForPostRequest(data, eventData, userAndCustomData) {
   eventData.event_name = getEventName(data);
   eventData.v = makeNumber(data.protocol_version);
 
-  let customData = getCustomData(data, true);
+  const customData = getCustomData(data, true, userAndCustomData);
 
   for (let key in customData) {
     eventData[customData[key].name] = customData[key].value;
@@ -919,7 +954,7 @@ function addGaRequiredData(data, eventData) {
   return eventData;
 }
 
-function addDataForGetRequest(data, url) {
+function addDataForGetRequest(data, url, userAndCustomData, isPostFallback) {
   let eventData = {};
   url += '?v=' + data.protocol_version + '&event=' + encodeUriComponent(getEventName(data));
 
@@ -927,15 +962,15 @@ function addDataForGetRequest(data, url) {
     eventData = addCommonData(eventData);
   }
 
-  if (data.add_consent_state && data.request_type === 'auto') {
+  if (data.add_consent_state && (data.request_type === 'auto' || isPostFallback)) {
     eventData = addConsentStateData(eventData);
   }
 
-  if (data.add_common_cookie && data.request_type === 'auto') {
+  if (data.add_common_cookie && (data.request_type === 'auto' || isPostFallback)) {
     eventData = addCommonCookie(eventData);
   }
 
-  const customData = getCustomData(data, false);
+  const customData = getCustomData(data, false, userAndCustomData);
 
   if (customData.length) {
     for (let customDataKey in customData) {
@@ -945,7 +980,11 @@ function addDataForGetRequest(data, url) {
 
   eventData = addTempClientId(eventData);
 
-  if (data.request_type === 'auto') {
+  if (isPostFallback) {
+    eventData.data_tag_post_fallback = true;
+  }
+
+  if (data.request_type === 'auto' || isPostFallback) {
     return url + '&dtdc=' + encodeUriComponent(toBase64(JSON.stringify(eventData)));
   }
 
@@ -1040,13 +1079,13 @@ function getEventName(data) {
   return eventName;
 }
 
-function getCustomData(data, dtagLoaded) {
-  let dataToStore = [];
-  let customData = userAndCustomData;
+function getCustomData(data, dtagLoaded, userAndCustomData) {
+  const dataToStore = [];
+  const customData = userAndCustomData;
 
   for (let dataKey in customData) {
     let dataValue = customData[dataKey].value;
-    let dataTransformation = customData[dataKey].transformation;
+    const dataTransformation = customData[dataKey].transformation;
 
     if (dataValue) {
       if (dataTransformation === 'trim') {
@@ -1099,8 +1138,8 @@ function getCustomData(data, dtagLoaded) {
 }
 
 function storeData(dataToStore) {
-  let dataToStoreCookieResult = {};
-  let dataToStoreLocalStorageResult = {};
+  const dataToStoreCookieResult = {};
+  const dataToStoreLocalStorageResult = {};
   let dataToStoreCookie = getCookieValues('stape')[0];
 
   if (dataToStoreCookie) {
@@ -1165,7 +1204,7 @@ function getObjectLength(object) {
   return length;
 }
 
-function determinateRequestType() {
+function determinateRequestType(userAndCustomData) {
   if (data.request_type !== 'auto') {
     return data.request_type;
   }
@@ -2400,13 +2439,78 @@ scenarios:
     \    const requestPathStartsWith = requestPath.indexOf(testCase.expectedRequestPath)\
     \ === 0;\n    assertThat(requestPathStartsWith).isTrue();\n  });\n\n  runCode(mockData);\n\
     });"
+- name: Falls back to a GET request when the POST script fails to load and the fallback
+    is enabled
+  code: |-
+    mockData.request_type = 'post';
+    mockData.event_type = 'standard';
+    mockData.event_name_standard = 'page_view';
+    mockData.gtm_server_domain = 'example.com';
+    mockData.request_path = '/foo';
+    mockData.postFallbackToGet = true;
+
+    mock('injectScript', function(url, onSuccess, onFailure) {
+      onFailure();
+    });
+
+    let sendPixelCalled = false;
+
+    mock('sendPixel', function(url, onSuccess) {
+      sendPixelCalled = true;
+      assertThat(url).contains('dtdc=');
+      onSuccess();
+    });
+
+    runCode(mockData);
+
+    callLater(() => {
+      assertThat(sendPixelCalled).isTrue();
+      assertApi('gtmOnSuccess').wasCalled();
+    });
+- name: Fails without falling back to GET when the fallback is disabled (default)
+  code: |
+    mockData.request_type = 'post';
+    mockData.event_type = 'standard';
+    mockData.event_name_standard = 'page_view';
+    mockData.gtm_server_domain = 'example.com';
+    mockData.request_path = '/foo';
+    mockData.postFallbackToGet = false;
+
+    mock('injectScript', function(url, onSuccess, onFailure) {
+      onFailure();
+    });
+
+    let sendPixelCalled = false;
+
+    mock('sendPixel', function(url, onSuccess) {
+      sendPixelCalled = true;
+      onSuccess();
+    });
+
+    runCode(mockData);
+
+    callLater(() => {
+      assertThat(sendPixelCalled).isFalse();
+      assertApi('gtmOnFailure').wasCalled();
+    });
 setup: |-
+  const callLater = require('callLater');
+
   const mockData = {
     protocol_version: '2'
   };
 
 
 ___NOTES___
+
+2026-08-25 - Change Notes:
+  - Add optional "Fall back to a GET request if the POST script fails to load" checkbox (disabled by default) so events aren't lost when the Data Tag script fails to load
+  - Mark fallback events with a data_tag_post_fallback=true parameter for server-side identification
+  - Document the feature's limitations in the checkbox help text (hashed fields sent unhashed, no data layer/GA4 enrichment, richsstsse unsupported, URL length limits)
+  - Fix "Add Common Cookie" checkbox label and help text to correctly describe cookies being added to a dedicated common_cookie object (previously said eventData)
+  - Add an "Add Property" button label to the custom headers and query params tables for clearer UX
+  - Bump Data Tag script version to v10, defaulting the script URL to the parameterized ${data-script-version} placeholder instead of a hardcoded v9 URL
+  - Tighten the custom script URL override check to require a string value (previously any defined value), preventing invalid overrides from being used
 
 2026-08-07 - Change Notes:
   - Add OpenAI Ads Conversions API link to the Common Cookie help text, with extra spacing for readability

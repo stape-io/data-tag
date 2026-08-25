@@ -70,6 +70,18 @@ function dataTagSendData(
       } catch (e) {}
       sendBeaconResult || sendPixel(url);
     },
+    // Shopify Custom Pixel sandbox throws this (not a native browser error) when fetch/XHR targets a request to the same origin of the Shopify website.
+    isRestrictedUrlError = function (error) {
+      return (
+        error &&
+        error.name === 'RestrictedUrlError' &&
+        error.message.indexOf('Requests are not allowed to the same origin:') === 0
+      );
+    },
+    // sendBeacon is not blocked by Shopify Custom Pixel sandbox, so we can use it as a fallback for fetch/XHR.
+    sendBeaconAsFallback = function (url, data) {
+      navigator.sendBeacon && navigator.sendBeacon(url, data);
+    },
     fallbackIterator = function (a) {
       var b = 0;
       return function () {
@@ -88,6 +100,7 @@ function dataTagSendData(
       eventDataLayerData.event = dataLayerEventName;
       window[dataLayerVariableName].push(eventDataLayerData);
     },
+    requestUrl = gtmServerDomain + requestPath,
     stringifiedData = JSON.stringify(data),
     response = '',
     loaded = 0,
@@ -123,119 +136,135 @@ function dataTagSendData(
     };
 
   if (useFetchInsteadOfXHR) {
-    fetch(gtmServerDomain + requestPath, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain'
-      },
-      credentials: 'include',
-      keepalive: true,
-      body: stringifiedData
-    })
-      .then(function (response) {
-        response.text().then(function (responseText) {
-          if (responseText) {
-            responseText = replaceVariable(responseText, replacements);
-          }
-          if (responseText && responseText.startsWith('event: message\ndata: ')) {
-            responseText
-              .split('\n\n')
-              .filter(function (eventString) {
-                return eventString; // Filter out empty strings
-              })
-              .forEach(function (eventString) {
-                try {
-                  var event = JSON.parse(eventString.replace('event: message\ndata: ', ''));
-                  processResponseDataEvent(event);
-                } catch (error) {
-                  console.error('Error processing response data:', error);
-                }
-              });
-          }
-          if (dataLayerEventName && dataLayerVariableName) {
-            // data tag configured to push event
-            if (!responseText || !responseText.startsWith('event: message\ndata: ')) {
-              // old protocol
-              eventDataLayerData = dataTagParseResponse(responseText);
-              eventDataLayerData.status = response.status;
-              pushToDataLayer();
-            } else if (
-              !waitForCookies || // data tag configured to push event instantly
-              setCookieRunningCount === 0 // no cookies received or all cookies already set
-            ) {
-              pushToDataLayer();
-            }
-          }
-        });
+    try {
+      fetch(requestUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        credentials: 'include',
+        keepalive: true,
+        body: stringifiedData
       })
-      .catch(function (error) {
-        console.error(error);
-      });
+        .then(function (response) {
+          response.text().then(function (responseText) {
+            if (responseText) {
+              responseText = replaceVariable(responseText, replacements);
+            }
+            if (responseText && responseText.startsWith('event: message\ndata: ')) {
+              responseText
+                .split('\n\n')
+                .filter(function (eventString) {
+                  return eventString; // Filter out empty strings
+                })
+                .forEach(function (eventString) {
+                  try {
+                    var event = JSON.parse(eventString.replace('event: message\ndata: ', ''));
+                    processResponseDataEvent(event);
+                  } catch (error) {
+                    console.error('Error processing response data:', error);
+                  }
+                });
+            }
+            if (dataLayerEventName && dataLayerVariableName) {
+              // data tag configured to push event
+              if (!responseText || !responseText.startsWith('event: message\ndata: ')) {
+                // old protocol
+                eventDataLayerData = dataTagParseResponse(responseText);
+                eventDataLayerData.status = response.status;
+                pushToDataLayer();
+              } else if (
+                !waitForCookies || // data tag configured to push event instantly
+                setCookieRunningCount === 0 // no cookies received or all cookies already set
+              ) {
+                pushToDataLayer();
+              }
+            }
+          });
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    } catch (error) {
+      if (isRestrictedUrlError(error)) {
+        sendBeaconAsFallback(requestUrl, stringifiedData);
+      } else {
+        throw error;
+      }
+    }
   } else {
-    xhr = new XMLHttpRequest();
-    xhr.open('POST', gtmServerDomain + requestPath);
-    xhr.setRequestHeader('Content-type', 'text/plain');
-    xhr.withCredentials = true;
+    try {
+      xhr = new XMLHttpRequest();
+      xhr.open('POST', requestUrl);
+      xhr.setRequestHeader('Content-type', 'text/plain');
+      xhr.withCredentials = true;
 
-    xhr.onprogress = function (progress) {
-      if (xhr.status === 200 && xhr.responseText.startsWith('event: message\ndata: ')) {
-        response += xhr.responseText.substring(loaded);
-        loaded = progress.loaded;
+      xhr.onprogress = function (progress) {
+        if (xhr.status === 200 && xhr.responseText.startsWith('event: message\ndata: ')) {
+          response += xhr.responseText.substring(loaded);
+          loaded = progress.loaded;
 
-        for (
-          var replacedResponse = replaceVariable(response, replacements),
+          for (
+            var replacedResponse = replaceVariable(response, replacements),
+              nextSeparationPos = replacedResponse.indexOf('\n\n');
+            -1 !== nextSeparationPos;
+
+          ) {
+            var parsedData;
+            a: {
+              var iterableLines;
+              var lines = replacedResponse.substring(0, nextSeparationPos).split('\n'),
+                linesIterator =
+                  'undefined' != typeof Symbol && Symbol.iterator && lines[Symbol.iterator];
+              if (linesIterator) iterableLines = linesIterator.call(lines);
+              else if ('number' == typeof lines.length)
+                iterableLines = {
+                  next: fallbackIterator(lines)
+                };
+              else throw Error(String(lines) + ' is not an iterable or ArrayLike');
+              var eventNameLine = iterableLines.next().value,
+                eventDataLine = iterableLines.next().value;
+              if (eventNameLine.startsWith('event: message') && eventDataLine.startsWith('data: '))
+                try {
+                  parsedData = JSON.parse(eventDataLine.substring(eventDataLine.indexOf(':') + 1));
+                  break a;
+                } catch (e) {}
+              parsedData = void 0;
+            }
+            processResponseDataEvent(parsedData);
+            replacedResponse = replacedResponse.substring(nextSeparationPos + 2);
             nextSeparationPos = replacedResponse.indexOf('\n\n');
-          -1 !== nextSeparationPos;
-
-        ) {
-          var parsedData;
-          a: {
-            var iterableLines;
-            var lines = replacedResponse.substring(0, nextSeparationPos).split('\n'),
-              linesIterator =
-                'undefined' != typeof Symbol && Symbol.iterator && lines[Symbol.iterator];
-            if (linesIterator) iterableLines = linesIterator.call(lines);
-            else if ('number' == typeof lines.length)
-              iterableLines = {
-                next: fallbackIterator(lines)
-              };
-            else throw Error(String(lines) + ' is not an iterable or ArrayLike');
-            var eventNameLine = iterableLines.next().value,
-              eventDataLine = iterableLines.next().value;
-            if (eventNameLine.startsWith('event: message') && eventDataLine.startsWith('data: '))
-              try {
-                parsedData = JSON.parse(eventDataLine.substring(eventDataLine.indexOf(':') + 1));
-                break a;
-              } catch (e) {}
-            parsedData = void 0;
           }
-          processResponseDataEvent(parsedData);
-          replacedResponse = replacedResponse.substring(nextSeparationPos + 2);
-          nextSeparationPos = replacedResponse.indexOf('\n\n');
         }
-      }
-    };
-    xhr.onload = function () {
-      if (xhr.status.toString()[0] !== '2') {
-        console.error(xhr.status + '> ' + xhr.statusText);
-      }
+      };
+      xhr.onload = function () {
+        if (xhr.status.toString()[0] !== '2') {
+          console.error(xhr.status + '> ' + xhr.statusText);
+        }
 
-      if (dataLayerEventName && dataLayerVariableName) {
-        // data tag configured to push event
-        if (!xhr.responseText.startsWith('event: message\ndata: ')) {
-          // old protocol
-          eventDataLayerData = dataTagParseResponse(xhr.responseText);
-          eventDataLayerData.status = xhr.status;
-          pushToDataLayer();
-        } else if (
-          !waitForCookies || // data tag configured to push event instantly
-          setCookieRunningCount === 0 // no cookies received or all cookies already set
-        ) {
-          pushToDataLayer();
+        if (dataLayerEventName && dataLayerVariableName) {
+          // data tag configured to push event
+          if (!xhr.responseText.startsWith('event: message\ndata: ')) {
+            // old protocol
+            eventDataLayerData = dataTagParseResponse(xhr.responseText);
+            eventDataLayerData.status = xhr.status;
+            pushToDataLayer();
+          } else if (
+            !waitForCookies || // data tag configured to push event instantly
+            setCookieRunningCount === 0 // no cookies received or all cookies already set
+          ) {
+            pushToDataLayer();
+          }
         }
+      };
+      xhr.send(stringifiedData);
+    } catch (error) {
+      if (isRestrictedUrlError(error)) {
+        sendBeaconAsFallback(requestUrl, stringifiedData);
+      } else {
+        throw error;
       }
-    };
-    xhr.send(stringifiedData);
+    }
   }
 }
 
