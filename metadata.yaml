@@ -1,8 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/data-tag'
 versions:
-  - sha: 92fc2ad52b8c0b8b22cd5e777c18753b2a331bd9
-    changeNotes: Add optional GET fallback when the POST script fails to load.
+  - sha: d7bf33574f96ec426e69c81305b14efd99df91df
+    changeNotes: Add optional GET fallback when the POST script fails to load. Bump Data Tag Script version to v10.
   - sha: c75687d9af9cf72cebfab385743571f80254238d
     changeNotes: Add Open AI Browser ID cookie to common cookie object.
   - sha: f19903150c4ead1cf2a868f74381d89dceb35977
