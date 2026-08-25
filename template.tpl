@@ -262,9 +262,9 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "CHECKBOX",
         "name": "add_common_cookie",
-        "checkboxText": "Add Common Cookie",
+        "checkboxText": "Add common cookies",
         "simpleValueType": true,
-        "help": "The tag will send common cookies in \u003cI\u003eeventData\u003c/i\u003e to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/linkedin-tag\"\u003e LinkedIn Conversions API \u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/openai-capi-tag\"\u003e OpenAI Ads Conversions API \u003c/a\u003e\n\u003c/br\u003e",
+        "help": "The tag will send common cookies in the \u003ci\u003ecommon_cookie\u003c/i\u003e object to avoid some e-commerce platform limitations.\n\u003cbr/\u003e\u003cbr/\u003e\nSupported Stape\u0027s tags:\n\u003cbr/\u003e\u003cbr/\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/facebook-tag\" target\u003d\"_blank\"\u003eFacebook Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/tiktok-tag\" target\u003d\"_blank\"\u003eTikTok Events API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/pinterest-capi-tag\" target\u003d\"_blank\"\u003ePinterest Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/snapchat-tag\" target\u003d\"_blank\"\u003eSnapchat Conversion API\u003c/a\u003e\u003cbr /\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/taboola-tag\" target\u003d\"_blank\"\u003eTaboola\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/awin-tag\" target\u003d\"_blank\"\u003eAwin\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/rakuten-tag\" target\u003d\"_blank\"\u003eRakuten\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/klaviyo-tag\" target\u003d\"_blank\"\u003eKlaviyo\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/outbrain-tag\" target\u003d\"_blank\"\u003eOutbrain\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/webgains-tag\" target\u003d\"_blank\"\u003eWebgains\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/postscript-tag\" target\u003d\"_blank\"\u003ePostscript\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/microsoft-capi-tag\" target\u003d\"_blank\"\u003eMicrosoft UET Conversion API\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/google-conversion-events-tag\" target\u003d\"_blank\"\u003eGoogle Conversion Events (Data Manager)\u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/linkedin-tag\"\u003e LinkedIn Conversions API \u003c/a\u003e\u003c/br\u003e\n\u003ca href\u003d\"https://tagmanager.google.com/gallery/#/owners/stape-io/templates/openai-capi-tag\"\u003e OpenAI Ads Conversions API \u003c/a\u003e\n\u003c/br\u003e",
         "alwaysInSummary": true
       }
     ]
@@ -367,7 +367,8 @@ ___TEMPLATE_PARAMETERS___
               }
             ]
           }
-        ]
+        ],
+        "newRowButtonText": "Add Property"
       }
     ]
   },
@@ -520,7 +521,8 @@ ___TEMPLATE_PARAMETERS___
               }
             ]
           }
-        ]
+        ],
+        "newRowButtonText": "Add Property"
       }
     ]
   },
@@ -632,7 +634,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "data_tag_load_script_url",
         "displayName": "Data Tag Script URL",
         "simpleValueType": true,
-        "help": "The URL where to load Data tag script from (for POST requests), by default it will be loaded from \u003cI\u003ehttps://stapecdn.com/dtag/${data-script-version}.js\u003c/i\u003e. \n\u003cbr/\u003e\nThis can be parameterized with \u003ci\u003e${data-script-version}\u003c/i\u003e in order to load the correct version for this tag.\n\u003cbr/\u003e\u003cbr/\u003e\nLatest version: \u003cb\u003ev9\u003c/b\u003e.",
+        "help": "The URL where to load Data tag script from (for POST requests), by default it will be loaded from \u003cI\u003ehttps://stapecdn.com/dtag/${data-script-version}.js\u003c/i\u003e. \n\u003cbr/\u003e\nThis can be parameterized with \u003ci\u003e${data-script-version}\u003c/i\u003e in order to load the correct version for this tag.\n\u003cbr/\u003e\u003cbr/\u003e\nLatest version: \u003cb\u003ev10\u003c/b\u003e.",
         "valueValidators": [
           {
             "type": "REGEX",
@@ -642,7 +644,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "alwaysInSummary": false,
-        "defaultValue": "https://stapecdn.com/dtag/v9.js",
+        "defaultValue": "https://stapecdn.com/dtag/${data-script-version}.js",
         "enablingConditions": [
           {
             "paramName": "request_type",
@@ -821,9 +823,9 @@ const normalizedServerUrl = normalizeServerUrl();
 const eventId = copyFromDataLayer('gtm.uniqueEventId'); // Must be read before any asynchronous operation to ensure the correct value is captured.
 
 if (requestType === 'post') {
-  const dataScriptVersion = 'v9';
+  const dataScriptVersion = 'v10';
   const dataTagScriptUrl =
-    getType(data.data_tag_load_script_url) !== 'undefined'
+    getType(data.data_tag_load_script_url) === 'string'
       ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
 
@@ -2501,10 +2503,14 @@ setup: |-
 
 ___NOTES___
 
-2026-08-10 - Change Notes:
+2026-08-25 - Change Notes:
   - Add optional "Fall back to a GET request if the POST script fails to load" checkbox (disabled by default) so events aren't lost when the Data Tag script fails to load
   - Mark fallback events with a data_tag_post_fallback=true parameter for server-side identification
   - Document the feature's limitations in the checkbox help text (hashed fields sent unhashed, no data layer/GA4 enrichment, richsstsse unsupported, URL length limits)
+  - Fix "Add Common Cookie" checkbox label and help text to correctly describe cookies being added to a dedicated common_cookie object (previously said eventData)
+  - Add an "Add Property" button label to the custom headers and query params tables for clearer UX
+  - Bump Data Tag script version to v10, defaulting the script URL to the parameterized ${data-script-version} placeholder instead of a hardcoded v9 URL
+  - Tighten the custom script URL override check to require a string value (previously any defined value), preventing invalid overrides from being used
 
 2026-08-07 - Change Notes:
   - Add OpenAI Ads Conversions API link to the Common Cookie help text, with extra spacing for readability

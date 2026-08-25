@@ -36,9 +36,9 @@ const normalizedServerUrl = normalizeServerUrl();
 const eventId = copyFromDataLayer('gtm.uniqueEventId'); // Must be read before any asynchronous operation to ensure the correct value is captured.
 
 if (requestType === 'post') {
-  const dataScriptVersion = 'v9';
+  const dataScriptVersion = 'v10';
   const dataTagScriptUrl =
-    getType(data.data_tag_load_script_url) !== 'undefined'
+    getType(data.data_tag_load_script_url) === 'string'
       ? data.data_tag_load_script_url.replace('${data-script-version}', dataScriptVersion)
       : 'https://stapecdn.com/dtag/' + dataScriptVersion + '.js';
 
