@@ -492,7 +492,12 @@ function addCommonCookie(eventData) {
     'li_fat_id',
     // OpenAI cookies
     '__oppref',
-    '__obref'
+    '__obref',
+    // Reddit cookies
+    '_rdt_uuid',
+    '_rdt_cid',
+    '_rdt_ph',
+    '_rdt_em'
   ];
 
   let commonCookie = null;
