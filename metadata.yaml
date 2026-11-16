@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/data-tag'
 versions:
+  - sha: 03f9efa37c3a4d3de5ebec4c4d45518dfda4651c
+    changeNotes: Added Reddit cookies to common cookie object.
   - sha: c75687d9af9cf72cebfab385743571f80254238d
     changeNotes: Add Open AI Browser ID cookie to common cookie object.
   - sha: f19903150c4ead1cf2a868f74381d89dceb35977
